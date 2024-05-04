@@ -178,6 +178,21 @@ How well do you know the concept of notebooks\footnote{%
 \end{activity}
 \end{frame}
 
+Notebooks consists of cells, which can be of different types.
+Some might be text and others are code.
+The code cells can be executed and the output is shown below the cell, in the 
+document.
+This way the author can explain the code in the text cells and then show the 
+code in the code cells.
+
+The code cells can be executed in any order, which is both a strength and a 
+weakness.
+It's a strength because you can experiment and try things out.
+It's a weakness because you can't really successively build the program.
+However, if they weren't independet, we would get dependencies and the cells 
+would have to be executed in the right order (spaghetti code with global 
+variables).
+
 \begin{frame}
 \begin{figure}
   \includegraphics[width=\columnwidth]{figs/jupyter-notebook.png}
@@ -205,7 +220,7 @@ How well do you think notebooks fulfil the goals of literate programming?
 It for sure fulfils the first goal, \enquote{\LPexplain}.
 However, it doesn't necessarily fulfil the second goal, \enquote{\LPorder}.
 We can't really have any order we want, we must follow the order of execution 
-of the cells---which is ordered for the computer, not the human\footnote{%
+in the cells---which is ordered for the computer, not the human\footnote{%
   Although, these might align at times, at other times they don't.
 }.
 
@@ -213,9 +228,57 @@ of the cells---which is ordered for the computer, not the human\footnote{%
 \begin{block}{Notebooks}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
-    \item[\(\approx\)] {\color{orange}\LPorder}
+    \item[\(-\)] {\color{red}\LPorder}
   \end{itemize}
 \end{block}
+
+\begin{remark}
+  Code cells independent, code in order of the computer.
+\end{remark}
+\end{frame}
+
+\paragraph{Docstrings}
+
+Docstrings is another concept that has been argued is literate programming.
+The reasoning is that we generate documentation from the code.
+
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+How well do you think docstrings fulfil the goals of literate programming?
+\end{activity}
+\end{frame}
+
+The docstrings aim at explaining how to use a particular function or class.
+It explains what the inputs and outputs are, but not how those are achieved.
+The purpose of them is to describe how to use these constructs as black boxes, 
+without having to know how they do it.
+Consider the documentation for the function [[sorted]] in Python:
+\begin{pycode}
+print(r"\begin{verbatim}")
+help(sorted)
+print(r"\end{verbatim}")
+\end{pycode}
+Nothing in the documentation explains how the sorting is done, no details of 
+the underlying sorting algorithm(s).
+
+We could of course generate an explanation for a piece of code by extracting 
+the docstrings of the functions being called.
+However, that only explains what the code does, same as reading the code 
+itself.
+It doesn't explain the programmer's intent when writing the code.
+
+\begin{frame}<presentation>
+\begin{block}{Docstrings}
+  \begin{itemize}
+    \item[\(-\)] {\color{red}\LPexplain}
+    \item[\(-\)] {\color{red}\LPorder}
+  \end{itemize}
+\end{block}
+
+\begin{remark}
+  Explains what, not why.
+\end{remark}
 \end{frame}
 
 \paragraph{Rubber duck debugging}
@@ -275,7 +338,9 @@ programming?
 \end{frame}
 
 This for sure comes close to the goals of literate programming.
-However, none is documented, so it's lost to others.
+However, none is documented, so it's lost to others\footnote{%
+  And your future self.
+}.
 Also, the programmer is not forced to explain things unless there is a bug to 
 find.
 
@@ -286,7 +351,14 @@ instead of a rubber duck and you do this while developing---not just when
 debugging.
 
 \begin{frame}<presentation>
-\begin{uncoverenv}<1>
+\begin{onlyenv}<1-2>
+\begin{block}{Pair programming}
+  Pair programming is sort of the same, but with a fellow human instead of a 
+  rubber duck.
+\end{block}
+\end{onlyenv}
+
+\begin{uncoverenv}<2>
 \begin{block}{Pair programming}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
@@ -296,6 +368,12 @@ debugging.
 \end{uncoverenv}
 
 \begin{onlyenv}<2>
+\begin{remark}
+  They have to write the code in the order the computer understands it.
+\end{remark}
+\end{onlyenv}
+
+\begin{onlyenv}<3>
 \begin{remark}
   But this is not necessarily documented, so it's lost to others.
 \end{remark}
@@ -309,11 +387,110 @@ debugging.
 \end{onlyenv}
 \end{frame}
 
+The two programmers working together explains the thoughts of the design and 
+code to each other as they progress the development.
+To some extent, they can do this in the order needed.
+However, in the end, the code must be written in the order the computer 
+understands it.
+
+But in the end, nothing from this process is necessarily stored.
+So it's again lost to others, including the programmers' future selves.
+
 \paragraph{Documentation in version management}
+
+We can also document meaning in the version management system, as commit 
+messages and notes in issues and pull requests.
+
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+How well do you think documentation in version management systems fulfil the 
+goals of literate programming?
+\end{activity}
+\end{frame}
+
+The documentation of \emph{changes} in the version management system sure 
+contains good explanation of why the changes are needed.
+For instance, [[git blame]] and similar commands, allows us to see a motivation 
+for each line of code.
+
+However, this does not necessarily give us the order needed to understand the 
+program.
+But rather as the commit diff was generated, together with one block of 
+explanation.
+So the quality depends on the sizes of the commits.
+
+Another problem is that the commits for the first version don't necessarily 
+contain the same quality of explanation as the later commits.
+For those we are probably left with only the comments in the code.
+And in this case, the order of exposition is adapted for the computer rather 
+than humans.
+
+\begin{frame}<presentation>
+\begin{block}{Documentation in version management}
+  \begin{itemize}
+    \item[\(\approx\)] {\color{orange}\LPexplain}
+    \item[\(\approx\)] {\color{orange}\LPorder}
+  \end{itemize}
+\end{block}
+
+\begin{remark}
+  \begin{itemize}
+    \item Documents changes mostly, not first version.
+    \item Exposition in diffs.
+  \end{itemize}
+\end{remark}
+\end{frame}
 
 \paragraph{Pseudocode}
 
-\paragraph{Test-driven development}
+The last one that we'll cover is pseudocode.
+
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+How well do you think pseudocode fulfils the goals of literate programming?
+\end{activity}
+\end{frame}
+
+Pseudocode actually comes quite close.
+It's a way to explain the code to humans, and it's not necessarily tied to the 
+order of execution.
+We can vary the level of detail and the order of exposition to fit the human 
+understanding.
+As something usually used in the design process, it helps with the 
+understanding of the overall design.
+However, it's not necessarily integrated with the code.
+And in the worst case, it's thrown away once there is an implementation.
+
+\begin{frame}<presentation>
+\begin{uncoverenv}<1>
+\begin{block}{Pseudocode}
+  \begin{itemize}
+    \item[\(+\)] {\color{green!75!black}\LPexplain}
+    \item[\(+\)] {\color{green!75!black}\LPorder}
+  \end{itemize}
+\end{block}
+\end{uncoverenv}
+
+\begin{onlyenv}<2>
+\begin{remark}
+  \begin{itemize}
+    \item But this is not necessarily kept in the documentation.
+    \item It's also not necessarily integrated with the code.
+  \end{itemize}
+\end{remark}
+
+\begin{block}{Pseudocode, end product}
+  \begin{itemize}
+    \item[\(\approx\)] {\color{orange}\LPexplain}
+    \item[\(\approx\)] {\color{orange}\LPorder}
+  \end{itemize}
+\end{block}
+\end{onlyenv}
+\end{frame}
+
+%\paragraph{Testing}
 
 \paragraph{Others}
 
