@@ -9,6 +9,7 @@ SRC+=		merge.sh merge.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
+FIGS+=		figs/beamer.pdf figs/web.pdf figs/noweb.pdf
 
 notes.pdf: notes.tex didactic.sty
 notes.pdf: ${SRC} ${FIGS}

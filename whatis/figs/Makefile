@@ -20,3 +20,7 @@ jupyter-notebook.webp:
 .PHONY: clean
 clean:
 	${RM} ${FIGS}
+
+
+INCLUDE_MAKEFILES=../../makefiles
+include ${INCLUDE_MAKEFILES}/doc.mk

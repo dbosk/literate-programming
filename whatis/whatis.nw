@@ -181,20 +181,199 @@ see \cref{fig:jupyter}.
 
 \begin{frame}
 \begin{remark}
-  The concept of notebooks originate Mathematica\autocite{Wolfram1988}.
+  The concept of notebooks seems to originate with 
+  Mathematica\autocite{Wolfram1988}.
   (Wolfram started the work in 1986.)
 \end{remark}
 \end{frame}
 
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+How well do you think notebooks fulfil the goals of literate programming?
+\end{activity}
+\end{frame}
+
+It for sure fulfils the first goal, \enquote{\LPexplain}.
+However, it doesn't necessarily fulfil the second goal, \enquote{\LPorder}.
+We can't really have any order we want, we must follow the order of execution 
+of the cells---which is ordered for the computer, not the human\footnote{%
+  Although, these might align at times, at other times they don't.
+}.
+
+\begin{frame}<presentation>
+\begin{block}{Notebooks}
+  \begin{itemize}
+    \item[\(+\)] {\color{green!75!black}\LPexplain}
+    \item[\(\approx\)] {\color{orange}\LPorder}
+  \end{itemize}
+\end{block}
+\end{frame}
+
+\paragraph{Rubber duck debugging}
+
+Another related concept is rubber duck debugging.
+
+\begin{frame}
+\begin{activity}
+How well do you know rubber duck debugging?
+\end{activity}
+\end{frame}
+
+\begin{frame}<presentation>
+\begin{block}{Rubber duck debugging}
+  \begin{itemize}
+    \item Explain the code to a rubber duck.
+    \item Helps understanding the code to find the bug.
+  \end{itemize}
+\end{block}
+\end{frame}
+
+The idea of rubber duck debugging is that you explain the code for a rubber 
+duck.
+In doing so, you get a better understanding of the code, which helps you to 
+find the bug.
+
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+How well do you think rubber duck debugging fulfils the goals of literate 
+programming?
+\end{activity}
+\end{frame}
+
+\begin{frame}<presentation>
+\begin{uncoverenv}<1>
+\begin{block}{Rubber duck debugging}
+  \begin{itemize}
+    \item[\(+\)] {\color{green!75!black}\LPexplain}
+    \item[\(+\)] {\color{green!75!black}\LPorder}
+  \end{itemize}
+\end{block}
+\end{uncoverenv}
+
+\begin{onlyenv}<2>
+\begin{remark}
+  But none is documented, so it's lost to others.
+\end{remark}
+
+\begin{block}{Rubber duck debugging, end product}
+  \begin{itemize}
+    \item[\(-\)] {\color{red}\LPexplain}
+    \item[\(-\)] {\color{red}\LPorder}
+  \end{itemize}
+\end{block}
+\end{onlyenv}
+\end{frame}
+
+This for sure comes close to the goals of literate programming.
+However, none is documented, so it's lost to others.
+Also, the programmer is not forced to explain things unless there is a bug to 
+find.
+
+\paragraph{Pair programming}
+
+Pair programming is similar to rubber duck debugging, but with another human 
+instead of a rubber duck and you do this while developing---not just when 
+debugging.
+
+\begin{frame}<presentation>
+\begin{uncoverenv}<1>
+\begin{block}{Pair programming}
+  \begin{itemize}
+    \item[\(+\)] {\color{green!75!black}\LPexplain}
+    \item[\(\approx\)] {\color{orange}\LPorder}
+  \end{itemize}
+\end{block}
+\end{uncoverenv}
+
+\begin{onlyenv}<2>
+\begin{remark}
+  But this is not necessarily documented, so it's lost to others.
+\end{remark}
+
+\begin{block}{Pair programming, end product}
+  \begin{itemize}
+    \item[\(-\)] {\color{red}\LPexplain}
+    \item[\(-\)] {\color{red}\LPorder}
+  \end{itemize}
+\end{block}
+\end{onlyenv}
+\end{frame}
+
+\paragraph{Documentation in version management}
+
+\paragraph{Pseudocode}
+
+\paragraph{Test-driven development}
+
+\paragraph{Others}
+
+This covered only some of the related concepts.
+
+\ltnote{%
+  We asked them in the beginning to name some systems that they think are 
+  related.
+  Some of their answers were probably covered by the examples above.
+  In either case, they did their own analysis above, an analysis that might 
+  have been complemented by the examples we gave.
+  Now we give them the chance to provide us with the complemented analyses from 
+  before, for the systems that we didn't cover.
+}%
+\begin{frame}
+\only<presentation>{\LPgoals}
+\begin{activity}
+Do you know of any other tools/systems/languages/techniques that let you do 
+something like this?
+Name them and discuss how well they fulfil the goals.
+\end{activity}
+\end{frame}
+
+
 
 \section{Literate programming}
+
+\begin{frame}
+\begin{figure}
+\begin{fullwidth}
+\begin{subfigure}{0.48\columnwidth}
+  \includegraphics[width=\columnwidth]{figs/web.pdf}
+  \caption{Traditional \web-based workflow.}
+\end{subfigure}
+\begin{subfigure}{0.48\columnwidth}
+  \includegraphics[width=\columnwidth]{figs/noweb.pdf}
+  \caption{\noweb-based workflow.}
+\end{subfigure}
+\end{fullwidth}
+\caption{Traditional \web{} vs \noweb{} workflow.}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+  \includegraphics[width=0.8\columnwidth]{figs/beamer.pdf}
+  \caption{My workflow with \texttt{beamerarticle} and \texttt{beamer}.}
+\end{figure}
+\end{frame}
 
 \subsection{Example: a script for merging Canvas rooms}
 
 \mode<all>{\input{merge.tex}}
 
+\subsection{Check}
 
-\section{\noweb: a literate programming tool}
+\ltnote{%
+  This question is purely phenomenographic.
+  We want to know how they perceive literate programming, what aspects they 
+  distinguish now.
+}%
+\begin{frame}
+\begin{activity}
+  How would you summarize literate programming?
+\end{activity}
+\end{frame}
+
+\subsection{\noweb: a literate programming tool}
 
 To use literate programming we need some tooling.
 We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
