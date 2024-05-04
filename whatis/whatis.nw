@@ -150,25 +150,33 @@ goals.
   This means that they have already gotten started on the contrast pattern.
   Compare with the Japanese classrooms discussed in Chapter 6 of 
   \cite{NecessaryConditionsOfLearning}.
+
+  However, we don't ask them to write anything at this point.
+  To name them, they still have to think about this.
+  Then we'll go through a few in detail.
+  Then we can ask them for remaining ones.
 }%
 \begin{frame}
-\begin{onlyenv}<presentation>
-  \begin{itemize}
-    \item \textbf{explaining to human beings what we want a computer to do}
-    \item \textbf{strives for a program that is comprehensible because its 
-    concepts have been introduced in an order that is best for human 
-    understanding}
-  \end{itemize}
-\end{onlyenv}
+\only<presentation>{\LPgoals}
 \begin{activity}
 Do you know of any tools/systems/languages that lets you do something like 
 this?
-Name them and discuss shortly how close they get.
+Name them.
 \end{activity}
 \end{frame}
 
+\paragraph{Notebooks}
+
 Probably the first that comes to mind is the Jupyter notebook,
 see \cref{fig:jupyter}.
+
+\begin{frame}
+\begin{activity}
+How well do you know the concept of notebooks\footnote{%
+  Be it Jupyter, Google Colab, or any other similar system.
+}?
+\end{activity}
+\end{frame}
 
 \begin{frame}
 \begin{figure}
