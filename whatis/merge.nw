@@ -1,0 +1,182 @@
+\mode*
+
+IT automatically creates separate Canvas rooms for all the course instances.
+However, we want to merge them into one, so that all students can communicate 
+with each other.
+
+IT creates the course instances 270 days before the course start.
+This gives us time to email them as soon as the new course rooms pops up in 
+Canvas.
+
+\begin{onlyenv}<presentation>
+\begin{frame}
+  \begin{block}{Overview}
+    \begin{itemize}
+      \item IT automatically creates separate Canvas rooms for all the course 
+      instances.
+      \item We want to merge them into one, so that all students can 
+      communicate with each other.
+      \item IT creates the course instances 270 days before the course start.
+      \item Essentially, we use IT as an asynchronous API call.
+    \end{itemize}
+  \end{block}
+\end{frame}
+\end{onlyenv}
+
+To do this, whenever we notice there are more than one matching course room in 
+Canvas, we'll send an email to IT and ask them to merge the courses.
+However, we don't want to run this too often, so that we don't send another 
+email before IT has acted on the first.
+Essentially, we use IT as an asynchronous API call.
+\begin{frame}[fragile]
+<<merge.sh>>=
+YEAR=$(date +%y)
+<<condition to not send too often>>
+  course_rooms=$(canvaslms courses \
+                  "DD1301.(HT${YEAR}|VT$(expr $YEAR + 1))")
+  if [[ "$?" = "0" \
+        -a "$(echo "${course_rooms}" | wc -l)" -gt 1 ]]
+  then
+    <<send email to IT to merge Canvas rooms in [[course_rooms]]>>
+  fi
+<<end condition to not send too often>>
+@
+\end{frame}
+
+We simply generate a message that we send to IT on the usual email address.
+\begin{frame}[fragile]
+<<send email to IT to merge Canvas rooms in [[course_rooms]]>>=
+<<adjust IFS for the loop>>
+echo "
+Hej! Kan ni slå ihop följande canvasrum till ett,
+DD1301 HT${YEAR} (datintro${YEAR})?
+
+$(<<print [[course_rooms]] as itemized list>>)
+
+    Tack så mycket,
+        Daniel
+" | <<fix indents>> \
+  | mutt -s "Slå ihop canvasrum" it-support@kth.se
+<<restore IFS>>
+@
+\end{frame}
+
+We need to adjust the IFS variable to loop over the course rooms, since those 
+contain spaces.
+\begin{frame}[fragile]
+\begin{example}
+  [[course_rooms]] might look like this (year is set to 2023):
+  \begin{pycode}
+import subprocess
+year = 23
+course_rooms = subprocess.check_output(
+    f"canvaslms courses 'DD1301.(HT{year}|VT{year+1})'", shell=True).decode()
+print(r"\begin{minted}{text}")
+print(course_rooms)
+print(r"\end{minted}")
+  \end{pycode}
+\end{example}
+<<adjust IFS for the loop>>=
+oldIFS="$IFS"
+IFS=$'\n'
+<<restore IFS>>=
+IFS="$oldIFS"
+@
+\end{frame}
+
+In the list of courses to IT, we're only interested in part of the data shown 
+above.
+We'll skip the long name of the course (second column), we keep the rest.
+\begin{frame}[fragile]
+<<print [[course_rooms]] as itemized list>>=
+for course in ${course_rooms}; do
+  echo -n " - "
+  echo "${course}" | cut -f 1,3- | sed "s/\t/ /g"
+done
+@
+\end{frame}
+
+Now, \noweb{} will indent the message due to its block appearing indented.
+We can see it's due to the following.
+If the block is indented, \noweb{} will indent the code in the block.
+\begin{frame}[fragile]
+\inputminted
+  [autogobble=false,showspaces=true,firstline=39,lastline=41]{text}{merge.nw}
+\only<presentation>\vfill
+\inputminted
+  [autogobble=false,showspaces=true,firstline=13,lastline=23]{bash}{merge.sh}
+\end{frame}
+This is also why the for-loop above is perfectly indented.
+\begin{frame}[fragile]
+\inputminted
+  [autogobble=false,showspaces=true,firstline=50,lastline=58]{text}{merge.nw}
+\only<presentation>\vfill
+\inputminted
+  [autogobble=false,showspaces=true,firstline=17,lastline=20]{bash}{merge.sh}
+\end{frame}
+
+But we don't want an indented message.
+So we fix it like this:
+\begin{frame}[fragile]
+<<fix indents>>=
+sed "s/^    //"
+@
+\end{frame}
+
+We only want to ask IT to merge the rooms once every two weeks; particularly, 
+only on days 1, 14 and 28 (that way we catch last of February too).
+That way, they should have had the time to merge the rooms before we ask them 
+about the same thing again.
+
+However, this only works if we run the script \emph{at most once} every day.
+This is mostly the case, but we run it once an hour during September and end of 
+August.
+\begin{frame}[fragile]
+\begin{verbatim}
+00,30 8-20 22-31 Aug * /bin/bash ${HOME}/datintro23.sh
+00,30 8-20 * Sep * /bin/bash ${HOME}/datintro23.sh
+00 02 * * * /bin/bash ${HOME}/datintro23.sh
+\end{verbatim}
+\only<article>{So we avoid running this part during August and September.}
+<<condition to not send too often>>=
+if ! [[ "$(date +%m)" = "09" -o "$(date +%m)" = "08" ]]
+then
+  case "$(date +%d)" in
+    01|14|28)
+<<end condition to not send too often>>=
+      ;;
+    *)
+      ;;
+  esac
+fi
+@
+\end{frame}
+
+The first version of the script had another condition to not send too often.
+In that version I just wanted to send the email on the first of every month.
+\begin{frame}[fragile]
+<<condition to not send too often, first version>>=
+if [[ "$(date +%d)" = "01" ]]
+then
+<<end condition to not send too often, first version>>=
+fi
+@
+\end{frame}
+However, as the cronjob data showed above; this script runs once a day---except 
+during a part of August and full September.
+During that time, the first version would send this email every hour of the 1st 
+September.
+That would for sure have triggered a \enquote{rate-limiting protection} on IT's 
+end by sending an angry email to me.
+
+What we want to note here is that we can keep related things closer together.
+%\begin{frame}[fragile]
+%\small%
+%\textbytext{%
+%  \inputminted[breaklines,firstline=2,lastline=5]{bash}{merge.sh}
+%  \dots
+%  \inputminted[firstline=28,lastline=32]{bash}{merge.sh}
+%}{%
+%  \inputminted[firstline=113,lastline=124]{bash}{merge.nw}
+%}
+%\end{frame}

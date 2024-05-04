@@ -1,0 +1,242 @@
+\title{%
+  What is literate programming?
+}
+\author{%
+  Daniel Bosk
+}
+\institute{%
+  KTH EECS
+}
+
+\mode*
+
+@
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\clearpage
+
+\begin{frame}
+  \only<presentation>{\tableofcontents[hideallsubsections]}
+  \only<article>{\tableofcontents}
+\end{frame}
+
+\clearpage
+
+\section{Introduction}
+
+Let's start of with some thinking.
+
+\ltnote{%
+  We want to investigate how many know of or have heard of literate 
+  programming.
+  Or, think they know.
+  This will simply give us some statistics.
+}%
+\begin{frame}
+\begin{activity}\label{HeardOfLP}
+  Have you ever heard of or do you know literate programming?
+\end{activity}
+\end{frame}
+
+\ltnote{%
+  We want to investigate what people think literate programming is.
+  This will help us understand the correctness of the answers of 
+  \cref{HeardOfLP}.
+
+  This will also help us understand how to improve this material in the future.
+
+  Finally, consider the results by Székely discussed in Chapter 6 of 
+  \cite{NecessaryConditionsOfLearning}.
+  If they get to think a bit about what they think it is, they'll be more 
+  likely to learn better.
+}%
+\begin{frame}
+\begin{activity}
+  What do you think it means?
+\end{activity}
+\end{frame}
+
+\subsection{Motivation}
+
+Let's start with a quote that summarizes Knuth's motivation for literate 
+programming:
+\begin{frame}
+\blockcquote[p.~99, my emphasis]{Knuth1984}{%
+  Let us change our traditional attitude to the construction of programs: 
+  Instead of imagining that our main task is to instruct a computer what to do, 
+  let us concentrate rather on
+  \textbf{explaining to human beings what we want a computer to do}.
+
+  \textelp{}
+
+  Such an author, with thesaurus in hand, chooses the names of variables 
+  carefully and explains what each variable means. He or she
+  \textbf{strives for a program that is comprehensible because its concepts 
+  have been introduced in an order that is best for human understanding},
+  using a mixture of formal and informal methods that reinforce each other.
+}
+\end{frame}
+
+\subsection{Related approaches}
+
+Let's start by thinking of systems that we know that might fulfil some of these 
+goals.
+\ltnote{%
+  The purpose of this is to get them to think about systems they already know 
+  that might come close to this.
+  From a variation theoretic perspective, they now think about why or why not 
+  some things fulfil these goals.
+  This means that they have already gotten started on the contrast pattern.
+  Compare with the Japanese classrooms discussed in Chapter 6 of 
+  \cite{NecessaryConditionsOfLearning}.
+}%
+\begin{frame}
+\begin{onlyenv}<presentation>
+  \begin{itemize}
+    \item \textbf{explaining to human beings what we want a computer to do}
+    \item \textbf{strives for a program that is comprehensible because its 
+    concepts have been introduced in an order that is best for human 
+    understanding}
+  \end{itemize}
+\end{onlyenv}
+\begin{activity}
+Do you know of any tools/systems/languages that lets you do something like 
+this?
+Name them and discuss shortly how close they get.
+\end{activity}
+\end{frame}
+
+Probably the first that comes to mind is the Jupyter notebook,
+see \cref{fig:jupyter}.
+
+\begin{frame}
+\begin{figure}
+  \includegraphics[width=\columnwidth]{figs/jupyter-notebook.png}
+  \caption{\label{fig:jupyter}%
+    The Jupyter notebook.
+  }
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{remark}
+  The concept of notebooks originate Mathematica\autocite{Wolfram1988}.
+  (Wolfram started the work in 1986.)
+\end{remark}
+\end{frame}
+
+
+\section{Literate programming}
+
+\subsection{Example: a script for merging Canvas rooms}
+
+\mode<all>{\input{merge.tex}}
+
+
+\section{\noweb: a literate programming tool}
+
+To use literate programming we need some tooling.
+We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
+
+There has been several tools developed for literate programming over time.
+The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
+to be written in Pascal and the documentation in \TeX.
+This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
+to be written in C and the documentation in \TeX.
+
+\noweb, on the other hand, is language agnostic.
+It allows the programmer to write the programs in any language and the 
+documentation in any format.
+This makes it simpler, hence \enquote{simplified} in the title of the paper by 
+\textcite{Ramsey1994}.
+This comes with both advantages and disadvantages.
+The most obvious disadvantage is that we can't get prettyprinting (syntax 
+highlighting) in any straight-forward way; the system can't know what language 
+is being used.
+Some advantages are that
+\begin{enumerate}
+  \item we can mix languages: for instance, we can write the make file in the 
+  same file as the C program; that way we can include necessary building 
+  instructions, for example, when we depend on certain libraries.
+  \item we can also write the documentation in any format, for instance in 
+  Markdown, \LaTeX, or HTML.
+  \noweb{} supports \LaTeX{} and HTML out of the box, but it's easy to extend 
+  to make slight improvements for formats such as Markdown.
+\end{enumerate}
+
+
+\section{Famous literate programs}
+
+The first program that comes to mind is of course
+\begin{frame}%
+\only<presentation>{\centering\Huge}%
+\TeX\autocite{TeXprogram}
+and
+\LaTeX\footnote{\url{https://latex-project.org}}%
+\end{frame}.
+\TeX{} was of course among the first literate programs to be written.
+
+\begin{frame}
+  On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
+  awarded the 2013 Scientific and Technical Academy Award for Physically Based 
+  Rendering\autocite[][award for an earlier edition]{PBR}.
+  \begin{onlyenv}<article>
+    See \cref{fig:pbr}.
+    The motivation:
+    \blockquote{%
+      Physically based rendering has transformed computer graphics lighting by 
+      more accurately simulating materials and lights, allowing digital artists 
+      to focus on cinematography rather than the intricacies of rendering. 
+      First published in 2004, Physically Based Rendering is both a textbook 
+      and a complete source-code implementation that has provided a widely 
+      adopted practical roadmap for most physically based shading and lighting 
+      systems used in film production.
+    }
+  \end{onlyenv}
+
+  \begin{figure}
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
+      \caption{The cover of the book \citetitle{PBR}.}
+    \end{subfigure}
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
+      \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
+    \end{subfigure}
+    \caption{\label{fig:pbr}The book \citetitle{PBR} and its authors.}
+  \end{figure}
+\end{frame}
+
+Knuth said of this: \blockquote{This book has deservedly won an Academy Award. 
+I believe it should also be nominated for a Pulitzer Prize.}
+This book is a literate program.
+See \cref{fig:pbrlit} for an excerpt from the book.
+
+\begin{frame}
+  \begin{figure}
+    \centering
+    \includegraphics[width=\columnwidth]{figs/pbr.png}
+    \caption{\label{fig:pbrlit}%
+      An excerpt from the (online version of) book \citetitle{PBR}.
+    }
+  \end{figure}
+\end{frame}
+
+\begin{onlyenv}<presentation>
+\begin{frame}
+  Whatever Daniel wrote during the last decade \dots
+\end{frame}
+\end{onlyenv}
+
+
+\begin{frame}
+\printbibliography{}
+\end{frame}
+
