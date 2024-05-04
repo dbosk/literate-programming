@@ -63,6 +63,21 @@ Let's start of with some thinking.
 \end{activity}
 \end{frame}
 
+Now that you have heard the term, you must learn what it means.
+We'll see afterwards how you feel about it.
+As Knuth says:
+\begin{frame}
+\blockcquote{Knuth1984}{%
+  I must confess that there may also be a bit of malice in my choice of a 
+  title. During the 1970s I was coerced like everybody else into adopting the 
+  ideas of structured programming, because I couldn’t bear to be found guilty 
+  of writing unstructured programs. Now I have a chance to get even. By coining 
+  the phrase \enquote{literate programming,} I am imposing a moral commitment 
+  on everyone who hears the term; surely nobody wants to admit writing an 
+  illiterate program.%
+}
+\end{frame}
+
 \subsection{Motivation}
 
 Let's start with a quote that summarizes Knuth's motivation for literate 
@@ -83,6 +98,45 @@ programming:
   using a mixture of formal and informal methods that reinforce each other.
 }
 \end{frame}
+\mode<all>{%
+\NewDocumentCommand{\LPexplain}{}{%
+  explaining to human beings what we want a computer to do%
+}
+\NewDocumentCommand{\LPorder}{}{%
+  strives for a program that is comprehensible because its concepts have been 
+  introduced in an order that is best for human understanding%
+}
+\NewDocumentCommand{\LPgoals}{}{%
+  \begin{itemize}
+    \item \textbf{\LPexplain}
+    \item \textbf{\LPorder}
+  \end{itemize}
+}}%
+So we can summarize the goals of literate programming as follows:
+\begin{itemize}
+\item \LPexplain, and
+\item \LPorder.
+\end{itemize}
+
+There are some more fun and interesting quotes in Knuth's paper.
+The following are also worth mentioning:
+\begin{frame}
+\blockcquote{Knuth1984}{%
+  I’ve stumbled across a method of composing programs that excites me
+  very much. In fact, my enthusiasm is so great that I must warn the reader to 
+  discount much of what I shall say as the ravings of a fanatic who thinks he 
+  has just seen a great light.%
+}
+\end{frame}
+
+But Knuth is convinced that this works well:
+\blockcquote{Knuth1984}{%
+  Because it seems to me that at last
+  I’m able to write programs as they should be written.
+  My programs are not only explained better than ever
+  before; they also are better programs, because the new
+  methodology encourages me to do a better job.%
+}
 
 \subsection{Related approaches}
 
@@ -224,7 +278,7 @@ See \cref{fig:pbrlit} for an excerpt from the book.
     \centering
     \includegraphics[width=\columnwidth]{figs/pbr.png}
     \caption{\label{fig:pbrlit}%
-      An excerpt from the (online version of) book \citetitle{PBR}.
+      An excerpt from the book \citetitle{PBR} (online version).
     }
   \end{figure}
 \end{frame}
