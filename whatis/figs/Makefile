@@ -1,6 +1,10 @@
 FIGS+=	pbrcover.jpg
 FIGS+=	jupyter-notebook.png
 FIGS+=	jupyter-lab.png
+FIGS+= 	beamer.pdf beamer.pdf_tex
+FIGS+=	web.pdf web.pdf_tex
+FIGS+=	noweb.pdf noweb.pdf_tex
+FIGS+=	pythontex.pdf pythontex.pdf_tex
 
 .PHONY: all
 all: ${FIGS}

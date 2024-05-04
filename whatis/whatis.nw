@@ -346,11 +346,11 @@ Name them and discuss how well they fulfil the goals.
 \begin{fullwidth}
 \begin{subfigure}{0.48\columnwidth}
   \includegraphics[width=\columnwidth]{figs/web.pdf}
-  \caption{Traditional \web-based workflow.}
+  \caption{\label{web}Traditional \web-based workflow.}
 \end{subfigure}
 \begin{subfigure}{0.48\columnwidth}
   \includegraphics[width=\columnwidth]{figs/noweb.pdf}
-  \caption{\noweb-based workflow.}
+  \caption{\label{noweb}\noweb-based workflow.}
 \end{subfigure}
 \end{fullwidth}
 \caption{Traditional \web{} vs \noweb{} workflow.}
@@ -359,8 +359,10 @@ Name them and discuss how well they fulfil the goals.
 
 \begin{frame}
 \begin{figure}
-  \includegraphics[width=0.8\columnwidth]{figs/beamer.pdf}
-  \caption{My workflow with \texttt{beamerarticle} and \texttt{beamer}.}
+  \includegraphics[width=0.8\columnwidth]{figs/pythontex.pdf}
+  \caption{\label{myflow}%
+    My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.%
+  }
 \end{figure}
 \end{frame}
 
