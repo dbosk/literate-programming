@@ -177,6 +177,13 @@ Consider the following.
   \begin{remark}
     [[<<condition to not send too often>>]] depends on how we solve
     [[<<send email to IT to merge Canvas rooms in [[course_rooms]]>>]].
+    \only<article>{%
+      This means that in \enquote{illiterate} programming, we must write
+      [[<<condition to not send too often>>]] before
+      [[<<send email to IT to merge Canvas rooms in [[course_rooms]]>>]].
+      But we need to know how the latter affects the former, before we can 
+      write it.
+    }
   \end{remark}
 \end{frame}
 
