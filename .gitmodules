@@ -1,0 +1,6 @@
+[submodule "didactic"]
+	path = didactic
+	url = https://github.com/dbosk/didactic.git
+[submodule "makefiles"]
+	path = makefiles
+	url = https://github.com/dbosk/makefiles.git
