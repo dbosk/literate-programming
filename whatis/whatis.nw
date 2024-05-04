@@ -547,6 +547,11 @@ Name them and discuss how well they fulfil the goals.
 
 \mode<all>{\input{merge.tex}}
 
+All in all, the script [[merge.sh]] looks like this after we've tangled it:
+\begin{frame}[fragile,allowframebreaks]
+\inputminted{bash}{merge.sh}
+\end{frame}
+
 \subsection{Check}
 
 \ltnote{%
