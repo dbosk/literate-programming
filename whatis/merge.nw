@@ -170,6 +170,16 @@ That would for sure have triggered a \enquote{rate-limiting protection} on IT's
 end by sending an angry email to me.
 
 What we want to note here is that we can keep related things closer together.
+And we can explain them in the order that makes it the clearest to us.
+Consider the following.
+\begin{frame}[fragile]
+  \inputminted[firstline=32,lastline=43]{text}{merge.nw}
+  \begin{remark}
+    [[<<condition to not send too often>>]] depends on how we solve
+    [[<<send email to IT to merge Canvas rooms in [[course_rooms]]>>]].
+  \end{remark}
+\end{frame}
+
 %\begin{frame}[fragile]
 %\small%
 %\textbytext{%
