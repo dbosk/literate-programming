@@ -1,0 +1,19 @@
+\mode*
+
+We'll write the short Python module named [[pyex]], residing in 
+[[<<pyex.py>>]].
+(The literate source code is in a file [[pyex.nw]] that should reside in the 
+[[/src]] directory.)
+This module cannot be run, only imported.
+It contains only functions and constants.
+<<pyex.py>>=
+"""
+This is an example module that illustrates docstrings in Python.
+"""
+
+<<constants>>
+<<functions>>
+@
+
+We also want to do testing with [[pytest]].
+Normally, the tests resides in a directory [[/tests]].
