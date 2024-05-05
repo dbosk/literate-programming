@@ -1,3 +1,4 @@
+% small noweb example
 This is a small literate program.
 Its computer-readable source is named [[foo.bar]].
 <<foo.bar>>=
