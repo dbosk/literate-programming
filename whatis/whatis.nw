@@ -818,7 +818,8 @@ at GitHub:
 
 All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \begin{frame}[fragile,allowframebreaks]
-\inputminted{bash}{merge.sh}
+\only<presentation>{\inputminted[fontsize=\footnotesize]{bash}{merge.sh}}
+\only<article>{\inputminted{bash}{merge.sh}}
 \end{frame}
 
 \subsection{Summary}
