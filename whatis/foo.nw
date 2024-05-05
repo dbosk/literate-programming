@@ -1,0 +1,17 @@
+This is a small literate program.
+Its computer-readable source is named [[foo.bar]].
+<<foo.bar>>=
+<<do first step>>
+<<do second step>>
+@
+
+The main thing is the second step.
+We want to print a message to the screen.
+<<do second step>>=
+print(the_message)
+@
+
+The first step is to define the message.
+<<do first step>>=
+the_message = "Hello, world!"
+@

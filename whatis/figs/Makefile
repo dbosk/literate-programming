@@ -18,6 +18,9 @@ jupyter-lab.webp:
 jupyter-notebook.webp:
 	curl -o $@ https://jupyter.org/assets/homepage/jupyterpreview.webp
 
+cweave.jpg:
+	curl -o $@ http://literateprogramming.com/cweave.jpg
+
 %.png: %.webp
 	convert $< $@
 
