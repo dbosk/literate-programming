@@ -88,6 +88,20 @@ In the list of courses to IT, we're only interested in part of the data shown
 above.
 We'll skip the long name of the course (second column), we keep the rest.
 \begin{frame}[fragile]
+\begin{onlyenv}<presentation>
+\begin{example}
+  [[course_rooms]] might look like this (year is set to 2023):
+  \begin{pycode}
+import subprocess
+year = 23
+course_rooms = subprocess.check_output(
+    f"canvaslms courses 'DD1301.(HT{year}|VT{year+1})'", shell=True).decode()
+print(r"\begin{minted}{text}")
+print(course_rooms)
+print(r"\end{minted}")
+  \end{pycode}
+\end{example}
+\end{onlyenv}
 <<print [[course_rooms]] as itemized list>>=
 for course in ${course_rooms}; do
   echo -n " - "
