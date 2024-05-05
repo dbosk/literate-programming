@@ -518,6 +518,15 @@ Name them and discuss how well they fulfil the goals.
 
 \section{Literate programming}
 
+Let's start with a small example.
+
+\begin{frame}[fragile]
+\begin{example}[Literate source]
+We write the following literate source in [[foo.nw]].
+\inputminted{text}{foo.nw}
+\end{example}
+\end{frame}
+
 \begin{frame}
 \begin{figure}
 \begin{fullwidth}
@@ -534,6 +543,100 @@ Name them and discuss how well they fulfil the goals.
 \end{figure}
 \end{frame}
 
+\begin{frame}[fragile]
+\begin{example}[Tangling]\label{foo.bar}
+We can extract the computer readable code by tangling:
+[[notangle -Rfoo.bar foo.nw > foo.bar]].
+This yields:
+\inputminted{text}{foo.bar}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Weaving]
+We can extract the documentation by weaving:
+[[noweave -n -latex foo.nw > foo.tex]].
+This yields:
+\inputminted{latex}{foo.tex}
+Compiled into a document, it looks like this:
+\input{foo.tex}
+\end{example}
+\end{frame}
+
+\begin{frame}<presentation>
+\input{foo.tex}
+\end{frame}
+
+When we use literate programming, there are generally three languages that 
+interact:
+\begin{enumerate}
+\item The \emph{code} language, which is the language the computer understands 
+(\eg Python, C or C++).
+\item The \emph{documentation} language, which is the language that the 
+documentation is written in (\eg \LaTeX, \TeX{} or Markdown, not English).
+\item The \emph{web} language, which is the language that marks what is code 
+and what is documentation (\eg \web{} or \noweb{}).
+\end{enumerate}
+
+The web language is used to extract the code and the documentation from the 
+source into separate files.
+(See \cref{web} for an illustration.)
+We extract the code by \emph{tangling} the literate source, using the tool 
+[[ctangle]] (\cweb) or [[notangle]] (\noweb, \cref{noweb}).
+This results in a file with the code as readable by the computer (compiler or 
+interpreter)
+We extract the documentation (and code) by \emph{weaving} the literate source, 
+using the tool [[cweave]] (\cweb) or [[noweave]] (\noweb).
+This results in \TeX-code that can be compiled into a document readable by 
+humans.
+
+Traditionally, the documentation is written in \TeX{}.
+However, \noweb{}, for instance, supports other formats as well, such as HTML.
+Markdown can also be used, even without weaving.
+However, adding support for Markdown in the weaving process is possible with 
+\noweb, and it would make the code slightly nicer to write.
+
+\subsection{Using \noweb}
+
+To use literate programming we need some tooling.
+We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
+
+There has been several tools developed for literate programming over time.
+The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
+to be written in Pascal and the documentation in \TeX.
+This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
+to be written in C and the documentation in \TeX.
+
+\noweb, on the other hand, is language agnostic.
+It allows the programmer to write the programs in any language and the 
+documentation in any format.
+This makes it simpler, hence \enquote{simplified} in the title of the paper by 
+\textcite{Ramsey1994}.
+This comes with both advantages and disadvantages.
+The most obvious disadvantage is that we can't get prettyprinting (syntax 
+highlighting) in any straight-forward way; the system can't know what language 
+is being used.
+Some advantages are that
+\begin{frame}
+\begin{enumerate}
+  \item we can mix languages: for instance, we can write the make file in the 
+  same file as the C program; that way we can include necessary building 
+  instructions, for example, when we depend on certain libraries.
+  \item we can also write the documentation in any format, for instance in 
+  Markdown, \LaTeX, or HTML.
+  \noweb{} supports \LaTeX{} and HTML out of the box, but it's easy to extend 
+  to make slight improvements for formats such as Markdown.
+\end{enumerate}
+\end{frame}
+
+An advantage of using \LaTeX{} (or \TeX) for the documentation, over formats 
+such as Markdown, is that it's a Turing complete language.
+This allows us to do anything we want with the documentation to improve the 
+exposition for the reader.
+For instance, in my workflow (\cref{myflow}) I use Python\TeX{} 
+(\texttt{pythontex}) to run the program and include outputs in the 
+documentation.
+
 \begin{frame}
 \begin{figure}
   \includegraphics[width=0.8\columnwidth]{figs/pythontex.pdf}
@@ -541,6 +644,45 @@ Name them and discuss how well they fulfil the goals.
     My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.%
   }
 \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Python\TeX{}]
+We saw in
+\only<article>{\cref{foo.bar}}%
+\only<presentation>{above}
+that it's actually valid Python.
+We can do this:
+\begin{minted}{latex}
+\begin{pyblock}
+import subprocess
+print(r"\begin{verbatim}")
+proc = subprocess.run(["python3", "foo.bar"], capture_output=True)
+print(proc.stdout)
+print(r"\end{verbatim}")
+\end{pyblock}
+\end{minted}
+The results looks like this:
+\begin{pycode}
+import subprocess
+print(r"\begin{verbatim}")
+proc = subprocess.run(["python3", "foo.bar"], capture_output=True)
+print(proc.stdout)
+print(r"\end{verbatim}")
+\end{pycode}
+\end{example}
+\end{frame}
+
+\begin{frame}
+\begin{example}
+You can find the source code for this
+\only<presentation>{slides (and article)}%
+\only<article>{article (and slides)}
+at GitHub:
+\begin{center}
+\url{https://github.com/dbosk/literate-programming/tree/master/whatis}.
+\end{center}
+\end{example}
 \end{frame}
 
 \subsection{Example: a script for merging Canvas rooms}
@@ -565,36 +707,49 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \end{activity}
 \end{frame}
 
-\subsection{\noweb: a literate programming tool}
+\subsection{Other tools}
 
-To use literate programming we need some tooling.
-We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
+We note that Haskell supports literate programming out of the box.
+This is done by using a file with the extension [[.lhs]] instead of [[.hs]].
+In a [[.lhs]] file, the code is written in code blocks:
+\begin{frame}[fragile]
+\begin{minted}{text}
+Let's create a small Haskell program.
+> main = putStrLn "Hello, world!"
+\end{minted}
+or, equivalently
+\begin{minted}{text}
+Let's create a small Haskell program.
+\begin{code}
+main = putStrLn "Hello, world!"
+\end{code}
+\end{minted}
+\end{frame}
 
-There has been several tools developed for literate programming over time.
-The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
-to be written in Pascal and the documentation in \TeX.
-This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
-to be written in C and the documentation in \TeX.
+We note that the code blocks of literate Haskell doesn't allow for the same web 
+of code blocks as \web{}-based literate programming.
+This is actually fine due to the nature of Haskell, where the order of 
+definitions doesn't matter.
+This means that we can still, despite this, write the code in the order we want 
+to explain it---adapted for human understanding, not the computer's.
 
-\noweb, on the other hand, is language agnostic.
-It allows the programmer to write the programs in any language and the 
-documentation in any format.
-This makes it simpler, hence \enquote{simplified} in the title of the paper by 
-\textcite{Ramsey1994}.
-This comes with both advantages and disadvantages.
-The most obvious disadvantage is that we can't get prettyprinting (syntax 
-highlighting) in any straight-forward way; the system can't know what language 
-is being used.
-Some advantages are that
-\begin{enumerate}
-  \item we can mix languages: for instance, we can write the make file in the 
-  same file as the C program; that way we can include necessary building 
-  instructions, for example, when we depend on certain libraries.
-  \item we can also write the documentation in any format, for instance in 
-  Markdown, \LaTeX, or HTML.
-  \noweb{} supports \LaTeX{} and HTML out of the box, but it's easy to extend 
-  to make slight improvements for formats such as Markdown.
-\end{enumerate}
+Another related tool, Agda, allows for the same type of literate 
+programming.
+Agda uses the extension [[.lagda]].
+Agda is a language for formal reasoning and proof development, developed by Ulf 
+Norell and Catarina Coquand at Chalmers University of Technology.
+(We note that several people from Chalmers also contributed to the development 
+of Haskell.)
+
+\begin{frame}<presentation>
+\begin{center}
+  \Huge
+  Agda
+\end{center}
+\end{frame}
+
+As a final note, GNU Make has built in rules for literate programming using 
+Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
 
 
 \section{Famous literate programs}

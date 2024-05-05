@@ -6,6 +6,7 @@ LATEXFLAGS+=	-shell-escape
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
 SRC+=		merge.sh merge.tex
+SRC+=		foo.bar foo.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -22,6 +23,9 @@ contents.tex: whatis.nw
 
 ${FIGS}::
 	${MAKE} -C $(dir $@) $(notdir $@)
+
+foo.bar: foo.nw
+	${NOTANGLE}
 
 .PHONY: clean
 clean:
