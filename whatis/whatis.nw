@@ -628,6 +628,25 @@ We describe the second step before we describe the first step.
 \end{frame}
 
 \begin{frame}[fragile]
+\ltnote{%
+  \Cref{foo.bar} starts our work on LO~\ref{LOnoweb}.
+}%
+\begin{onlyenv}<presentation>
+  \vspace*{-1em}
+  \begin{columns}[t]
+    \begin{column}{0.48\columnwidth}
+      \inputminted[
+        firstline=2,firstnumber=1,lastline=8,fontsize=\footnotesize,
+        breaklines
+      ]{text}{foo.nw}
+    \end{column}
+    \begin{column}{0.48\columnwidth}
+      \inputminted[
+        firstline=9,firstnumber=9,fontsize=\footnotesize
+      ]{text}{foo.nw}
+    \end{column}
+  \end{columns}
+\end{onlyenv}
 \begin{example}[Tangling]\label{foo.bar}
 We can extract the computer readable code by tangling:
 [[notangle -Rfoo.bar foo.nw > foo.bar]].
@@ -636,14 +655,19 @@ This yields:
 \end{example}
 \end{frame}
 
+Despite being described in the \enquote{wrong} (from the computer's 
+perspective) order, the code is extracted in the right order in \cref{foo.bar}.
+
 \begin{frame}[fragile]
 \begin{example}[Weaving]
 We can extract the documentation by weaving:
 [[noweave -n -latex foo.nw > foo.tex]].
 This yields:
 \inputminted{latex}{foo.tex}
+\begin{onlyenv}<article>
 Compiled into a document, it looks like this:
 \input{foo.tex}
+\end{onlyenv}
 \end{example}
 \end{frame}
 
@@ -701,12 +725,29 @@ The most obvious disadvantage is that we can't get prettyprinting (syntax
 highlighting) in any straight-forward way; the system can't know what language 
 is being used.
 Some advantages are that
-\begin{frame}
+\begin{frame}[fragile]
+\begin{onlyenv}<presentation>
+\begin{onlyenv}<1>
+  \begin{figure}[H]
+    \begin{fullwidth}
+      \begin{subfigure}{0.48\columnwidth}
+        \includegraphics[width=\columnwidth]{figs/web.pdf}
+        \caption{\label{web}Traditional \web-based workflow.}
+      \end{subfigure}
+      \begin{subfigure}{0.48\columnwidth}
+        \includegraphics[width=\columnwidth]{figs/noweb.pdf}
+        \caption{\label{noweb}\noweb-based workflow.}
+      \end{subfigure}
+    \end{fullwidth}
+  \end{figure}
+\end{onlyenv}
+\end{onlyenv}
+
 \begin{enumerate}
-  \item we can mix languages: for instance, we can write the make file in the 
+  \item<+> we can mix languages: for instance, we can write the Makefile in the 
   same file as the C program; that way we can include necessary building 
   instructions, for example, when we depend on certain libraries.
-  \item we can also write the documentation in any format, for instance in 
+  \item<+> we can also write the documentation in any format, for instance in 
   Markdown, \LaTeX, or HTML.
   \noweb{} supports \LaTeX{} and HTML out of the box, but it's easy to extend 
   to make slight improvements for formats such as Markdown.
@@ -741,7 +782,8 @@ We can do this:
 \begin{pyblock}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"], capture_output=True)
+proc = subprocess.run(["python3", "foo.bar"],
+                      capture_output=True)
 print(proc.stdout)
 print(r"\end{verbatim}")
 \end{pyblock}
@@ -750,7 +792,8 @@ The results looks like this:
 \begin{pycode}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"], capture_output=True)
+proc = subprocess.run(["python3", "foo.bar"],
+                      capture_output=True)
 print(proc.stdout)
 print(r"\end{verbatim}")
 \end{pycode}
@@ -778,7 +821,7 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \inputminted{bash}{merge.sh}
 \end{frame}
 
-\subsection{Check}
+\subsection{Summary}
 
 \ltnote{%
   This question is purely phenomenographic.
@@ -834,6 +877,13 @@ of Haskell.)
 
 As a final note, GNU Make has built in rules for literate programming using 
 Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
+
+\begin{frame}<presentation>
+\begin{center}
+  \Huge
+  GNU Make
+\end{center}
+\end{frame}
 
 
 \section{Famous literate programs}
