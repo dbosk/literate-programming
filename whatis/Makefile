@@ -7,6 +7,7 @@ SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
 SRC+=		merge.sh merge.tex
 SRC+=		foo.bar foo.tex
+SRC+=		pyex.tex pyex.py
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png

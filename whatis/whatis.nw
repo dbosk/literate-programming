@@ -278,7 +278,8 @@ The docstrings aim at explaining how to use a particular function or class.
 It explains what the inputs and outputs are, but not how those are achieved.
 The purpose of them is to describe how to use these constructs as black boxes, 
 without having to know how they do it.
-Consider the documentation for the function [[sorted]] in Python:
+Consider the documentation for the function [[sorted]]\label{sortedDocExample} 
+in Python:
 \begin{pycode}
 print(r"\begin{verbatim}")
 help(sorted)

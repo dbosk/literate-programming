@@ -2,18 +2,125 @@
 
 We'll write the short Python module named [[pyex]], residing in 
 [[<<pyex.py>>]].
-(The literate source code is in a file [[pyex.nw]] that should reside in the 
-[[/src]] directory.)
+We'll use [[poetry]] to manage the Python project.
+The literate source code is in a file [[pyex.nw]] that should reside in the 
+[[/src]] directory, where we want the [[.py]] files to be too.
 This module cannot be run, only imported.
 It contains only functions and constants.
 <<pyex.py>>=
 """
-This is an example module that illustrates docstrings in Python.
+<<module docstring>>
 """
 
-<<constants>>
 <<functions>>
 @
 
-We also want to do testing with [[pytest]].
+\ltnote{%
+  We want to show how literate programming and docstrings complement each 
+  other.
+  We choose to implement the [[sorted]] function as we used it as an example 
+  previously, in \cref{sortedDocExample}.
+  In that use, we wanted to
+}%
+We want to write a function [[sorted]] that is our own implementation of the 
+corresponding Python built-in function.
+<<module docstring>>=
+This module contains a few functions that are our own implementations of 
+built-in Python functions. They are not meant to be used in production code, 
+but rather as a learning experience.
+@ We also want to test it with [[pytest]].
+
+\subsubsection{Building the tests}
+
 Normally, the tests resides in a directory [[/tests]].
+We'll still use that directory structure.
+We'll just drop a make file [[Makefile]] in the [[/tests]] directory that knows 
+how to create the tests.
+<<Makefile>>=
+<<variables>>
+
+.PHONY: all
+all: <<test files>>
+	poetry run pytest ${PYTESTFLAGS}
+
+<<targets for test files>>
+
+.PHONY: clean distclean
+clean:
+	<<clean files>>
+
+distclean:
+@
+
+To find the test files in the source code, we'll use the following convention:
+If we have a file [[foo.py]] that resides in code chuck [[<<foo.py>>]] in a 
+[[.nw]] file in the [[/src]] directory, then we'll need a test file named 
+[[test_foo.py]] that we can get from the [[<<test foo.py>>]] code chunk in the 
+same [[.nw]] file.
+(Note the missing underscore in the code chunk name, we'll translate this.
+ The reason is that underscores in chunk names are interpreted as \LaTeX{} 
+ code.)
+
+This means that we can search for such code chunks and extract the file names.
+We'll find all files, grep through them after this code-chunk pattern.
+We want two things: the name of the test file ([[test_foo.py]]) and the name of 
+the source file ([[bar.nw]]).
+We need this to extract [[test_foo.py]].
+<<variables>>=
+define find_tests
+find ../src -type f | xargs grep "@<<test [^.]*\.py>>" | \
+  sed -En "s/^(.*):.*@<<test ([^.]*).py>>.*/test_\2.py:\1/p" | sort -u
+endef
+
+TESTS=	$(shell ${find_tests})
+@ Now we have a list of all test files and from which files to build them.
+The list contains items like [[test_foo.py:../src/bar.nw]].
+
+One thing we can do now is to list the prerequisites for the [[all]] target.
+The prerequisites are the files to build, \ie [[test_foo.py]] in our example, 
+so we cut the first file name from the pairs.
+<<test files>>=
+$(foreach files,${TESTS},$(shell echo ${files} | cut -d: -f1))
+@ Now that we know the files to build, we can also clean them.
+<<clean files>>=
+${RM} <<test files>>
+@ However, running the tests also generates Python cache files that we want to 
+clean.
+<<clean files>>=
+${RM} -Rf __pycache__
+@
+
+Lastly we need to define the targets for the test files.
+We generate them from the list of test files.
+We'll create a function that returns the code for each target, then we run 
+[[eval]] on this code to define the targets.
+<<targets for test files>>=
+$(foreach files,${TESTS},$(eval $(call def_target, ${files})))
+@
+
+Now the [[def_target]] function should take a list of
+[[test_foo.py:../src/bar.nw]] pairs
+and return a target corresponding to each pair.
+In the case of our example it will be:
+\begin{minted}{make}
+test_foo.py: ../src/bar.nw
+  notangle "-R$(shell echo $@ | sed 's/_/ /')" $^ > $@
+\end{minted}
+In a function like this, we need to escape the dollar signs that are going to 
+be evaluated later when the target is run ([[make test_foo.py]]), instead of 
+when the target is built (in the [[call]] in
+[[<<targets for test files>>]]).
+<<variables>>=
+define def_target
+$(shell echo $1 | cut -d: -f1): $(shell echo $1 | cut -d: -f2)
+	notangle ${NOTANGLEFLAGS.py} "-R$$(shell echo $$@ | sed 's/_/ /')" $$^ > $$@
+endef
+@
+
+Let's finish by looking at how we set up the test file for our example.
+<<test pyex.py>>=
+import pytest
+import pyex
+
+<<test functions>>
+@ We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].
