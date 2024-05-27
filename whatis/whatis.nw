@@ -129,6 +129,7 @@ programming:
   other methodologies.
   This means that we want to introduce other methodologies and show variation 
   in these two aspects.
+  This is what \cref{RelatedApproaches} is for.
 }%
 So we can summarize the goals of literate programming as follows:
 \begin{itemize}
@@ -156,10 +157,19 @@ But Knuth is convinced that this works well:
   methodology encourages me to do a better job.%
 }
 
-\subsection{Related approaches}
+\subsection{Related approaches}\label{RelatedApproaches}
 
 Let's start by thinking of systems that we know that might fulfil some of these 
 goals.
+\ltnote{%
+  As mentioned above, we want to show how well different methods do and don't 
+  fulfil the goals of literate programming.
+  This is to get a better understanding for the goals themselves, rather than 
+  the different methods.
+
+  From a variation theoretic perspective, the students must see examples that 
+  both fulfils and don't fulfil the goals.
+}%
 \ltnote{%
   The purpose of \cref{NameOtherRelated} is to get them to think about systems 
   they already know that might come close to this.
