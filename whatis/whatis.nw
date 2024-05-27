@@ -231,7 +231,17 @@ variables).
 \begin{remark}
   The concept of notebooks seems to originate with 
   Mathematica\autocite{Wolfram1988}.
-  (Wolfram started the work in 1986.)
+  Wolfram started the work in 1986, two years after Knuth published 
+  \citetitle{Knuth1984}.
+  \only<article>{%
+    It's unclear from the material that I've reviewed so far, if Wolfram was 
+    inspired by Knuth's work.
+    It might be independent due Wolfram being a physicist and Mathematica's 
+    focus on mathematics.
+    The notebook concept is basically just an interactive (and computational) 
+    extension of the traditional way of using mathematics in physics (papers 
+    and notebooks).%
+  }
 \end{remark}
 \end{frame}
 
