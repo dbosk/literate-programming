@@ -2,19 +2,7 @@
 
 We'll write the short Python module named [[pyex]], residing in 
 [[<<pyex.py>>]].
-We'll use [[poetry]] to manage the Python project.
-The literate source code is in a file [[pyex.nw]] that should reside in the 
-[[/src]] directory, where we want the [[.py]] files to be too.
-This module cannot be run, only imported.
-It contains only functions and constants.
-<<pyex.py>>=
-"""
-<<module docstring>>
-"""
-
-<<functions>>
-@
-
+We want it to be like this:
 \ltnote{%
   We want to show how literate programming and docstrings complement each 
   other.
@@ -22,22 +10,627 @@ It contains only functions and constants.
   previously, in \cref{sortedDocExample}.
   In that use, we wanted to
 }%
+\begin{frame}[fragile]
+\begin{pycode}
+import subprocess
+
+def minted_pydoc(module, builtin=False):
+  print(r"\begin{minted}{text}")
+  output = subprocess.run(["python3", "-m", "pydoc", module],
+                          capture_output=True)
+  lines = output.stdout.decode().splitlines()
+  if not builtin:
+    lines = lines[:-4]
+  print("\n".join(lines).strip())
+  print(r"\end{minted}")
+
+minted_pydoc("pyex")
+\end{pycode}
+\end{frame}
+
+We'll use [[poetry]] to manage the Python project.
+The literate source code is in a file [[pyex.nw]] that should reside in the 
+[[/src]] directory, where we want the [[.py]] files to be too.
+This module cannot be run, only imported.
+It contains only functions.
+\begin{frame}[fragile]
+<<pyex.py>>=
+"""
+<<module docstring>>
+"""
+<<imports>>
+
+<<functions>>
+@
+\end{frame}
+
 We want to write a function [[sorted]] that is our own implementation of the 
 corresponding Python built-in function.
+\begin{frame}[fragile]
 <<module docstring>>=
 This module contains a few functions that are our own implementations of 
 built-in Python functions. They are not meant to be used in production code, 
 but rather as a learning experience.
-@ We also want to test it with [[pytest]].
+@
+\end{frame}
+
+We also want to test it with [[pytest]].
+The test file for our example looks like this.
+\begin{frame}[fragile]
+<<test pyex.py>>=
+import pytest
+from pyex import *
+
+<<test functions>>
+@
+\end{frame}
+We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].
+We use [[from pyex import *]] to import all functions from the module, so that 
+we can use them as we would in the same module.
+
+\subsubsection{The sorting function: \texttt{sorted}}
+
+We want to implement the function [[sorted]].
+\begin{frame}[fragile]
+<<functions>>=
+def sorted(<<[[sorted]] arguments>>):
+  """
+  <<[[sorted]] docstring>>
+  """
+  <<[[sorted]] set up>>
+  <<[[sorted]] body>>
+@
+\end{frame}
+
+The standard sorting function in Python is based on the Merge Sort 
+algorithm\autocite[Section 5.2.4: Sorting by Merging]{KnuthAOCPvol3} and is 
+written in C\footnote{%
+   That is, the CPython implementation.
+   See \href
+  {https://github.com/python/cpython/blob/1500a23f33f5a6d052ff1ef6383d9839928b8ff1/Objects/listobject.c\#L2856}
+  {\texttt{list\textunderscore sort\textunderscore impl} in 
+  GitHub.com/python/cpython/Objects/listobject.c}
+}.
+We'll use IntroSort\autocite{Musser1997} instead, which is a hybrid sorting 
+algorithm that combines three sorting algorithms: Quick Sort, Heap Sort, and 
+Insertion Sort.
+(This is the algorithm used in the C++ standard library\footnote{%
+  See \href
+  {https://en.cppreference.com/w/cpp/algorithm/sort}
+  {\texttt{std::sort} in cppreference.com}
+}.)
+\begin{frame}[fragile]
+<<[[sorted]] docstring>>=
+<<describe [[sorted]] arguments and return values>>
+
+This function uses the IntroSort algorithm to sort the input 
+list, instead of MergeSort as the built-in `sorted` function.
+@
+\end{frame}
+
+Remember, we want to keep compatibility with the built-in [[sorted]] function.
+\begin{frame}[fragile]
+\begin{pycode}
+minted_pydoc("sorted", builtin=True)
+\end{pycode}
+\end{frame}
+This means that the [[iterable]] argument should be positional (the [[/]] 
+delimiter) and the [[key]] and [[reverse]] arguments should be keyword-only 
+arguments (the [[*]] delimiter).
+But we can add more keyword arguments if we like, just not less.
+<<[[sorted]] arguments>>=
+iterable, /, *, key=None, reverse=False,
+<<describe [[sorted]] arguments and return values>>=
+Iterable is a sequence of elements that should be sorted. The optional keyword 
+arguments are `key` and `reverse`, which are used to control the sorting 
+behaviour. `key` is a function that is called on each element before comparing,
+and `reverse` is a boolean that controls the sorting order.
+@
+
+The IntroSort algorithm needs some numbers to make its decisions.
+It needs the size of the list, \(n\).
+It also needs the maximum depth of the recursion; which we can estimate by 
+\(2\left\lfloor\log_2 n\right\rfloor\).
+The reason for the factor \(2\) is a tuning parameter that we can adjust for 
+performance.
+\begin{frame}[fragile]
+<<[[sorted]] arguments>>=
+tuning=2,
+<<describe [[sorted]] arguments and return values>>=
+The tuning parameter is for calculating max depth for the IntroSort algorithm, 
+that is the cut off between using Quick Sort or Heap Sort.
+@
+\end{frame}
+Now we only need to get the IntroSort algorithm started.
+\begin{frame}[fragile]
+<<[[sorted]] set up>>=
+n = len(iterable)
+max_depth = tuning * math.floor(math.log(n))
+<<[[sorted]] body>>=
+return intro_sort(iterable.copy(), max_depth,
+                  <<pass keyword-only arguments for sorting behaviour>>)
+<<imports>>=
+import math
+@
+\end{frame}
+
+\subsubsection{The sorting algorithm: \texttt{intro\textunderscore sort}}
+
+We need a separate function for IntroSort that we can call recursively and vary 
+the [[max_depth]] parameter.
+We need to decrease it for every recursive call.
+\begin{frame}[fragile]
+<<functions>>=
+def intro_sort(iterable, max_depth, /, *,
+               <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function returns iterable sorted (in-place) using the IntroSort 
+  algorithm. max_depth is the maximum depth of the recursion before switching 
+  to Heap Sort.
+  """
+  if len(iterable) <= 16:
+    <<sort using Insertion Sort>>
+  elif max_depth == 0:
+    <<sort using Heap Sort>>
+  else:
+    <<sort using Quick Sort>>
+  return iterable
+@
+\end{frame}
+
+\subsubsection{Using Quick Sort}
+
+The case using Quick Sort is the simplest case.
+We simply calculate the pivot and call [[intro_sort]] recursively on the two 
+halves of the list.
+\begin{frame}[fragile]
+<<sort using Quick Sort>>=
+pivot = partition(iterable,
+                  <<pass keyword-only arguments for sorting behaviour>>)
+intro_sort(iterable[:pivot], max_depth-1,
+           <<pass keyword-only arguments for sorting behaviour>>)
+intro_sort(iterable[pivot:], max_depth-1,
+           <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+Now to the last piece of this part of the puzzle: the partitioning function.
+It selects the pivot element and moves all elements less than the pivot to the 
+left and all elements greater than the pivot to the right.
+(Less and greater than in terms of our preferred direction of sorting.)
+<<functions>>=
+def partition(iterable,
+              <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function partitions the input list in-place and returns the index of the 
+  pivot element.
+  """
+  n = len(iterable)
+  <<let [[pivot]] be index of pivot element>>
+  <<swap elements around [[pivot]]>>
+  return pivot
+@
+
+As discussed by \textcite{Musser1997}, we can select the pivot element as the 
+median of the first, middle, and last element.
+<<let [[pivot]] be index of pivot element>>=
+first, middle, last = 0, n//2, n-1
+if iterable[first] < iterable[middle] < iterable[last]:
+  pivot = middle
+elif iterable[first] < iterable[last] < iterable[middle]:
+  pivot = last
+else:
+  pivot = first
+@
+
+Consider the following list as an example: \[
+  3, 1, 2, 5, 4.
+\] The pivot element is the median of \(3, 2, 4\), which is \(3\).
+
+We want to keep the pivot element at the last index when we start.
+This essentially reduces the partitioning scheme to the Lomuto 
+partitioning\autocite{ProgrammingPearls}, which uses the last element as pivot.
+<<swap elements around [[pivot]]>>=
+iterable[pivot], iterable[last] = iterable[last], iterable[pivot]
+pivot = last
+@ This leaves us with the following list: \[
+  4, 1, 2, 5, 3.
+\]
+
+To move the elements into the correct partitions, we use two pointers [[i]] and 
+[[j]].
+Both start at the beginning of the list.
+The [[j]] pointer moves forward, looking for elements smaller than the pivot.
+<<swap elements around [[pivot]]>>=
+i = 0
+for j in range(n):
+  <<move element to left partition if less than pivot>>
+@ We note that most implementations use a while loop instead of a for loop.
+But in Python, the for loop is more idiomatic, and it's actually faster to 
+iterate over a [[range]] iterator with for than using a while loop\footnote{%
+  See the discussion on \href
+  {https://stackoverflow.com/questions/869229/why-is-looping-over-range-in-python-faster-than-using-a-while-loop}
+  {StackOverflow on \enquote{Why is looping over range() in Python faster than 
+  using a while loop?}}.
+}.
+
+The loop invariant is that all elements from the beginning of the list up to 
+[[i]] are less than the pivot.
+In our example, we start with both [[i]] and [[j]] pointing at the first 
+element, \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+  [[j]] &   &   &   &   \\
+  4, & 1, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Since that's greater than the pivot (\(3\), still the last element), we don't 
+move it.
+Now [[j]] points at the second element, \(1\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  4, & 1, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+This is indeed less than the pivot, so we swap the elements at [[i]] and [[j]].
+Remember that [[i]] pointed to an element that is greater than the pivot 
+(\(4\)), so swapping them is correct.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Since the element that [[i]] points to is now less than the pivot, we move 
+[[i]] forward.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+This means that [[i]] always points to the first element that is greater than 
+the pivot, so we can always switch with it.
+So now [[j]] proceeds to point at the third element, \(2\), and [[i]] points at 
+the second element, \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Now \(2\) is less than the pivot, so we swap the elements at [[i]] and [[j]]:
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+We increase [[i]] as we swapped, so it keeps pointing at that \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Now [[j]] proceeds to the fourth element, \(5\), we see that it's greater than 
+the pivot, so we don't swap and we don't touch [[i]] (still pointing at \(4\)).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   & [[j]] &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Finally, [[j]] points at the last element, \(3\), which isn't less than the 
+pivot (it is the pivot), so we don't swap.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   &   & [[j]] \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+\begin{frame}[fragile]
+<<move element to left partition if less than pivot>>=
+if is_ordered(iterable[j], iterable[pivot]):
+  iterable[i], iterable[j] = iterable[j], iterable[i]
+  i += 1
+<<keyword-only arguments for sorting behaviour>>=
+is_ordered=lambda x, y: x < y,
+<<pass keyword-only arguments for sorting behaviour>>=
+is_ordered=is_ordered,
+@
+\end{frame}
+
+We can conclude that the loop invariant is that the [[i]] index always points 
+at the first element that is greater than the pivot.
+Since the pivot is at the last index and the pivot is supposed to be 
+\enquote{in the middle}, we can swap the pivot with the element at [[i]].
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   &   & [[j]] \\
+  1, & 2, & 3, & 5, & 4 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+\begin{frame}[fragile]
+<<swap elements around [[pivot]]>>=
+iterable[i], iterable[pivot] = iterable[pivot], iterable[i]
+pivot = i
+@
+\end{frame}
+
+Let's have a look at it's execution.
+We'll run the code with PySnooper to see if the execution corresponds to what 
+we imagined above.
+\begin{minted}{python}
+import pysnooper
+import pyex
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  pyex.partition(lst)
+\end{minted}
+That yields the following output.
+\begin{frame}[fragile,allowframebreaks]
+\begin{pycode}
+import subprocess
+
+def minted_output(code):
+  print(r"\begin{minted}{text}")
+  with open("tmp_minted_output.py", "w") as f:
+    f.write(code)
+  output = subprocess.run(["python3", f.name],
+                          stdout=subprocess.PIPE,
+                          stderr=subprocess.STDOUT)
+  print(output.stdout.decode().strip())
+  print(r"\end{minted}")
+
+minted_output(r"""
+import pysnooper
+import pyex
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  pyex.partition(lst)
+""")
+\end{pycode}
+\end{frame}
+
+Now let's add a test for the partitioning function.
+We first add the same test as we did above.
+(We know that this is correct, unless we change the code later.)
+\begin{frame}[fragile]
+<<test functions>>=
+def test_partition():
+  lst = [3, 1, 2, 5, 4]
+  pivot = partition(lst)
+  assert pivot == 2
+  assert lst == [1, 2, 3, 4, 5]
+@
+\end{frame}
+We also want to test the case when the list is already sorted.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_partition_sorted():
+  lst = [1, 2, 3, 4, 5]
+  pivot = partition(lst)
+  assert pivot == 2
+  assert lst == [1, 2, 3, 4, 5]
+@
+\end{frame}
+
+\subsubsection{Controlling sorting}
+
+We want to be able to control the sorting behaviour.
+We noticed above that we added a keyword argument to the [[partition]] function 
+named [[is_ordered]].
+(Actually, we added it to all the functions by adding it to
+[[<<keyword-only arguments for sorting behaviour>>]].)
+
+As we mentioned earlier, we want to keep compatibility with the built-in 
+[[sorted]] function.
+This is fine since we have a default value for the [[is_ordered]] argument.
+But we want the [[key]] and [[reverse]] keyword arguments to affect the 
+[[is_ordered]] function as expected.
+\begin{frame}[fragile]
+<<[[sorted]] set up>>=
+if key:
+  is_ordered = lambda x, y: key(x) < key(y)
+if reverse:
+  is_ordered = lambda x, y: not is_ordered(x, y)
+@
+\end{frame}
+
+Let's add some tests for various combinations of these settings.
+We start with the default settings.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_sorted():
+  lst = [3, 1, 2, 5, 4]
+  assert sorted(lst) == [1, 2, 3, 4, 5]
+@
+\only<article>{Next, we test the [[reverse]] argument.}
+<<test functions>>=
+def test_sorted_reverse():
+  lst = [3, 1, 2, 5, 4]
+  assert sorted(lst, reverse=True) == [5, 4, 3, 2, 1]
+@
+\end{frame}
+
+Let's test the [[key]] argument next.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_sorted_key():
+  lst = ["Adam", "Bertil", "Cesar"]
+  assert sorted(lst, key=len) == ["Adam", "Cesar", "Bertil"]
+@
+\only<article>{And now, let's reverse that result.}
+<<test functions>>=
+def test_sorted_key_reverse():
+  lst = ["Adam", "Bertil", "Cesar"]
+  assert sorted(lst, key=len, reverse=True) == ["Bertil", "Cesar", "Adam"]
+@
+\end{frame}
+
+
+\subsubsection{Using Insertion Sort}
+
+\begin{frame}[fragile]
+<<sort using Insertion Sort>>=
+return insertion_sort(iterable,
+                      <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+The Insertion Sort algorithm is simple.
+We iterate over the list and insert the current element in the correct position 
+in the already sorted part of the list (the left part, with lower indices).
+The loop invariant is that indices \(0..[[i]]-1\) are sorted.
+\begin{frame}[fragile]
+<<functions>>=
+def insertion_sort(iterable,
+                   <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function sorts the input list in-place using the Insertion Sort 
+  algorithm.
+  """
+  for i in range(1, len(iterable)):
+    <<insert element [[i]] at correct position \(1..[[i]]-1\)>>
+  return iterable
+@
+\end{frame}
+
+When we want to insert the element at the correct position, we must move the 
+other elements.
+\Textcite[Section~5.2.1]{KnuthAOCPvol3} points out that this will be more 
+efficient if we do the check from \([[i]]-1\) down to \(0\), rather than from 
+\(0\) up to \([[i]]-1\).
+This way we can move the elements one by one as we compare them.
+Once we encounter an element at position [[j]] that is less than the current 
+element, we insert the current element at the next position (\([[j]]+1\)).
+\begin{frame}[fragile]
+<<insert element [[i]] at correct position \(1..[[i]]-1\>>>=
+current = iterable[i]
+for j in range(i-1, 0, -1):
+  if is_ordered(current, iterable[j]):
+    iterable[j+1] = iterable[j]
+  else:
+    iterable[j+1] = current
+    break
+else:
+  iterable[j] = current
+@
+\end{frame}
+We note that if we don't break out of the loop, that means that we moved the 
+element at index 0 to index 1.
+We're also at the beginning, which means that the [[current]] element is 
+smaller than all the other elements.
+So we use the for-else construction in Python to handle this case.
+(If we break out of the loop, the else block isn't executed.)
+
+Let's add a test for the Insertion Sort algorithm.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_insertion_sort():
+  lst = [3, 1, 2, 5, 4]
+  insertion_sort(lst)
+  assert lst == [1, 2, 3, 4, 5]
+@
+\end{frame}
+
+
+\subsubsection{Using Heap Sort}
+
+\begin{frame}[fragile]
+<<sort using Heap Sort>>=
+return heap_sort(iterable,
+                 <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+The Heap Sort algorithm is a bit more complex.
+We first build a heap from the list, then we repeatedly remove the largest 
+element from the heap and insert it at the end of the list.
+\begin{frame}[fragile]
+<<functions>>=
+def heap_sort(iterable,
+              <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function sorts the input list in-place using the Heap Sort algorithm.
+  """
+  n = len(iterable)
+  <<build heap>>
+  for i in range(n-1, 0, -1):
+    <<remove largest element from heap>>
+  return iterable
+@
+\end{frame}
+
+\subsubsection{The \texttt{pyex} module's code}
+
+All in all, the file [[pyex.py]] looks like this after we've tangled it:
+\begin{frame}[fragile,allowframebreaks]
+\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{pyex.py}}
+\only<article>{\inputminted{python}{pyex.py}}
+\end{frame}
+
+\subsubsection{Docstrings and literate programming}
+
+\dots
+
+\begin{frame}[fragile]
+\begin{pycode}
+minted_pydoc("pyex.sorted")
+\end{pycode}
+\end{frame}
+
+\subsubsection{The test file}
+
+The test file [[test_pyex.py]] looks like this after we've tangled it:
+\begin{frame}[fragile,allowframebreaks]
+\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{test_pyex.py}}
+\only<article>{\inputminted{python}{test_pyex.py}}
+\end{frame}
 
 \subsubsection{Building the tests}
 
-Normally, the tests resides in a directory [[/tests]].
+Normally, the tests resides in a directory [[/tests]], not in [[/src]].
 We'll still use that directory structure.
 We'll just drop a make file [[Makefile]] in the [[/tests]] directory that knows 
-how to create the tests.
+how to create the tests from the source files in [[/src]].
+\begin{frame}[fragile]
 <<Makefile>>=
-<<variables>>
+<<Makefile variables>>
 
 .PHONY: all
 all: <<test files>>
@@ -47,10 +640,11 @@ all: <<test files>>
 
 .PHONY: clean distclean
 clean:
-	<<clean files>>
+	<<clean test files>>
 
 distclean:
 @
+\end{frame}
 
 To find the test files in the source code, we'll use the following convention:
 If we have a file [[foo.py]] that resides in code chuck [[<<foo.py>>]] in a 
@@ -66,61 +660,65 @@ We'll find all files, grep through them after this code-chunk pattern.
 We want two things: the name of the test file ([[test_foo.py]]) and the name of 
 the source file ([[bar.nw]]).
 We need this to extract [[test_foo.py]].
-<<variables>>=
+\begin{frame}[fragile]
+<<Makefile variables>>=
 define find_tests
 find ../src -type f | xargs grep "@<<test [^.]*\.py>>" | \
   sed -En "s/^(.*):.*@<<test ([^.]*).py>>.*/test_\2.py:\1/p" | sort -u
 endef
 
 TESTS=	$(shell ${find_tests})
-@ Now we have a list of all test files and from which files to build them.
+@
+\end{frame}
+Now we have a list of all test files and from which files to build them.
 The list contains items like [[test_foo.py:../src/bar.nw]].
 
 One thing we can do now is to list the prerequisites for the [[all]] target.
 The prerequisites are the files to build, \ie [[test_foo.py]] in our example, 
 so we cut the first file name from the pairs.
+\begin{frame}[fragile]
 <<test files>>=
-$(foreach files,${TESTS},$(shell echo ${files} | cut -d: -f1))
-@ Now that we know the files to build, we can also clean them.
-<<clean files>>=
+$(foreach file,${TESTS},$(shell echo ${file} | cut -d: -f1))
+@ \only<article>{Now that we know the files to build, we can also clean them.}
+<<clean test files>>=
 ${RM} <<test files>>
-@ However, running the tests also generates Python cache files that we want to 
-clean.
-<<clean files>>=
+@ \only<article>{However, running the tests also generates Python cache files 
+that we want to clean.}
+<<clean test files>>=
 ${RM} -Rf __pycache__
 @
+\end{frame}
 
 Lastly we need to define the targets for the test files.
 We generate them from the list of test files.
 We'll create a function that returns the code for each target, then we run 
 [[eval]] on this code to define the targets.
+\begin{frame}[fragile]
 <<targets for test files>>=
-$(foreach files,${TESTS},$(eval $(call def_target, ${files})))
+$(foreach file,${TESTS},$(eval $(call def_target, ${file})))
 @
+\end{frame}
 
-Now the [[def_target]] function should take a list of
+\begin{frame}[fragile]
+\only<article>{Now the [[def_target]] function should take a list of}
 [[test_foo.py:../src/bar.nw]] pairs
-and return a target corresponding to each pair.
-In the case of our example it will be:
+\only<article>{and return a target corresponding to each pair.
+In the case of our example it will be:}
+\only<presentation>{\par should be changed into\par}
 \begin{minted}{make}
 test_foo.py: ../src/bar.nw
   notangle "-R$(shell echo $@ | sed 's/_/ /')" $^ > $@
 \end{minted}
-In a function like this, we need to escape the dollar signs that are going to 
-be evaluated later when the target is run ([[make test_foo.py]]), instead of 
-when the target is built (in the [[call]] in
-[[<<targets for test files>>]]).
-<<variables>>=
+\only<article>{In a function like this, we need to escape the dollar signs that 
+are going to be evaluated later when the target is run ([[make test_foo.py]]), 
+instead of when the target is built (in the [[call]] in
+[[<<targets for test files>>]]).}
+<<Makefile variables>>=
 define def_target
 $(shell echo $1 | cut -d: -f1): $(shell echo $1 | cut -d: -f2)
 	notangle ${NOTANGLEFLAGS.py} "-R$$(shell echo $$@ | sed 's/_/ /')" $$^ > $$@
 endef
 @
+\end{frame}
 
-Let's finish by looking at how we set up the test file for our example.
-<<test pyex.py>>=
-import pytest
-import pyex
 
-<<test functions>>
-@ We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].

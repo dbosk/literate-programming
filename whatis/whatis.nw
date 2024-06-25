@@ -846,12 +846,6 @@ documentation for sure can be targeted at users.)
 
 \mode<all>{\input{pyex.tex}}
 
-All in all, the script [[pyex.py]] looks like this after we've tangled it:
-\begin{frame}[fragile,allowframebreaks]
-\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{pyex.py}}
-\only<article>{\inputminted{python}{pyex.py}}
-\end{frame}
-
 \subsection{Summary}
 
 \ltnote{%
