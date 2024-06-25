@@ -8,6 +8,7 @@ SRC+=		abstract.tex contents.tex
 SRC+=		merge.sh merge.tex
 SRC+=		foo.bar foo.tex
 SRC+=		pyex.tex pyex.py
+SRC+=		test_pyex.py
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -28,11 +29,15 @@ ${FIGS}::
 foo.bar: foo.nw
 	${NOTANGLE}
 
+test_pyex.py: pyex.nw
+	notangle -R"test pyex.py" $< | cpif $@
+
 .PHONY: clean
 clean:
 	${RM} notes.pdf slides.pdf
 	${RM} contents.tex
 	${RM} merge.tex
+	${RM} test_pyex.py tmp_minted_output.py
 
 
 INCLUDE_MAKEFILES=../makefiles

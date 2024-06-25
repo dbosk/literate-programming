@@ -10,3 +10,7 @@ foo.bar
 foo.tex
 pyex.py
 pyex.tex
+test_pyex.py
+tmp_minted_output.py
+__pycache__/
+
