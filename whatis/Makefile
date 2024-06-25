@@ -36,7 +36,8 @@ test_pyex.py: pyex.nw
 clean:
 	${RM} notes.pdf slides.pdf
 	${RM} contents.tex
-	${RM} merge.tex
+	${RM} merge.tex merge.sh
+	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
 	${RM} test_pyex.py tmp_minted_output.py
 
 
