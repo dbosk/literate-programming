@@ -38,7 +38,10 @@ clean:
 	${RM} contents.tex
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
+	${RM} pyex.py pyex.tex
 	${RM} test_pyex.py tmp_minted_output.py
+	${RM} foo.bar foo.tex
+	${RM} -R __pycache__
 
 
 INCLUDE_MAKEFILES=../makefiles
