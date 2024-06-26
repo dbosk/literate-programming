@@ -844,7 +844,7 @@ not users.
 (Although there can be some overlap and some parts of the literate 
 documentation for sure can be targeted at users.)
 
-\mode<all>{\input{pyex.tex}}
+\mode<all>{\input{introsort.tex}}
 
 \subsection{Summary}
 

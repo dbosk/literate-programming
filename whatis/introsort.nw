@@ -1,7 +1,7 @@
 \mode*
 
-We'll write the short Python module named [[pyex]], residing in 
-[[<<pyex.py>>]].
+We'll write the short Python module named [[introsort]], residing in 
+[[<<introsort.py>>]].
 We want it to be like this:
 \ltnote{%
   We want to show how literate programming and docstrings complement each 
@@ -24,17 +24,17 @@ def minted_pydoc(module, builtin=False):
   print("\n".join(lines).strip())
   print(r"\end{minted}")
 
-minted_pydoc("pyex")
+minted_pydoc("introsort")
 \end{pycode}
 \end{frame}
 
 We'll use [[poetry]] to manage the Python project.
-The literate source code is in a file [[pyex.nw]] that should reside in the 
+The literate source code is in a file [[introsort.nw]] that should reside in the 
 [[/src]] directory, where we want the [[.py]] files to be too.
 This module cannot be run, only imported.
 It contains only functions.
 \begin{frame}[fragile]
-<<pyex.py>>=
+<<introsort.py>>=
 """
 <<module docstring>>
 """
@@ -57,15 +57,15 @@ but rather as a learning experience.
 We also want to test it with [[pytest]].
 The test file for our example looks like this.
 \begin{frame}[fragile]
-<<test pyex.py>>=
+<<test introsort.py>>=
 import pytest
-from pyex import *
+from introsort import *
 
 <<test functions>>
 @
 \end{frame}
 We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].
-We use [[from pyex import *]] to import all functions from the module, so that 
+We use [[from introsort import *]] to import all functions from the module, so that 
 we can use them as we would in the same module.
 
 \subsubsection{The sorting function: \texttt{sorted}}
@@ -394,11 +394,11 @@ We'll run the code with PySnooper to see if the execution corresponds to what
 we imagined above.
 \begin{minted}{python}
 import pysnooper
-import pyex
+import introsort
 
 lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
-  pyex.partition(lst)
+  introsort.partition(lst)
 \end{minted}
 That yields the following output.
 \begin{frame}[fragile,allowframebreaks]
@@ -417,11 +417,11 @@ def minted_output(code):
 
 minted_output(r"""
 import pysnooper
-import pyex
+import introsort
 
 lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
-  pyex.partition(lst)
+  introsort.partition(lst)
 """)
 \end{pycode}
 \end{frame}
@@ -596,12 +596,12 @@ def heap_sort(iterable,
 @
 \end{frame}
 
-\subsubsection{The \texttt{pyex} module's code}
+\subsubsection{The \texttt{introsort} module's code}
 
-All in all, the file [[pyex.py]] looks like this after we've tangled it:
+All in all, the file [[introsort.py]] looks like this after we've tangled it:
 \begin{frame}[fragile,allowframebreaks]
-\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{pyex.py}}
-\only<article>{\inputminted{python}{pyex.py}}
+\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{introsort.py}}
+\only<article>{\inputminted{python}{introsort.py}}
 \end{frame}
 
 \subsubsection{Docstrings and literate programming}
@@ -610,16 +610,16 @@ All in all, the file [[pyex.py]] looks like this after we've tangled it:
 
 \begin{frame}[fragile]
 \begin{pycode}
-minted_pydoc("pyex.sorted")
+minted_pydoc("introsort.sorted")
 \end{pycode}
 \end{frame}
 
 \subsubsection{The test file}
 
-The test file [[test_pyex.py]] looks like this after we've tangled it:
+The test file [[test_introsort.py]] looks like this after we've tangled it:
 \begin{frame}[fragile,allowframebreaks]
-\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{test_pyex.py}}
-\only<article>{\inputminted{python}{test_pyex.py}}
+\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{test_introsort.py}}
+\only<article>{\inputminted{python}{test_introsort.py}}
 \end{frame}
 
 \subsubsection{Building the tests}

@@ -8,9 +8,9 @@ slides.pdf
 contents.tex
 foo.bar
 foo.tex
-pyex.py
-pyex.tex
-test_pyex.py
+introsort.py
+introsort.tex
+test_introsort.py
 tmp_minted_output.py
 __pycache__/
 

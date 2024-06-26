@@ -7,8 +7,8 @@ SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
 SRC+=		merge.sh merge.tex
 SRC+=		foo.bar foo.tex
-SRC+=		pyex.tex pyex.py
-SRC+=		test_pyex.py
+SRC+=		introsort.tex introsort.py
+SRC+=		test_introsort.py
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -29,8 +29,8 @@ ${FIGS}::
 foo.bar: foo.nw
 	${NOTANGLE}
 
-test_pyex.py: pyex.nw
-	notangle -R"test pyex.py" $< | cpif $@
+test_introsort.py: introsort.nw
+	notangle -R"test introsort.py" $< | cpif $@
 
 .PHONY: clean
 clean:
@@ -38,8 +38,8 @@ clean:
 	${RM} contents.tex
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
-	${RM} pyex.py pyex.tex
-	${RM} test_pyex.py tmp_minted_output.py
+	${RM} introsort.py introsort.tex
+	${RM} test_introsort.py tmp_minted_output.py
 	${RM} foo.bar foo.tex
 	${RM} -R __pycache__
 
