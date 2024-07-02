@@ -855,7 +855,8 @@ documentation for sure can be targeted at users.)
 }%
 \begin{frame}
 \begin{activity}
-  How would you summarize literate programming?
+  How would you summarize literate programming for someone who don't know what 
+  it is?
 \end{activity}
 \end{frame}
 

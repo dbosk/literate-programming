@@ -1,6 +1,6 @@
 \mode*
 
-We'll write the short Python module named [[introsort]], residing in 
+We'll write a short Python module named [[introsort]], residing in the file 
 [[<<introsort.py>>]].
 We want it to be like this:
 \ltnote{%
@@ -8,13 +8,16 @@ We want it to be like this:
   other.
   We choose to implement the [[sorted]] function as we used it as an example 
   previously, in \cref{sortedDocExample}.
-  In that use, we wanted to
+  In that use, we wanted the student to discern how the goal of literate 
+  programming relate to docstrings.
+  We generalize that here.
 }%
 \begin{frame}[fragile]
 \begin{pycode}
 import subprocess
 
 def minted_pydoc(module, builtin=False):
+  print(r"\begin{fullwidth}")
   print(r"\begin{minted}{text}")
   output = subprocess.run(["python3", "-m", "pydoc", module],
                           capture_output=True)
@@ -23,6 +26,7 @@ def minted_pydoc(module, builtin=False):
     lines = lines[:-4]
   print("\n".join(lines).strip())
   print(r"\end{minted}")
+  print(r"\end{fullwidth}")
 
 minted_pydoc("introsort")
 \end{pycode}
@@ -32,7 +36,7 @@ We'll use [[poetry]] to manage the Python project.
 The literate source code is in a file [[introsort.nw]] that should reside in the 
 [[/src]] directory, where we want the [[.py]] files to be too.
 This module cannot be run, only imported.
-It contains only functions.
+It contains only functions and imports.
 \begin{frame}[fragile]
 <<introsort.py>>=
 """
@@ -44,17 +48,18 @@ It contains only functions.
 @
 \end{frame}
 
-We want to write a function [[sorted]] that is our own implementation of the 
-corresponding Python built-in function.
+As mentioned, we want to write a function [[sorted]] that is our own 
+implementation of the corresponding Python built-in function.
+We already saw the module docstring above.
 \begin{frame}[fragile]
 <<module docstring>>=
-This module contains a few functions that are our own implementations of 
-built-in Python functions. They are not meant to be used in production code, 
-but rather as a learning experience.
+This module contains a few functions related to the Intro Sort algorithm. We 
+want our own implementation of the built-in Python function `sorted`, but which 
+uses Intro Sort.
 @
 \end{frame}
 
-We also want to test it with [[pytest]].
+We also want to test all the functions with [[pytest]].
 The test file for our example looks like this.
 \begin{frame}[fragile]
 <<test introsort.py>>=
@@ -65,8 +70,9 @@ from introsort import *
 @
 \end{frame}
 We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].
-We use [[from introsort import *]] to import all functions from the module, so that 
-we can use them as we would in the same module.
+We use [[from introsort import *]] to import all functions from the module, so 
+that we can use them as we would in the same module.
+(This makes reading easier.)
 
 \subsubsection{The sorting function: \texttt{sorted}}
 
@@ -91,7 +97,7 @@ written in C\footnote{%
   {\texttt{list\textunderscore sort\textunderscore impl} in 
   GitHub.com/python/cpython/Objects/listobject.c}
 }.
-We'll use IntroSort\autocite{Musser1997} instead, which is a hybrid sorting 
+We'll use Intro Sort\autocite{Musser1997} instead, which is a hybrid sorting 
 algorithm that combines three sorting algorithms: Quick Sort, Heap Sort, and 
 Insertion Sort.
 (This is the algorithm used in the C++ standard library\footnote{%
@@ -103,8 +109,8 @@ Insertion Sort.
 <<[[sorted]] docstring>>=
 <<describe [[sorted]] arguments and return values>>
 
-This function uses the IntroSort algorithm to sort the input 
-list, instead of MergeSort as the built-in `sorted` function.
+This function uses the Intro Sort algorithm to sort the input list, instead of 
+MergeSort as the built-in `sorted` function.
 @
 \end{frame}
 
