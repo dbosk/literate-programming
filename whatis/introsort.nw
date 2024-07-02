@@ -721,4 +721,7 @@ endef
 @
 \end{frame}
 
-
+All in all, the [[Makefile]] in the [[/tests]] directory looks like this.
+\begin{frame}[fragile]
+\inputminted{make}{tests_Makefile}
+\end{frame}

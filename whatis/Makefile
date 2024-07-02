@@ -9,6 +9,7 @@ SRC+=		merge.sh merge.tex
 SRC+=		foo.bar foo.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
+SRC+=		tests_Makefile
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -29,8 +30,16 @@ ${FIGS}::
 foo.bar: foo.nw
 	${NOTANGLE}
 
+tests_Makefile: introsort.nw
+	notangle -RMakefile introsort.nw | cpif $@
+
+.PHONY: test
+test: test_introsort.py introsort.py
+	python3 -m pytest test_introsort.py
+
 test_introsort.py: introsort.nw
 	notangle -R"test introsort.py" $< | cpif $@
+	black $@
 
 .PHONY: clean
 clean:
