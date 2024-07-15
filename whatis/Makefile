@@ -51,6 +51,8 @@ clean:
 	${RM} test_introsort.py tmp_minted_output.py
 	${RM} foo.bar foo.tex
 	${RM} -R __pycache__
+	${RM} tests_Makefile
+	${RM} tmp_didactic_minted_output.txt
 
 
 INCLUDE_MAKEFILES=../makefiles

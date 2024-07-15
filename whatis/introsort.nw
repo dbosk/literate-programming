@@ -1,7 +1,7 @@
 \mode*
 
 We'll write a short Python module named [[introsort]], residing in the file 
-[[<<introsort.py>>]].
+named [[introsort.py]] (which is found in the code block [[<<introsort.py>>]]).
 We want it to be like this:
 \ltnote{%
   We want to show how literate programming and docstrings complement each 
@@ -14,21 +14,7 @@ We want it to be like this:
 }%
 \begin{frame}[fragile]
 \begin{pycode}
-import subprocess
-
-def minted_pydoc(module, builtin=False):
-  print(r"\begin{fullwidth}")
-  print(r"\begin{minted}{text}")
-  output = subprocess.run(["python3", "-m", "pydoc", module],
-                          capture_output=True)
-  lines = output.stdout.decode().splitlines()
-  if not builtin:
-    lines = lines[:-4]
-  print("\n".join(lines).strip())
-  print(r"\end{minted}")
-  print(r"\end{fullwidth}")
-
-minted_pydoc("introsort")
+didactic_pydoc("introsort", fullwidth=True)
 \end{pycode}
 \end{frame}
 
@@ -109,15 +95,15 @@ Insertion Sort.
 <<[[sorted]] docstring>>=
 <<describe [[sorted]] arguments and return values>>
 
-This function uses the Intro Sort algorithm to sort the input list, instead of 
-MergeSort as the built-in `sorted` function.
+This function uses the Intro Sort algorithm to sort the input list,
+instead of MergeSort as the built-in `sorted` function.
 @
 \end{frame}
 
 Remember, we want to keep compatibility with the built-in [[sorted]] function.
 \begin{frame}[fragile]
 \begin{pycode}
-minted_pydoc("sorted", builtin=True)
+didactic_pydoc("sorted", builtin=True, fullwidth=True)
 \end{pycode}
 \end{frame}
 This means that the [[iterable]] argument should be positional (the [[/]] 
@@ -469,15 +455,8 @@ Let's have a look at it's execution.
 The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
-import inspect
 import introsort
-
-def minted_source(function):
-  print(r"\begin{minted}{python}")
-  print(inspect.getsource(function).strip())
-  print(r"\end{minted}")
-
-minted_source(introsort.partition)
+didactic_source(introsort.partition, fullwidth=True)
 \end{pycode}
 \end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
@@ -497,34 +476,7 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
 Running that code yields the following output.
 \begin{frame}[fragile,allowframebreaks]
 \begin{pycode}
-import re
-import subprocess
-
-def minted_output(code, grep=None):
-  with open("tmp_minted_output.py", "w") as f:
-    f.write(code)
-  output = subprocess.run(["python3", f.name],
-                          stdout=subprocess.PIPE,
-                          stderr=subprocess.STDOUT)
-  print(r"\begin{fullwidth}")
-  highlightlines = []
-  if grep:
-    lines = output.stdout.decode().splitlines()
-    for i, line in enumerate(lines):
-      for pattern in grep:
-        if re.search(pattern, line):
-          highlightlines.append(i+1)
-          break
-  if highlightlines:
-    print(r"\begin{{minted}}[highlightlines={{{}}}]{{text}}".format(
-      ",".join(str(i) for i in highlightlines)))
-  else:
-    print(r"\begin{minted}{text}")
-  print(output.stdout.decode().strip())
-  print(r"\end{minted}")
-  print(r"\end{fullwidth}")
-
-minted_output(r"""
+didactic_output(r"""
 import pysnooper
 import introsort
 
@@ -532,7 +484,8 @@ lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.partition(lst)
 """,
-grep=["iterable =", r"\.\. pivot ="])
+hlgrep=["iterable =", r"\.\. pivot ="],
+fullwidth=True)
 \end{pycode}
 \end{frame}
 
@@ -698,13 +651,13 @@ Let's visualize the execution for the list \([3, 1, 2, 5, 4]\).
 The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
-minted_source(introsort.insertion_sort)
+didactic_source(introsort.insertion_sort, fullwidth=True)
 \end{pycode}
 \end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
 had in mind.
 \begin{pycode}
-minted_output(r"""
+didactic_output(r"""
 import pysnooper
 import introsort
 
@@ -712,7 +665,8 @@ lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.insertion_sort(lst)
 """,
-grep=["iterable =", r"\.\. current =", ".. [ij] ="])
+hlgrep=["iterable =", r"\.\. current =", ".. [ij] ="],
+fullwidth=True)
 \end{pycode}
 
 Finally, let's add a test for the Insertion Sort algorithm, to see that it 
@@ -839,13 +793,13 @@ Let's visualize the execution for the list \([3, 1, 2, 5, 4]\), same as before.
 The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
-minted_source(introsort.heap_sort)
+didactic_source(introsort.heap_sort, fullwidth=True)
 \end{pycode}
 \end{frame}
 
 When we run the code with PySnooper, we get the following output.
 \begin{pycode}
-minted_output(r"""
+didactic_output(r"""
 import pysnooper
 import introsort
 
@@ -853,7 +807,8 @@ lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.heap_sort(lst)
 """,
-grep=["iterable =", r"\.\. heap =", ".. i ="])
+hlgrep=["iterable =", r"\.\. heap =", ".. i ="],
+fullwidth=True)
 \end{pycode}
 
 Let's try to sort a list.
@@ -873,7 +828,7 @@ def test_heap_sort():
 
 \begin{frame}[fragile]
 \begin{pycode}
-minted_pydoc("introsort.sorted")
+didactic_pydoc("introsort.sorted", fullwidth=True)
 \end{pycode}
 \end{frame}
 
