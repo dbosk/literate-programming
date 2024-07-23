@@ -8,5 +8,10 @@ slides.pdf
 contents.tex
 foo.bar
 foo.tex
-pyex.py
-pyex.tex
+introsort.py
+introsort.tex
+test_introsort.py
+__pycache__/
+tests_Makefile
+didactic_output_*
+didactic_code_*

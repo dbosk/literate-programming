@@ -854,13 +854,7 @@ not users.
 (Although there can be some overlap and some parts of the literate 
 documentation for sure can be targeted at users.)
 
-\mode<all>{\input{pyex.tex}}
-
-All in all, the script [[pyex.py]] looks like this after we've tangled it:
-\begin{frame}[fragile,allowframebreaks]
-\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{pyex.py}}
-\only<article>{\inputminted{python}{pyex.py}}
-\end{frame}
+\mode<all>{\input{introsort.tex}}
 
 \subsection{Summary}
 
@@ -871,7 +865,8 @@ All in all, the script [[pyex.py]] looks like this after we've tangled it:
 }%
 \begin{frame}
 \begin{activity}
-  How would you summarize literate programming?
+  How would you summarize literate programming for someone who don't know what 
+  it is?
 \end{activity}
 \end{frame}
 

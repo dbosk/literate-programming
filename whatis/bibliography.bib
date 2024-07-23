@@ -58,16 +58,73 @@
 
 @article{CWEB,
 	title = {The CWEB System of Structured Documentation},
-  author={Knuth, Donald Ervin and Levy, Silvio},
-  year={1994},
-  publisher={Addison-Wesley Longman Publishing Co., Inc.},
+	author = {Knuth, Donald Ervin and Levy, Silvio},
+	publisher = {Addison-Wesley Longman Publishing Co., Inc.},
+	year = {1994},
 }
 
 @book{Wolfram1988,
-  author={Wolfram, Stephen},
-  title={Mathematica : a system for doing mathematics by computer},
-  publisher={Addison-Wesley},
-  address={Redwood City, Calif.},
-  year={1988},
-  ISBN={0201193345},
+	title = {Mathematica : a system for doing mathematics by computer},
+	author = {Wolfram, Stephen},
+	address = {Redwood City, Calif.},
+	isbn = {0201193345},
+	pages = {I--XVIII, 1--749},
+	publisher = {Addison-Wesley},
+	url = {https://catalog.lib.kyushu-u.ac.jp/en/recordID/1000260128},
+	year = {1988},
+}
+
+@book{KnuthAOCPvol3,
+  title = {The Art of Computer Programming: Sorting and Searching},
+	author = {Knuth, Donald Ervin},
+	publisher = {Addison-Wesley},
+  volume = {3},
+  edition = {2},
+  year = {1998},
+  isbn = {0-201-89685-0},
+}
+
+@article{Musser1997,
+  author = {Musser, David R.},
+  title = {Introspective Sorting and Selection Algorithms},
+  journal = {Software: Practice and Experience},
+  volume = {27},
+  number = {8},
+  pages = {983-993},
+  keywords = {quicksort, heapsort, sorting algorithms, introspective 
+              algorithms, hybrid algorithms, generic algorithms, STL},
+  doi = {https://doi.org/10.1002/(SICI)1097-024X(199708)27:8<983::AID-SPE117>3.0.CO;2-\#},
+  abstract = {Abstract Quicksort is the preferred in-place sorting algorithm in 
+              many contexts, since its average computing time on uniformly 
+              distributed inputs is Θ(N log N), and it is in fact faster than 
+              most other sorting algorithms on most inputs. Its drawback is 
+              that its worst-case time bound is Θ(N2). Previous attempts to 
+              protect against the worst case by improving the way quicksort 
+              chooses pivot elements for partitioning have increased the 
+              average computing time too much – one might as well use heapsort, 
+              which has a Θ(N log N) worst-case time bound, but is on the 
+              average 2–5 times slower than quicksort. A similar dilemma exists 
+              with selection algorithms (for finding the i-th largest element) 
+              based on partitioning. This paper describes a simple solution to 
+              this dilemma: limit the depth of partitioning, and for 
+              subproblems that exceed the limit switch to another algorithm 
+              with a better worst-case bound. Using heapsort as the ‘stopper’ 
+              yields a sorting algorithm that is just as fast as quicksort in 
+              the average case, but also has an Θ(N log N) worst case time 
+              bound. For selection, a hybrid of Hoare's FIND algorithm, which 
+              is linear on average but quadratic in the worst case, and the 
+              Blum–Floyd–Pratt–Rivest–Tarjan algorithm is as fast as Hoare's 
+              algorithm in practice, yet has a linear worst-case time bound. 
+              Also discussed are issues of implementing the new algorithms as 
+              generic algorithms, and accurately measuring their performance in 
+              the framework of the C+:+ Standard Template Library. ©1997 by 
+              John Wiley \& Sons, Ltd.},
+  year = {1997}
+}
+
+@book{ProgrammingPearls,
+  title = {Programming Pearls},
+  author = {Jon Bentley},
+  publisher = {Addison-Wesley},
+  year = {1999},
 }
