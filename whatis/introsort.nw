@@ -1,0 +1,954 @@
+\mode*
+
+We'll write a short Python module named [[introsort]], residing in the file 
+named [[introsort.py]] (which is found in the code block [[<<introsort.py>>]]).
+We want it to contain a drop-in replacement for the built-in function 
+[[sorted]].
+\ltnote{%
+  We want to show how literate programming and docstrings complement each 
+  other.
+  We choose to implement the [[sorted]] function as we used it as an example 
+  previously, in \cref{sortedDocExample}.
+  In that use, we wanted the student to discern how the goal of literate 
+  programming relate to docstrings.
+  We generalize that here.
+}%
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_pydoc("introsort.sorted", fullwidth=True)
+\end{pycode}
+\end{frame}
+It needs some extra optional arguments due to the nature of the Intro Sort 
+algorithm.
+
+We'll use [[poetry]] to manage the Python project.
+The literate source code is in a file [[introsort.nw]] that should reside in the 
+[[/src]] directory, where we want the [[.py]] files to be too.
+This module cannot be run, only imported.
+It contains only functions and imports.
+\begin{frame}[fragile]
+<<introsort.py>>=
+"""
+<<module docstring>>
+"""
+<<imports>>
+
+<<functions>>
+@
+\end{frame}
+
+As mentioned, we want to write a function [[sorted]] that is our own 
+implementation of the corresponding Python built-in function.
+We already saw the module docstring above.
+\begin{frame}[fragile]
+<<module docstring>>=
+This module contains a few functions related to the Intro Sort algorithm. We 
+want our own implementation of the built-in Python function `sorted`, but which 
+uses Intro Sort.
+@
+\end{frame}
+
+We also want to test all the functions with [[pytest]].
+The test file for our example looks like this.
+\begin{frame}[fragile]
+<<test introsort.py>>=
+import pytest
+from introsort import *
+
+<<test functions>>
+@
+\end{frame}
+We'll get back to [[<<test functions>>]] as we cover [[<<functions>>]].
+We use [[from introsort import *]] to import all functions from the module, so 
+that we can use them as we would in the same module.
+(This makes reading easier.)
+
+\subsubsection{The sorting function: \texttt{sorted}}
+
+We want to implement the function [[sorted]].
+\begin{frame}[fragile]
+<<functions>>=
+def sorted(<<[[sorted]] arguments>>):
+  """
+  <<[[sorted]] docstring>>
+  """
+  <<[[sorted]] set up>>
+  <<[[sorted]] body>>
+@
+\end{frame}
+
+The standard sorting function in Python is based on the Merge Sort 
+algorithm\autocite[Section 5.2.4: Sorting by Merging]{KnuthAOCPvol3} and is 
+written in C\footnote{%
+   That is, the CPython implementation.
+   See \href
+  {https://github.com/python/cpython/blob/1500a23f33f5a6d052ff1ef6383d9839928b8ff1/Objects/listobject.c\#L2856}
+  {\texttt{list\textunderscore sort\textunderscore impl} in 
+  GitHub.com/python/cpython/Objects/listobject.c}
+}.
+We'll use Intro Sort\autocite{Musser1997} instead, which is a hybrid sorting 
+algorithm that combines three sorting algorithms: Quick Sort, Heap Sort, and 
+Insertion Sort.
+(This is the algorithm used in the C++ standard library\footnote{%
+  See \href
+  {https://en.cppreference.com/w/cpp/algorithm/sort}
+  {\texttt{std::sort} in cppreference.com}
+}.)
+\begin{frame}[fragile]
+<<[[sorted]] docstring>>=
+<<describe [[sorted]] arguments and return values>>
+
+This function uses the Intro Sort algorithm to sort the input list,
+instead of MergeSort as the built-in `sorted` function.
+@
+\end{frame}
+
+Remember, we want to keep compatibility with the built-in [[sorted]] function.
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_pydoc("sorted", builtin=True, fullwidth=True)
+\end{pycode}
+\end{frame}
+This means that the [[iterable]] argument should be positional (the [[/]] 
+delimiter) and the [[key]] and [[reverse]] arguments should be keyword-only 
+arguments (the [[*]] delimiter).
+But we can add more keyword arguments if we like, just not less.
+<<[[sorted]] arguments>>=
+iterable, /, *, key=None, reverse=False,
+<<describe [[sorted]] arguments and return values>>=
+Iterable is a sequence of elements that should be sorted. The optional keyword 
+arguments are `key` and `reverse`, which are used to control the sorting 
+behaviour. `key` is a function that is called on each element before comparing,
+and `reverse` is a boolean that controls the sorting order.
+@
+
+The Intro Sort algorithm needs some numbers to make its decisions.
+It needs the size of the list, \(n\).
+It also needs the maximum depth of the recursion; which we can estimate by 
+\(t\left\lfloor\log_2 n\right\rfloor\).
+The reason for the factor \(t\) is that it's a tuning parameter that we can 
+adjust for performance.
+Why these numbers?
+The optimum depth of the recursion is \(\log_2 n\) for Quick Sort.
+But the more sorted the list is, the worse Quick Sort performs and thus the 
+farther away from the optimum depth we get.
+We can't always get optimal performance, so we use \(t\) to tune how far from 
+the optimal we can accept to go before switching from Quick Sort to Heap Sort.
+The default is \(t = 2\).
+\begin{frame}[fragile]
+<<[[sorted]] arguments>>=
+tuning=2,
+<<describe [[sorted]] arguments and return values>>=
+The tuning parameter is for calculating max depth for the Intro Sort algorithm, 
+that is the cut off between using Quick Sort or Heap Sort.
+@
+\end{frame}
+Now we only need to get the Intro Sort algorithm started.
+\begin{frame}[fragile]
+<<[[sorted]] set up>>=
+is_ordered = lambda x, y: x < y
+n = len(iterable)
+max_depth = tuning * math.floor(math.log(n))
+<<[[sorted]] body>>=
+return intro_sort(iterable.copy(), max_depth,
+                  <<pass keyword-only arguments for sorting behaviour>>)
+<<imports>>=
+import math
+@
+\end{frame}
+
+\subsubsection{The sorting algorithm: \texttt{intro\textunderscore sort}}
+
+We need a separate function for Intro Sort that we can call recursively and vary 
+the [[max_depth]] parameter.
+We need to decrease it for every recursive call.
+\begin{frame}[fragile]
+<<functions>>=
+def intro_sort(iterable, max_depth, /, *, threshold_insertion=16,
+               <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function returns iterable sorted (in-place) using the Intro Sort 
+  algorithm. max_depth is the maximum depth of the recursion before switching 
+  to Heap Sort.
+
+  <<doc for keyword-only arguments for sorting behaviour>>
+  """
+  if len(iterable) <= threshold_insertion:
+    <<sort using Insertion Sort>>
+  elif max_depth == 0:
+    <<sort using Heap Sort>>
+  else:
+    <<sort using Quick Sort>>
+  return iterable
+@
+\end{frame}
+
+Let's add some tests for the different cases.
+We start with the case when the list is small, to trigger Insertion Sort.
+<<test functions>>=
+def test_intro_sort_insertion():
+  lst = [3, 1, 2, 5, 4]
+  intro_sort(lst, 10)
+  assert lst == [1, 2, 3, 4, 5]
+@
+
+We now want to trigger Heap Sort.
+We do this by setting the maximum depth to 0 and having a list longer than 16 
+elements.
+<<test functions>>=
+def test_intro_sort_heap():
+  lst = [3, 1, 2, 5, 4] * 4
+  intro_sort(lst, 0)
+  assert lst == [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5]
+@
+
+Finally, we want to trigger Quick Sort.
+We do this by having a list longer than 16 elements and setting the maximum 
+depth to a value larger than 0.
+We set it to 100 to never switch to Heap Sort.
+<<test functions>>=
+def test_intro_sort_quick():
+  lst = [3, 1, 2, 5, 4] * 4
+  intro_sort(lst, 100)
+  assert lst == [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5]
+@
+
+
+\subsubsection{Using Quick Sort}
+
+The case using Quick Sort is the simplest case.
+We simply calculate the pivot and call [[intro_sort]] recursively on the two 
+halves of the list.
+\begin{frame}[fragile]
+<<sort using Quick Sort>>=
+pivot = partition(iterable,
+                  <<pass keyword-only arguments for sorting behaviour>>)
+iterable[:pivot] = intro_sort(iterable[:pivot], max_depth-1,
+                      <<pass keyword-only arguments for sorting behaviour>>)
+iterable[pivot:] = intro_sort(iterable[pivot:], max_depth-1,
+                      <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+Note that we could make this more memory efficient by passing the slices as a 
+separate argument.
+With the above construction we create a new list for each slice, then we write 
+the newly ordered elements back into the original list.
+
+Now to the last piece of this part of the puzzle: the partitioning function.
+It selects the pivot element and moves all elements less than the pivot to the 
+left and all elements greater than the pivot to the right.
+(Less and greater than in terms of our preferred direction of sorting.)
+<<functions>>=
+def partition(iterable,
+              <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function partitions the input list in-place and returns the index of the 
+  pivot element.
+
+  <<doc for keyword-only arguments for sorting behaviour>>
+  """
+  n = len(iterable)
+  <<check preconditions of [[iterable]]>>
+  <<let [[pivot]] be index of pivot element>>
+  <<swap elements around [[pivot]]>>
+  return pivot
+@
+
+As discussed by \textcite{Musser1997}, we can select the pivot element as the 
+median of the first, middle, and last element.
+<<let [[pivot]] be index of pivot element>>=
+first, middle, last = 0, n//2, n-1
+if iterable[first] < iterable[middle] < iterable[last]:
+  pivot = middle
+elif iterable[first] < iterable[last] < iterable[middle]:
+  pivot = last
+else:
+  pivot = first
+@ For this to work, we need to have at least one element in the list.
+<<check preconditions of [[iterable]]>>=
+if n < 1:
+  raise ValueError("The list must have at least one element.")
+@
+
+Consider the following list as an example:
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+  3, & 1, & 2, & 5, & 4.
+\end{tabular}
+\end{center}
+\end{frame}
+The pivot element is the median of \(3, 2, 4\), which is \(3\).
+
+We want to keep the pivot element at the last index when we start.
+This essentially reduces the partitioning scheme to the Lomuto 
+partitioning\autocite{ProgrammingPearls}, which uses the last element as pivot.
+This makes the algorithm easier.
+<<swap elements around [[pivot]]>>=
+iterable[pivot], iterable[last] = iterable[last], iterable[pivot]
+pivot = last
+@ This leaves us with the following list:
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+  4, & 1, & 2, & 5, & 3.
+\end{tabular}
+\end{center}
+\end{frame}
+
+To move the elements into the correct partitions, we use two pointers [[i]] and 
+[[j]].
+Both start at the beginning of the list.
+The [[j]] pointer moves forward, looking for elements smaller than the pivot.
+<<swap elements around [[pivot]]>>=
+i = 0
+for j in range(n):
+  <<move element to left partition if less than pivot>>
+@ We note that most implementations use a while loop instead of a for loop.
+But in Python, the for loop is more idiomatic, and it's actually faster to 
+iterate over a [[range]] iterator with for than using a while loop\footnote{%
+  See the discussion on \href
+  {https://stackoverflow.com/questions/869229/why-is-looping-over-range-in-python-faster-than-using-a-while-loop}
+  {StackOverflow on \enquote{Why is looping over range() in Python faster than 
+  using a while loop?}}.
+}.
+
+The loop invariant is that all elements from the beginning of the list up to 
+[[i]] are less than the pivot.
+In our example, we start with both [[i]] and [[j]] pointing at the first 
+element, \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+  [[j]] &   &   &   &   \\
+  4, & 1, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Since that's greater than the pivot (\(3\), still the last element), we don't 
+move it.
+Now [[j]] points at the second element, \(1\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  4, & 1, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+This (\(1\)) is indeed less than the pivot, so we swap the elements at [[i]] 
+and [[j]].
+Remember that [[i]] pointed to an element that is greater than the pivot 
+(\(4\)), so swapping them is correct.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+  [[i]] &   &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Since the element that [[i]] points to is now less than the pivot, we move 
+[[i]] forward.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    & [[j]] &   &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+This means that [[i]] always points to the first element that is greater than 
+the pivot, so we can always switch with it.
+So now [[j]] proceeds to point at the third element, \(2\), and [[i]] points at 
+the second element, \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 4, & 2, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Now \(2\) is less than the pivot, so we swap the elements at [[i]] and [[j]]:
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    & [[i]] &   &   &
+\end{tabular}
+\end{center}
+\end{frame}
+We increase [[i]] as we swapped, so it keeps pointing at that \(4\).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   & [[j]] &   &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Now [[j]] proceeds to the fourth element, \(5\), we see that it's greater than 
+the pivot, so we don't swap and we don't touch [[i]] (still pointing at \(4\)).
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   & [[j]] &   \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+Finally, [[j]] points at the last element, \(3\), which isn't less than the 
+pivot (it is the pivot), so we don't swap.
+\begin{frame}
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   &   & [[j]] \\
+  1, & 2, & 4, & 5, & 3 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+\end{frame}
+\begin{frame}[fragile]
+<<move element to left partition if less than pivot>>=
+if is_ordered(iterable[j], iterable[pivot]): # j < pivot
+  iterable[i], iterable[j] = iterable[j], iterable[i] # swap
+  i += 1
+<<keyword-only arguments for sorting behaviour>>=
+is_ordered=lambda x, y: x < y,
+<<doc for keyword-only arguments for sorting behaviour>>=
+The `is_ordered` function is used to compare two elements in the list. It 
+should return `True` if the first element is less than the second (i.e. they're 
+ordered), otherwise `False`.
+<<pass keyword-only arguments for sorting behaviour>>=
+is_ordered=is_ordered,
+@
+\end{frame}
+
+We can conclude that the loop invariant is that the [[i]] index always points 
+at the first element that is greater than the pivot.
+Since the pivot is at the last index and the pivot is supposed to be 
+\enquote{in the middle}, we can swap the pivot with the element at [[i]].
+This will not break the loop invariant, the list if correctly partitioned 
+around the pivot.
+\begin{frame}[fragile]
+\begin{center}
+\begin{tabular}{c c c c c c}
+    &   &   &   & [[j]] \\
+  1, & 2, & 3, & 5, & 4 \\
+    &  &  [[i]] &   &
+\end{tabular}
+\end{center}
+<<swap elements around [[pivot]]>>=
+iterable[i], iterable[pivot] = iterable[pivot], iterable[i]
+pivot = i
+@
+\end{frame}
+
+Let's have a look at it's execution.
+The code as a whole looks like this.
+\begin{frame}[fragile]
+\begin{pycode}
+import introsort
+didactic_source(introsort.partition)
+\end{pycode}
+\end{frame}
+We'll run the code with PySnooper to see if the execution corresponds to what 
+we imagined above.
+We'll run the following code.
+(Actually, it's a slightly more complicated version of the code.
+  The one we run allows us to highlight all lines matching a set of strings.)
+\begin{minted}{python}
+import pysnooper
+import introsort
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  introsort.partition(lst)
+\end{minted}
+Running that code yields the following output.
+\begin{frame}[fragile,allowframebreaks]
+\begin{pycode}
+didactic_run_code(r"""
+import pysnooper
+import introsort
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  introsort.partition(lst)
+""",
+hlgrep=["iterable =", r"\.\. pivot ="],
+fullwidth=True)
+\end{pycode}
+\end{frame}
+
+Now let's add a test for the partitioning function.
+We first add the same test as we did above.
+(We know that this is correct, unless we change the code later.)
+\begin{frame}[fragile]
+<<test functions>>=
+def test_partition():
+  lst = [3, 1, 2, 5, 4]
+  pivot = partition(lst)
+  assert pivot == 2
+  assert lst == [1, 2, 3, 5, 4]
+@
+\end{frame}
+We also want to test the case when the list is already sorted.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_partition_sorted():
+  lst = [1, 2, 3, 4, 5]
+  pivot = partition(lst)
+  assert pivot == 2
+  assert lst == [1, 2, 3, 4, 5]
+@
+\end{frame}
+
+Let's also add some corner cases, one where the list is empty and another where 
+there is only one element in the list.
+<<test functions>>=
+def test_partition_empty():
+  lst = []
+  try:
+    pivot = partition(lst)
+  except ValueError:
+    assert True
+  assert lst == []
+
+def test_partition_one_element():
+  lst = [1]
+  pivot = partition(lst)
+  assert pivot == 0
+  assert lst == [1]
+@
+
+
+\subsubsection{Controlling sorting behaviour}
+
+We want to be able to control the sorting behaviour.
+We noticed above that we added a keyword argument to the [[partition]] function 
+named [[is_ordered]].
+(Actually, we added it to all the functions by adding it to
+[[<<keyword-only arguments for sorting behaviour>>]].)
+
+As we mentioned earlier, we want to keep compatibility with the built-in 
+[[sorted]] function.
+This is fine since we have a default value for the [[is_ordered]] argument.
+But we need the [[key]] and [[reverse]] keyword arguments to affect the 
+[[is_ordered]] function as expected.
+\begin{frame}[fragile]
+<<[[sorted]] set up>>=
+if not key:
+  key = lambda x: x
+if reverse:
+  is_ordered = lambda x, y: key(x) > key(y)
+else:
+  is_ordered = lambda x, y: key(x) < key(y)
+@
+\end{frame}
+
+Let's add some tests for various combinations of these settings.
+We start with the default settings.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_sorted():
+  lst = [3, 1, 2, 5, 4]
+  assert sorted(lst) == [1, 2, 3, 4, 5]
+@
+\only<article>{Next, we test the [[reverse]] argument.}
+<<test functions>>=
+def test_sorted_reverse():
+  lst = [3, 1, 2, 5, 4]
+  assert sorted(lst, reverse=True) == [5, 4, 3, 2, 1]
+@
+\end{frame}
+
+Let's test the [[key]] argument next.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_sorted_key():
+  lst = ["Adam", "Bertil", "Cesar"]
+  assert sorted(lst, key=len) == ["Adam", "Cesar", "Bertil"]
+@
+\only<article>{And now, let's reverse that result.}
+<<test functions>>=
+def test_sorted_key_reverse():
+  lst = ["Adam", "Bertil", "Cesar"]
+  assert sorted(lst, key=len, reverse=True) == ["Bertil", "Cesar", "Adam"]
+@
+\end{frame}
+
+
+\subsubsection{Using Insertion Sort}
+
+\begin{frame}[fragile]
+<<sort using Insertion Sort>>=
+return insertion_sort(iterable,
+                      <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+The Insertion Sort algorithm is simple.
+We iterate over the list and insert the current element in the correct position 
+in the already sorted part of the list (the left part, with lower indices).
+The loop invariant is that indices \(0..i-1\) are sorted.
+\begin{frame}[fragile]
+<<functions>>=
+def insertion_sort(iterable,
+                   <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function sorts the input list in-place using the Insertion Sort 
+  algorithm.
+
+  <<doc for keyword-only arguments for sorting behaviour>>
+  """
+  for i in range(1, len(iterable)):
+    <<insert element at \(i\) at correct position in \(1..i-1\)>>
+  return iterable
+@
+\end{frame}
+
+When we want to insert the element at the correct position, we must move the 
+other elements.
+\Textcite[Section~5.2.1]{KnuthAOCPvol3} points out that this will be more 
+efficient if we do the check from \(i-1\) down to \(0\), rather than from \(0\) 
+up to \(i-1\).
+This way we can move the elements one by one as we compare them.
+Once we encounter an element at position \(j\) that is less than the current 
+element, we insert the current element at the next position (\(j+1\)).
+This works since we've already moved \(j+1\) out of the way (to \(j+2\), during 
+the previous round).
+\begin{frame}[fragile]
+<<insert element at \(i\) at correct position in \(1..i-1\)>>=
+current = iterable[i]
+for j in range(i-1, -1, -1):
+  if is_ordered(current, iterable[j]):
+    iterable[j+1] = iterable[j]
+  else:
+    iterable[j+1] = current
+    break
+else:
+  iterable[0] = current
+@
+\end{frame}
+We note that if we don't break out of the loop, that means that we moved the 
+element at index 0 to index 1.
+We're also at the beginning, which means that the [[current]] element is 
+smaller than all the other elements.
+So we use the for-else construction (the last else above) in Python to handle 
+this case.
+(If we break out of the loop, the else block isn't executed.)
+
+Let's visualize the execution for the list \([3, 1, 2, 5, 4]\).
+The code as a whole looks like this.
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_source(introsort.insertion_sort)
+\end{pycode}
+\end{frame}
+We'll run the code with PySnooper to see if the execution corresponds to what 
+had in mind.
+\begin{pycode}
+didactic_run_code(r"""
+import pysnooper
+import introsort
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  introsort.insertion_sort(lst)
+""",
+hlgrep=["iterable =", r"\.\. current =", ".. [ij] ="],
+fullwidth=True)
+\end{pycode}
+
+Finally, let's add a test for the Insertion Sort algorithm, to see that it 
+actually sorts different lists.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_insertion_sort():
+  lst = [3, 1, 2, 5, 4]
+  insertion_sort(lst)
+  assert lst == [1, 2, 3, 4, 5]
+
+def test_insertion_sort_duplicates():
+  lst = [3, 1, 2, 5, 4] * 2
+  insertion_sort(lst)
+  assert lst == [1, 1, 2, 2, 3, 3, 4, 4, 5, 5]
+@
+\end{frame}
+
+Let's also add the corner cases of an empty list and a list with only one 
+element.
+<<test functions>>=
+def test_insertion_sort_empty():
+  lst = []
+  insertion_sort(lst)
+  assert lst == []
+
+def test_insertion_sort_one_element():
+  lst = [1]
+  insertion_sort(lst)
+  assert lst == [1]
+@
+
+
+\subsubsection{Using Heap Sort}
+
+\begin{frame}[fragile]
+<<sort using Heap Sort>>=
+return heap_sort(iterable,
+                 <<pass keyword-only arguments for sorting behaviour>>)
+@
+\end{frame}
+
+The Heap Sort algorithm is a bit more complex, if one wants to use less 
+memory\footnote{%
+  That's becasue we need to maintain the heap in the list while sorting.
+  If we don't care about memory, we can build the heap as a copy---which is 
+  what we're doing here.
+}.
+However, this solution will be rather similar to that of the example in the 
+Python documentation\footnote{%
+  \href
+  {https://docs.python.org/3/library/heapq.html\#basic-examples}
+  {Section \enquote{Basic Examples} in Python's docs \enquote{heapq --- Heap 
+  queue algorithm}}.
+}.
+We first build a heap from the list, then we repeatedly remove the smallest or 
+largest element (depending on sort order) from the heap and insert it at the 
+end of the list.
+\begin{frame}[fragile]
+<<functions>>=
+def heap_sort(iterable,
+              <<keyword-only arguments for sorting behaviour>>):
+  """
+  This function sorts the input list in-place using the Heap Sort algorithm.
+
+  <<doc for keyword-only arguments for sorting behaviour>>
+  """
+  n = len(iterable)
+  <<heapify [[iterable]] into [[heap]]>>
+  for i in range(n):
+    <<pop smallest element from [[heap]], put at index \(i\) in [[iterable]]>>
+  return iterable
+@
+\end{frame}
+
+We'll use the [[heapq]] module to build the heap.
+However, this doesn't allow us to use [[is_ordered]] in any way.
+So we will create a class to wrap each element in, to overload the comparison 
+by implementing the [[__lt__]] method as [[is_ordered]]\footnote{%
+  This solution is inspired by the answer by Isaac Turner in the discussion on 
+  \href
+  {https://stackoverflow.com/a/40455775/1305099}
+  {StackOverflow on \enquote{What do I use for a max-heap implementation in 
+  Python?}}.
+}.
+\begin{frame}[fragile]
+<<heapify [[iterable]] into [[heap]]>>=
+class OrderedElement:
+  def __init__(self, value):
+    self.value = value
+  def __lt__(self, other):
+    return is_ordered(self.value, other.value)
+  def __str__(self):
+    return str(self.value)
+  def __repr__(self):
+    return repr(self.value)
+
+heap = iterable.copy()
+
+for i in range(n):
+  heap[i] = OrderedElement(heap[i])
+
+heapq.heapify(heap)
+<<imports>>=
+import heapq
+@
+\end{frame}
+We note that this code could be done much better if would write our own version 
+of a heap, one that would use the [[is_ordered]] function.
+Then we could also adapt it to use less memory, so that we'd keep it in a part 
+of [[iterable]] instead of a copy in [[heap]].
+
+To pop the smallest element from the heap, we use the [[heappop]] function.
+Then we put that element at the correct index in [[iterable]].
+Remember, that we want to extract the original value, not use the 
+[[OrderedElement]] version.
+\begin{frame}[fragile]
+<<pop smallest element from [[heap]], put at index \(i\) in [[iterable]]>>=
+iterable[i] = heapq.heappop(heap).value
+@
+\end{frame}
+
+Let's visualize the execution for the list \([3, 1, 2, 5, 4]\), same as before.
+The code as a whole looks like this.
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_source(introsort.heap_sort)
+\end{pycode}
+\end{frame}
+
+When we run the code with PySnooper, we get the following output.
+\begin{pycode}
+didactic_run_code(r"""
+import pysnooper
+import introsort
+
+lst = [3, 1, 2, 5, 4]
+with pysnooper.snoop(depth=2, color=False, normalize=True):
+  introsort.heap_sort(lst)
+""",
+hlgrep=["iterable =", r"\.\. heap =", ".. i ="],
+fullwidth=True)
+\end{pycode}
+
+Let's try to sort a list.
+\begin{frame}[fragile]
+<<test functions>>=
+def test_heap_sort():
+  lst = [3, 1, 2, 5, 4]
+  heap_sort(lst)
+  assert lst == [1, 2, 3, 4, 5]
+@
+\end{frame}
+
+
+\subsubsection{Docstrings and literate programming}
+
+We see that despite using literate programming, we used docstrings.
+Let's have a look at the docstrings for the functions we've defined.
+
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_pydoc("introsort", fullwidth=True)
+\end{pycode}
+\end{frame}
+
+We note that the docstrings were just a subset of the documentation.
+If we look at them, we see that they are targeted at the user of the function.
+The documentation we've written using literate programming targets someone who 
+needs to understand our implementation---someone who needs answers to all the 
+whys, the decisions we made while writing the code.
+
+\subsubsection{The test file}
+
+The test file [[test_introsort.py]] looks like this after we've tangled it:
+\begin{frame}[fragile,allowframebreaks]
+\only<presentation>{\inputminted[fontsize=\footnotesize]{python}{test_introsort.py}}
+\only<article>{\inputminted{python}{test_introsort.py}}
+\end{frame}
+
+\subsubsection{Building the tests}
+
+Normally, the tests resides in a directory [[/tests]], not in [[/src]].
+We'll still use that directory structure.
+We'll just drop a make file [[Makefile]] in the [[/tests]] directory that knows 
+how to create the tests from the source files in [[/src]].
+\begin{frame}[fragile]
+<<Makefile>>=
+<<Makefile variables>>
+
+.PHONY: all
+all: <<test files>>
+	poetry run pytest ${PYTESTFLAGS}
+
+<<targets for test files>>
+
+.PHONY: clean distclean
+clean:
+	<<clean test files>>
+
+distclean:
+@
+\end{frame}
+
+To find the test files in the source code, we'll use the following convention:
+If we have a file [[foo.py]] that resides in code chuck [[<<foo.py>>]] in a 
+[[.nw]] file in the [[/src]] directory, then we'll need a test file named 
+[[test_foo.py]] that we can get from the [[<<test foo.py>>]] code chunk in the 
+same [[.nw]] file.
+(Note the missing underscore in the code chunk name, we'll translate this.
+ The reason is that underscores in chunk names are interpreted as \LaTeX{} 
+ code.)
+
+This means that we can search for such code chunks and extract the file names.
+We'll find all files, grep through them after this code-chunk pattern.
+We want two things: the name of the test file ([[test_foo.py]]) and the name of 
+the source file ([[bar.nw]]).
+We need this to extract [[test_foo.py]].
+\begin{frame}[fragile]
+<<Makefile variables>>=
+define find_tests
+find ../src -type f | xargs grep "@<<test [^.]*\.py>>" | \
+  sed -En "s/^(.*):.*@<<test ([^.]*).py>>.*/test_\2.py:\1/p" | sort -u
+endef
+
+TESTS=	$(shell ${find_tests})
+@
+\end{frame}
+Now we have a list of all test files and from which files to build them.
+The list contains items like [[test_foo.py:../src/bar.nw]].
+
+One thing we can do now is to list the prerequisites for the [[all]] target.
+The prerequisites are the files to build, \ie [[test_foo.py]] in our example, 
+so we cut the first file name from the pairs.
+\begin{frame}[fragile]
+<<test files>>=
+$(foreach file,${TESTS},$(shell echo ${file} | cut -d: -f1))
+@ \only<article>{Now that we know the files to build, we can also clean them.}
+<<clean test files>>=
+${RM} <<test files>>
+@ \only<article>{However, running the tests also generates Python cache files 
+that we want to clean.}
+<<clean test files>>=
+${RM} -Rf __pycache__
+@
+\end{frame}
+
+Lastly we need to define the targets for the test files.
+We generate them from the list of test files.
+We'll create a function that returns the code for each target, then we run 
+[[eval]] on this code to define the targets.
+\begin{frame}[fragile]
+<<targets for test files>>=
+$(foreach file,${TESTS},$(eval $(call def_target, ${file})))
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\only<article>{Now the [[def_target]] function should take a list of}
+[[test_foo.py:../src/bar.nw]] pairs
+\only<article>{and return a target corresponding to each pair.
+In the case of our example it will be:}
+\only<presentation>{\par should be changed into\par}
+\begin{minted}{make}
+test_foo.py: ../src/bar.nw
+  notangle "-R$(shell echo $@ | sed 's/_/ /')" $^ > $@
+\end{minted}
+\only<article>{In a function like this, we need to escape the dollar signs that 
+are going to be evaluated later when the target is run ([[make test_foo.py]]), 
+instead of when the target is built (in the [[call]] in
+[[<<targets for test files>>]]).}
+<<Makefile variables>>=
+define def_target
+$(shell echo $1 | cut -d: -f1): $(shell echo $1 | cut -d: -f2)
+	notangle ${NOTANGLEFLAGS.py} "-R$$(shell echo $$@ | sed 's/_/ /')" $$^ > $$@
+endef
+@
+\end{frame}
+
+All in all, the [[Makefile]] in the [[/tests]] directory looks like this.
+\begin{frame}[fragile]
+\inputminted{make}{tests_Makefile}
+\end{frame}
