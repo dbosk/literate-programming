@@ -11,7 +11,7 @@ foo.tex
 introsort.py
 introsort.tex
 test_introsort.py
-tmp_minted_output.py
-tmp_didactic_minted_output.txt
 __pycache__/
 tests_Makefile
+didactic_output_*
+didactic_code_*

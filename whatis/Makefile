@@ -52,7 +52,8 @@ clean:
 	${RM} foo.bar foo.tex
 	${RM} -R __pycache__
 	${RM} tests_Makefile
-	${RM} tmp_didactic_minted_output.txt
+	${RM} didactic_output_*
+	${RM} didactic_code_*
 
 
 INCLUDE_MAKEFILES=../makefiles

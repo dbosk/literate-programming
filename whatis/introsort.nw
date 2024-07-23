@@ -2,7 +2,8 @@
 
 We'll write a short Python module named [[introsort]], residing in the file 
 named [[introsort.py]] (which is found in the code block [[<<introsort.py>>]]).
-We want it to be like this:
+We want it to contain a drop-in replacement for the built-in function 
+[[sorted]].
 \ltnote{%
   We want to show how literate programming and docstrings complement each 
   other.
@@ -14,9 +15,11 @@ We want it to be like this:
 }%
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_pydoc("introsort", fullwidth=True)
+didactic_pydoc("introsort.sorted", fullwidth=True)
 \end{pycode}
 \end{frame}
+It needs some extra optional arguments due to the nature of the Intro Sort 
+algorithm.
 
 We'll use [[poetry]] to manage the Python project.
 The literate source code is in a file [[introsort.nw]] that should reside in the 
@@ -456,15 +459,14 @@ The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
 import introsort
-didactic_source(introsort.partition, fullwidth=True)
+didactic_source(introsort.partition)
 \end{pycode}
 \end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
 we imagined above.
-We'll run the following code\footnote{%
-  Actually, it's a slightly more complicated version of the code.
-  The one we run allows us to highlight all lines matching a set of strings.
-}.
+We'll run the following code.
+(Actually, it's a slightly more complicated version of the code.
+  The one we run allows us to highlight all lines matching a set of strings.)
 \begin{minted}{python}
 import pysnooper
 import introsort
@@ -476,7 +478,7 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
 Running that code yields the following output.
 \begin{frame}[fragile,allowframebreaks]
 \begin{pycode}
-didactic_output(r"""
+didactic_run_code(r"""
 import pysnooper
 import introsort
 
@@ -651,13 +653,13 @@ Let's visualize the execution for the list \([3, 1, 2, 5, 4]\).
 The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_source(introsort.insertion_sort, fullwidth=True)
+didactic_source(introsort.insertion_sort)
 \end{pycode}
 \end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
 had in mind.
 \begin{pycode}
-didactic_output(r"""
+didactic_run_code(r"""
 import pysnooper
 import introsort
 
@@ -793,13 +795,13 @@ Let's visualize the execution for the list \([3, 1, 2, 5, 4]\), same as before.
 The code as a whole looks like this.
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_source(introsort.heap_sort, fullwidth=True)
+didactic_source(introsort.heap_sort)
 \end{pycode}
 \end{frame}
 
 When we run the code with PySnooper, we get the following output.
 \begin{pycode}
-didactic_output(r"""
+didactic_run_code(r"""
 import pysnooper
 import introsort
 
@@ -824,13 +826,20 @@ def test_heap_sort():
 
 \subsubsection{Docstrings and literate programming}
 
-\dots
+We see that despite using literate programming, we used docstrings.
+Let's have a look at the docstrings for the functions we've defined.
 
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_pydoc("introsort.sorted", fullwidth=True)
+didactic_pydoc("introsort", fullwidth=True)
 \end{pycode}
 \end{frame}
+
+We note that the docstrings were just a subset of the documentation.
+If we look at them, we see that they are targeted at the user of the function.
+The documentation we've written using literate programming targets someone who 
+needs to understand our implementation---someone who needs answers to all the 
+whys, the decisions we made while writing the code.
 
 \subsubsection{The test file}
 
