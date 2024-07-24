@@ -193,19 +193,29 @@ Name them.
 \end{activity}
 \end{frame}
 
+We'll now cover a few such systems:
+\ltnote{%
+  This provides a reasonable overview of some of the possible answers.
+  If they answered and know one of the them, they do get enough feedback.
+  If they don't, we'll go into the details of them in the following text.
+}%
+\begin{enumerate*}[label=(\arabic*)]
+\item notebooks,
+\item docstrings,
+\item rubber-ducking or rubber-duck debugging,
+\item pair programming,
+\item documentation in version control systems, and
+\item pseudocode.
+\end{enumerate*}
+There might be more than those that I cover here, but these are among the most 
+well-known ones.
+
 \paragraph{Notebooks}
 
 Probably the first that comes to mind is the Jupyter notebook,
 see \cref{fig:jupyter}.
 
-\begin{frame}
-\ltnote{%
-  \Cref{AnalyseNotebooks} allows the students to compare notebooks to the goals 
-  of literate programming.
-  This is the start of a generalization pattern:
-  we keep the goals invariant and vary the systems/tool/approach.
-  (We did get the contrast above, in \cref{WhatDoesLPMean}.)
-}%
+\begin{frame}<presentation>
 \begin{activity}\label{AnalyseNotebooks}
 How well do you know the concept of notebooks\footnote{%
   Be it Jupyter, Google Colab, or any other similar system.
@@ -256,6 +266,13 @@ variables).
 \end{frame}
 
 \begin{frame}
+\ltnote{%
+  \Cref{AnalyseNotebooks} allows the students to compare notebooks to the goals 
+  of literate programming.
+  This is the start of a generalization pattern:
+  we keep the goals invariant and vary the systems/tool/approach.
+  (We did get the contrast above, in \cref{WhatDoesLPMean}.)
+}%
 \only<presentation>{\LPgoals}
 \begin{activity}
 How well do you think notebooks fulfil the goals of literate programming?
