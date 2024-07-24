@@ -346,14 +346,14 @@ variables).
 
 \begin{frame}
 \ltnote{%
-  \Cref{AnalyseNotebooks} allows the students to compare notebooks to the goals 
-  of literate programming.
+  \Cref{NotebooksFullfilGoals} allows the students to compare notebooks to the 
+  goals of literate programming.
   This is the start of a generalization pattern:
   we keep the goals invariant and vary the systems/tool/approach.
   (We did get the contrast above, in \cref{WhatDoesLPMean}.)
 }%
 \only<presentation>{\LPgoals}
-\begin{activity}
+\begin{activity}\label{NotebooksFullfilGoals}
 How well do you think notebooks fulfil the goals of literate programming?
 \end{activity}
 \end{frame}
@@ -397,9 +397,7 @@ without having to know how they do it.
 Consider the documentation for the function [[sorted]]\label{sortedDocExample} 
 in Python:
 \begin{pycode}
-print(r"\begin{verbatim}")
-help(sorted)
-print(r"\end{verbatim}")
+didactic_pydoc("sorted", builtin=True)
 \end{pycode}
 Nothing in the documentation explains how the sorting is done, no details of 
 the underlying sorting algorithm(s).
@@ -455,6 +453,13 @@ programming?
 \end{activity}
 \end{frame}
 
+This for sure comes close to the goals of literate programming.
+However, none is documented, so it's lost to others\footnote{%
+  And your future self.
+}.
+Also, the programmer is not forced to explain things unless there is a bug to 
+find.
+
 \begin{frame}<presentation>
 \begin{uncoverenv}<1>
 \begin{block}{Rubber duck debugging}
@@ -478,13 +483,6 @@ programming?
 \end{block}
 \end{onlyenv}
 \end{frame}
-
-This for sure comes close to the goals of literate programming.
-However, none is documented, so it's lost to others\footnote{%
-  And your future self.
-}.
-Also, the programmer is not forced to explain things unless there is a bug to 
-find.
 
 \paragraph{Pair programming}
 
@@ -780,7 +778,9 @@ perspective) order, the code is extracted in the right order in \cref{foo.bar}.
 We can extract the documentation by weaving:
 [[noweave -n -latex foo.nw > foo.tex]].
 This yields:
-\inputminted{latex}{foo.tex}
+\begin{fullwidth}
+\inputminted[breaklines]{latex}{foo.tex}
+\end{fullwidth}
 \begin{onlyenv}<article>
 Compiled into a document, it looks like this:
 \input{foo.tex}
