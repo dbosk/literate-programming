@@ -313,12 +313,12 @@ The code cells can be executed in any order, which is both a strength and a
 weakness.
 It's a strength because you can experiment and try things out.
 It's a weakness because you can't really successively build the program.
-However, if they weren't independet, we would get dependencies and the cells 
+However, if they weren't independent, we would get dependencies and the cells 
 would have to be executed in the right order (spaghetti code with global 
 variables).
 
 \begin{frame}
-\begin{figure}
+\begin{figure}[b]
   \includegraphics[width=\columnwidth]{figs/jupyter-notebook.png}
   \caption{\label{fig:jupyter}%
     The Jupyter notebook.
