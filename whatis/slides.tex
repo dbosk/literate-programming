@@ -3,7 +3,37 @@
 \input{preamble.tex}
 \noweboptions{breakcode}
 
+\toggletrue{article}
+
 \begin{document}
+\title{%
+  What is literate programming?
+}
+\author{%
+  Daniel Bosk
+}
+\institute{%
+  KTH EECS
+}
+
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\clearpage
+
+\begin{frame}
+  \only<presentation>{\tableofcontents[hideallsubsections]}
+  \only<article>{\tableofcontents}
+\end{frame}
+
+\clearpage
+
 \mode<all>
 \input{contents.tex}
 \mode*

@@ -1,24 +1,14 @@
-\documentclass[a4paper,10pt,article,oneside,oldfontcommands]{memoir}
-\let\subsubsection\subsection
-\let\subsection\section
-\let\section\chapter
-
-%\newsubfloat{figure}
+\documentclass[ignoreframetext]{beamer}
 
 \input{preamble.tex}
-\noweboptions{longxref,breakcode}
-
-\usepackage[noamsthm,notheorems]{beamerarticle}
-%\setjobnamebeamerversion{slides}
-
-%\usepackage{authblk}
-%\let\institute\affil
+\noweboptions{breakcode}
 
 \toggletrue{article}
 
 \begin{document}
 \title{%
-  What is literate programming?
+  An example program:
+  Implementing sorted with Intro Sort in Python
 }
 \author{%
   Daniel Bosk
@@ -45,5 +35,7 @@
 
 \clearpage
 
+\mode<all>
 \input{contents.tex}
+\mode*
 \end{document}

@@ -1,7 +1,4 @@
-\documentclass[a4paper,10pt,article,oneside,oldfontcommands]{memoir}
-\let\subsubsection\subsection
-\let\subsection\section
-\let\section\chapter
+\documentclass[a4paper,10pt,oneside,oldfontcommands]{memoir}
 
 %\newsubfloat{figure}
 
@@ -14,11 +11,10 @@
 %\usepackage{authblk}
 %\let\institute\affil
 
-\toggletrue{article}
-
 \begin{document}
+\frontmatter
 \title{%
-  What is literate programming?
+  Literate Programming
 }
 \author{%
   Daniel Bosk
@@ -45,5 +41,11 @@
 
 \clearpage
 
+\mainmatter
+
 \input{contents.tex}
+
+\backmatter
+
+\printbibliography
 \end{document}

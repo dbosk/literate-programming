@@ -1,0 +1,17 @@
+didactic.sty
+dump.text
+ltxobj/
+merge.sh
+merge.tex
+notes.pdf
+slides.pdf
+contents.tex
+foo.bar
+foo.tex
+introsort.py
+introsort.tex
+test_introsort.py
+__pycache__/
+tests_Makefile
+didactic_output_*
+didactic_code_*
