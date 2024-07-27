@@ -289,23 +289,23 @@ We'll now cover a few such systems:
 There might be more than those that I cover here, but these are among the most 
 well-known ones.
 
-\paragraph{Notebooks}
+\subsubsection{Notebooks}
 
-Probably the first that comes to mind is the Jupyter notebook,
-see \cref{fig:jupyter}.
+Probably the first that comes to mind is the Jupyter notebook.
+As you can see in \cref{fig:jupyter}, a notebook consists of text interspersed 
+by code that can be executed (usually to generate graphics).
 
 \begin{frame}<presentation>
 \begin{activity}\label{AnalyseNotebooks}
-How well do you know the concept of notebooks\footnote{%
-  Be it Jupyter, Google Colab, or any other similar system.
-}?
+How well do you know the concept of notebooks?
+(Be it Jupyter, Google Colab, or any other similar system.)
 \end{activity}
 \end{frame}
 
-Notebooks consists of cells, which can be of different types.
+In more detail, notebooks consists of cells, which can be of different types.
 Some might be text and others are code.
 The code cells can be executed and the output is shown below the cell, in the 
-document.
+document (this is what we see in \cref{fig:jupyter}.
 This way the author can explain the code in the text cells and then show the 
 code in the code cells.
 
@@ -313,9 +313,10 @@ The code cells can be executed in any order, which is both a strength and a
 weakness.
 It's a strength because you can experiment and try things out.
 It's a weakness because you can't really successively build the program.
-However, if they weren't independent, we would get dependencies and the cells 
-would have to be executed in the right order (spaghetti code with global 
-variables).
+In some configurations, however, they can build on each other.
+However, in this case, we get dependencies and the cells must be executed in 
+the right order (if not chronologically, we get \enquote{spaghetti code} with 
+global variables).
 
 \begin{frame}
 \begin{figure}[b]
@@ -351,6 +352,10 @@ variables).
   This is the start of a generalization pattern:
   we keep the goals invariant and vary the systems/tool/approach.
   (We did get the contrast above, in \cref{WhatDoesLPMean}.)
+
+  However, to do this, we'd better explain briefly what the technology or 
+  system actually is.
+  The reader might not know, or have only limited knowledge of it.
 }%
 \only<presentation>{\LPgoals}
 \begin{activity}\label{NotebooksFullfilGoals}
@@ -361,11 +366,12 @@ How well do you think notebooks fulfil the goals of literate programming?
 It for sure fulfils the first goal, \enquote{\LPexplain}.
 However, it doesn't necessarily fulfil the second goal, \enquote{\LPorder}.
 We can't really have any order we want, we must follow the order of execution 
-in the cells---which is ordered for the computer, not the human\footnote{%
-  Although, these might align at times, at other times they don't.
-}.
+in the cells---which is ordered for the computer, not the human.
+(Although, these might align at times, but at other times they don't.)
 
-\begin{frame}<presentation>
+So in summary, we have:
+
+\begin{frame}
 \begin{block}{Notebooks}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
@@ -374,14 +380,35 @@ in the cells---which is ordered for the computer, not the human\footnote{%
 \end{block}
 
 \begin{remark}
-  Code cells independent, code in order of the computer.
+  Code is in order of the computer.
 \end{remark}
 \end{frame}
 
-\paragraph{Docstrings}
+\subsubsection{Docstrings}
 
 Docstrings is another concept that has been argued is literate programming.
 The reasoning is that we generate documentation from the code.
+Consider the documentation for the function [[sorted]]\label{sortedDocExample} 
+in Python:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_pydoc("sorted", builtin=True)
+\end{pycode}
+\end{frame}
+The documentation here is generated from the function's code:
+\begin{frame}[fragile]
+\begin{minted}{python}
+def sorted(iterable, /, *, key=None, reverse=False):
+    """
+    Return a new list containing all items from the iterable in ascending 
+    order.
+
+    A custom key function can be supplied to customize the sort order, and the
+    reverse flag can be set to request the result in descending order.
+    """
+    ...
+\end{minted}
+\end{frame}
 
 \begin{frame}
 \only<presentation>{\LPgoals}
@@ -394,11 +421,7 @@ The docstrings aim at explaining how to use a particular function or class.
 It explains what the inputs and outputs are, but not how those are achieved.
 The purpose of them is to describe how to use these constructs as black boxes, 
 without having to know how they do it.
-Consider the documentation for the function [[sorted]]\label{sortedDocExample} 
-in Python:
-\begin{pycode}
-didactic_pydoc("sorted", builtin=True)
-\end{pycode}
+
 Nothing in the documentation explains how the sorting is done, no details of 
 the underlying sorting algorithm(s).
 
@@ -408,7 +431,9 @@ However, that only explains what the code does, same as reading the code
 itself.
 It doesn't explain the programmer's intent when writing the code.
 
-\begin{frame}<presentation>
+In summary:
+
+\begin{frame}
 \begin{block}{Docstrings}
   \begin{itemize}
     \item[\(-\)] {\color{red}\LPexplain}
@@ -421,15 +446,20 @@ It doesn't explain the programmer's intent when writing the code.
 \end{remark}
 \end{frame}
 
-\paragraph{Rubber duck debugging}
+\subsubsection{Rubber duck debugging}
 
 Another related concept is rubber duck debugging.
 
-\begin{frame}
+\begin{frame}<presentation>
 \begin{activity}
 How well do you know rubber duck debugging?
 \end{activity}
 \end{frame}
+
+The idea of rubber duck debugging is that you explain the code for a rubber 
+duck (or any other object or person that can't help you solve the problem).
+Just by explaining, you get a better understanding of the code, which helps you 
+to find the bug more easily.
 
 \begin{frame}<presentation>
 \begin{block}{Rubber duck debugging}
@@ -440,11 +470,6 @@ How well do you know rubber duck debugging?
 \end{block}
 \end{frame}
 
-The idea of rubber duck debugging is that you explain the code for a rubber 
-duck.
-In doing so, you get a better understanding of the code, which helps you to 
-find the bug.
-
 \begin{frame}
 \only<presentation>{\LPgoals}
 \begin{activity}
@@ -453,90 +478,91 @@ programming?
 \end{activity}
 \end{frame}
 
-This for sure comes close to the goals of literate programming.
-However, none is documented, so it's lost to others\footnote{%
-  And your future self.
-}.
-Also, the programmer is not forced to explain things unless there is a bug to 
-find.
+This for sure comes close to the goals of literate programming:
+We explain the details of the code, why we've done the way we did and what we 
+expected.
+We can also explain the code in the order we want, to fit the human 
+understanding rather than the computer's execution.
 
 \begin{frame}<presentation>
-\begin{uncoverenv}<1>
 \begin{block}{Rubber duck debugging}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
     \item[\(+\)] {\color{green!75!black}\LPorder}
   \end{itemize}
 \end{block}
-\end{uncoverenv}
+\end{frame}
 
-\begin{onlyenv}<2>
-\begin{remark}
-  But none is documented, so it's lost to others.
-\end{remark}
+However, none of this is documented, so it's lost to others (and our future 
+selves).
+And we do spend more time reading code than writing it, so this is quite a 
+loss: \blockcquote[p.~14]{CleanCode}{%
+  Indeed, the ratio of time spent reading vs.~writing is well over 10:1.
+  We are constantly reading old code as part of the effort to write new code.
+}.
+Also, the programmer is not encouraged to explain the details unless there is a 
+bug to find.
 
-\begin{block}{Rubber duck debugging, end product}
+\begin{frame}
+\begin{block}{Rubber duck debugging}
   \begin{itemize}
     \item[\(-\)] {\color{red}\LPexplain}
     \item[\(-\)] {\color{red}\LPorder}
   \end{itemize}
 \end{block}
-\end{onlyenv}
+\begin{remark}
+  None is documented, so it's lost to others.
+\end{remark}
 \end{frame}
 
-\paragraph{Pair programming}
+\subsubsection{Pair programming}
 
 Pair programming is similar to rubber duck debugging, but with another human 
 instead of a rubber duck and you do this while developing---not just when 
 debugging.
+So that's an improvement.
 
 \begin{frame}<presentation>
-\begin{onlyenv}<1-2>
 \begin{block}{Pair programming}
   Pair programming is sort of the same, but with a fellow human instead of a 
   rubber duck.
 \end{block}
-\end{onlyenv}
 
-\begin{uncoverenv}<2>
 \begin{block}{Pair programming}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
     \item[\(\approx\)] {\color{orange}\LPorder}
   \end{itemize}
 \end{block}
-\end{uncoverenv}
+\end{frame}
 
-\begin{onlyenv}<2>
-\begin{remark}
-  They have to write the code in the order the computer understands it.
-\end{remark}
-\end{onlyenv}
+The two programmers working together explain the thoughts of the design and 
+code to each other as they progress the development.
+(To be exact there is a \enquote{navigator}, who explains to the 
+\enquote{driver}, who writes the code.)
 
-\begin{onlyenv}<3>
-\begin{remark}
-  But this is not necessarily documented, so it's lost to others.
-\end{remark}
+To some extent, they can do this in the order needed.
+However, in the end, the code must be written in the order the computer 
+understands it.
+And in the end, nothing from this process is necessarily stored as 
+documentation.
+So it's again lost to others, including the programmers' future selves.
 
-\begin{block}{Pair programming, end product}
+\begin{frame}
+\begin{block}{Pair programming}
   \begin{itemize}
     \item[\(-\)] {\color{red}\LPexplain}
     \item[\(-\)] {\color{red}\LPorder}
   \end{itemize}
 \end{block}
-\end{onlyenv}
+
+\begin{remark}
+  They have to write the code in the order the computer understands it.
+  And it's not necessarily documented, so it's lost to others.
+\end{remark}
 \end{frame}
 
-The two programmers working together explains the thoughts of the design and 
-code to each other as they progress the development.
-To some extent, they can do this in the order needed.
-However, in the end, the code must be written in the order the computer 
-understands it.
-
-But in the end, nothing from this process is necessarily stored.
-So it's again lost to others, including the programmers' future selves.
-
-\paragraph{Documentation in version management}
+\subsubsection{Documentation in version management}
 
 We can also document meaning in the version management system, as commit 
 messages and notes in issues and pull requests.
@@ -550,7 +576,7 @@ goals of literate programming?
 \end{frame}
 
 The documentation of \emph{changes} in the version management system sure 
-contains good explanation of why the changes are needed.
+contains good explanations of why the changes are needed.
 For instance, [[git blame]] and similar commands, allows us to see a motivation 
 for each line of code.
 
@@ -566,7 +592,7 @@ For those we are probably left with only the comments in the code.
 And in this case, the order of exposition is adapted for the computer rather 
 than humans.
 
-\begin{frame}<presentation>
+\begin{frame}
 \begin{block}{Documentation in version management}
   \begin{itemize}
     \item[\(\approx\)] {\color{orange}\LPexplain}
@@ -575,14 +601,12 @@ than humans.
 \end{block}
 
 \begin{remark}
-  \begin{itemize}
-    \item Documents changes mostly, not first version.
-    \item Exposition in diffs.
-  \end{itemize}
+  Documents changes mostly, not first version.
+  Exposition in diffs.
 \end{remark}
 \end{frame}
 
-\paragraph{Pseudocode}
+\subsubsection{Pseudocode}
 
 The last one that we'll cover is pseudocode.
 
@@ -604,35 +628,31 @@ However, it's not necessarily integrated with the code.
 And in the worst case, it's thrown away once there is an implementation.
 
 \begin{frame}<presentation>
-\begin{uncoverenv}<1>
 \begin{block}{Pseudocode}
   \begin{itemize}
     \item[\(+\)] {\color{green!75!black}\LPexplain}
     \item[\(+\)] {\color{green!75!black}\LPorder}
   \end{itemize}
 \end{block}
-\end{uncoverenv}
+\end{frame}
 
-\begin{onlyenv}<2>
-\begin{remark}
-  \begin{itemize}
-    \item But this is not necessarily kept in the documentation.
-    \item It's also not necessarily integrated with the code.
-  \end{itemize}
-\end{remark}
-
-\begin{block}{Pseudocode, end product}
+\begin{frame}
+\begin{block}{Pseudocode}
   \begin{itemize}
     \item[\(\approx\)] {\color{orange}\LPexplain}
     \item[\(\approx\)] {\color{orange}\LPorder}
   \end{itemize}
 \end{block}
-\end{onlyenv}
+
+\begin{remark}
+  But this is not necessarily kept in the documentation.
+  It's also not necessarily integrated with the code.
+\end{remark}
 \end{frame}
 
-%\paragraph{Testing}
+%\subsubsection{Testing}
 
-\paragraph{Others}
+\subsubsection{Others}
 
 This covered only some of the related concepts.
 
