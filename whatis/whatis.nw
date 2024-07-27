@@ -624,7 +624,8 @@ We can vary the level of detail and the order of exposition to fit the human
 understanding.
 As something usually used in the design process, it helps with the 
 understanding of the overall design.
-However, it's not necessarily integrated with the code.
+However, it's not necessarily integrated with the code\autocite[Unless we use 
+the methodology suggested by][Ch.~9]{CodeComplete}.
 And in the worst case, it's thrown away once there is an implementation.
 
 \begin{frame}<presentation>
