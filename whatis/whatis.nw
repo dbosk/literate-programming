@@ -960,19 +960,6 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \only<article>{\inputminted{bash}{merge.sh}}
 \end{frame}
 
-\subsection{Example: Docstrings and testing in Python}
-
-We've briefly discussed how docstrings relate to literate programming.
-Now we'll see that we still want to use docstrings even though we use literate 
-programming.
-We still want to have those when we use the modules we've written as an API.
-The literate documentation is rather targeted at the maintainers of the code, 
-not users.
-(Although there can be some overlap and some parts of the literate 
-documentation for sure can be targeted at users.)
-
-\mode<all>{\input{introsort.tex}}
-
 \subsection{Summary}
 
 \ltnote{%
@@ -1038,6 +1025,19 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
 \end{center}
 \end{frame}
 
+
+\section{Docstrings and testing in Python}
+
+We've briefly discussed how docstrings relate to literate programming.
+Now we'll see that we still want to use docstrings even though we use literate 
+programming.
+We still want to have those when we use the modules we've written as an API.
+The literate documentation is rather targeted at the maintainers of the code, 
+not users.
+(Although there can be some overlap and some parts of the literate 
+documentation for sure can be targeted at users.)
+
+\mode<all>{\input{introsort.tex}}
 
 
 \begin{frame}
