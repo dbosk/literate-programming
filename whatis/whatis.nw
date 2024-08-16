@@ -498,8 +498,8 @@ selves).
 And we do spend more time reading code than writing it, so this is quite a 
 loss: \blockcquote[p.~14]{CleanCode}{%
   Indeed, the ratio of time spent reading vs.~writing is well over 10:1.
-  We are constantly reading old code as part of the effort to write new code.
-}.
+  We are constantly reading old code as part of the effort to write new code.%
+}
 Also, the programmer is not encouraged to explain the details unless there is a 
 bug to find.
 
@@ -624,8 +624,12 @@ We can vary the level of detail and the order of exposition to fit the human
 understanding.
 As something usually used in the design process, it helps with the 
 understanding of the overall design.
-However, it's not necessarily integrated with the code\autocite[Unless we use 
-the methodology suggested by][Ch.~9]{CodeComplete}.
+However, it's not necessarily integrated with the code\footnote{%
+  Unless we use the methodology proposed by \textcite[Ch.~9]{CodeComplete}.
+  However, even then, we don't keep the order of exposition adapted to humans.
+  When we use the pseudocode as the comments of the code, the order is dictated 
+  by the computer's understanding.
+}.
 And in the worst case, it's thrown away once there is an implementation.
 
 \begin{frame}<presentation>
