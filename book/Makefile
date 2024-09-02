@@ -10,6 +10,9 @@ SRC+=		abstract.tex contents.tex
 DEPENDS+=	../whatis
 DEPENDS+=	../introsort
 
+TEXINPUTS=	$(shell kpsepath tex)$(foreach d,${DEPENDS},:${d}//)
+export TEXINPUTS
+
 lpbook.pdf: lpbook.tex didactic.sty ${SRC}
 
 ${DEPENDS}::
