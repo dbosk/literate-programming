@@ -1,4 +1,9 @@
 \mode*
+\iftoggle{article}{%
+  \section{Introduction}
+}{%
+  \chapter{An example: \texttt{sorted} using Intro Sort in Python}
+}
 
 We'll write a short Python module named [[introsort]], residing in the file 
 named [[introsort.py]] (which is found in the code block [[<<introsort.py>>]]).
@@ -63,7 +68,7 @@ We use [[from introsort import *]] to import all functions from the module, so
 that we can use them as we would in the same module.
 (This makes reading easier.)
 
-\subsubsection{The sorting function: \texttt{sorted}}
+\section{The sorting function: \texttt{sorted}}
 
 We want to implement the function [[sorted]].
 \begin{frame}[fragile]
@@ -157,7 +162,7 @@ import math
 @
 \end{frame}
 
-\subsubsection{The sorting algorithm: \texttt{intro\textunderscore sort}}
+\section{The sorting algorithm: \texttt{intro\textunderscore sort}}
 
 We need a separate function for Intro Sort that we can call recursively and vary 
 the [[max_depth]] parameter.
@@ -214,7 +219,7 @@ def test_intro_sort_quick():
 @
 
 
-\subsubsection{Using Quick Sort}
+\section{Using Quick Sort}
 
 The case using Quick Sort is the simplest case.
 We simply calculate the pivot and call [[intro_sort]] recursively on the two 
@@ -533,7 +538,7 @@ def test_partition_one_element():
 @
 
 
-\subsubsection{Controlling sorting behaviour}
+\section{Controlling sorting behaviour}
 
 We want to be able to control the sorting behaviour.
 We noticed above that we added a keyword argument to the [[partition]] function 
@@ -589,7 +594,7 @@ def test_sorted_key_reverse():
 \end{frame}
 
 
-\subsubsection{Using Insertion Sort}
+\section{Using Insertion Sort}
 
 \begin{frame}[fragile]
 <<sort using Insertion Sort>>=
@@ -702,7 +707,7 @@ def test_insertion_sort_one_element():
 @
 
 
-\subsubsection{Using Heap Sort}
+\section{Using Heap Sort}
 
 \begin{frame}[fragile]
 <<sort using Heap Sort>>=
@@ -824,7 +829,7 @@ def test_heap_sort():
 \end{frame}
 
 
-\subsubsection{Docstrings and literate programming}
+\section{Docstrings and literate programming}
 
 We see that despite using literate programming, we used docstrings.
 Let's have a look at the docstrings for the functions we've defined.
@@ -841,7 +846,7 @@ The documentation we've written using literate programming targets someone who
 needs to understand our implementation---someone who needs answers to all the 
 whys, the decisions we made while writing the code.
 
-\subsubsection{The test file}
+\section{The test file}
 
 The test file [[test_introsort.py]] looks like this after we've tangled it:
 \begin{frame}[fragile,allowframebreaks]
@@ -849,7 +854,7 @@ The test file [[test_introsort.py]] looks like this after we've tangled it:
 \only<article>{\inputminted{python}{test_introsort.py}}
 \end{frame}
 
-\subsubsection{Building the tests}
+\section{Building the tests}
 
 Normally, the tests resides in a directory [[/tests]], not in [[/src]].
 We'll still use that directory structure.
