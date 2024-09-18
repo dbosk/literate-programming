@@ -1,4 +1,5 @@
 \mode*
+\label{introsort}
 
 We'll write a short Python module named [[introsort]], residing in the file 
 named [[introsort.py]] (which is found in the code block [[<<introsort.py>>]]).
@@ -827,7 +828,8 @@ def test_heap_sort():
 \subsection{Docstrings and literate programming}
 
 We see that despite using literate programming, we used docstrings.
-Let's have a look at the docstrings for the functions we've defined.
+Let's have a look at the docstrings for the module we wrote in this 
+section.
 
 \begin{frame}[fragile]
 \begin{pycode}
@@ -836,6 +838,9 @@ didactic_pydoc("introsort", fullwidth=True)
 \end{frame}
 
 We note that the docstrings were just a subset of the documentation.
+What we wrote was everything in \cref{introsort}, but only a minor part show up 
+as the docstrings as seen above.
+But the docstrings are all that we need to use this module.
 If we look at them, we see that they are targeted at the user of the function.
 The documentation we've written using literate programming targets someone who 
 needs to understand our implementation---someone who needs answers to all the 
