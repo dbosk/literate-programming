@@ -4,6 +4,11 @@
 We want to write a short class to work with fractions.
 We want to do this twice, once for C++ and once for Java.
 
+\begin{activity}
+While reading the rest of this section,
+try to write the same program and experiment with it.
+\end{activity}
+
 \subsection{C++}
 
 The class should be used as the following example programs show.
@@ -221,6 +226,11 @@ nw:17
 We see above that the breakpoint refers to lines in the literate source.
 And, indeed, when we ask [[gdb]] to list the source around the breakpoint, it 
 lists the literate source.
+
+\begin{activity}
+Tangle the files with and without the [[-L]] flag and compile them.
+See how it affects compiler messages and the debugger.
+\end{activity}
 
 \subsubsection{Cleaning up}
 
