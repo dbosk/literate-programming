@@ -64,8 +64,8 @@ class Fraction {
   public:
     Fraction(int numerator, int denominator);
 
-    <<methods for Fraction>>
-    <<overloaded operators>>
+    <<method declarations>>
+    <<overloaded operator declarations>>
 };
 @
 
@@ -248,14 +248,14 @@ clean-cppfrac:
 \subsubsection{Implementing the methods}
 
 Now we need to implement the methods, we have [[to_string]] and
-[[<<overloaded operators>>]] to implement.
+[[<<overloaded operator declarations>>]] to implement.
 That should be done in the file [[<<fraction.cpp>>]].
 <<fraction.cpp>>=
 <<headers to include>>
 #include "fraction.h"
 
-<<implementation of methods for Fraction>>
-<<implementation of overloaded operators>>
+<<method definitions>>
+<<overloaded operator definitions>>
 @
 
 \subsubsection{Constructor}
@@ -263,7 +263,7 @@ That should be done in the file [[<<fraction.cpp>>]].
 The constructor should initialize the attributes.
 We'll also want it to shorten the fraction as much as possible.
 But we'll return to that later.
-<<implementation of methods for Fraction>>=
+<<method definitions>>=
 Fraction::Fraction(int numerator, int denominator)
   : numerator(numerator), denominator(denominator)
 {
@@ -283,9 +283,9 @@ TEST(Fraction, Constructor) {
 
 We want to be able to print a fraction.
 We can do this by implementing a method [[to_string]].
-<<methods for Fraction>>=
+<<method declarations>>=
 std::string to_string() const;
-<<implementation of methods for Fraction>>=
+<<method definitions>>=
 std::string Fraction::to_string() const {
   return std::to_string(numerator) + "/" + std::to_string(denominator);
 }
@@ -311,14 +311,14 @@ TEST(Fraction, ToString) {
 Now we also want to use this one to overload the [[<<]] operator so that we can 
 print fractions using [[std::cout]].
 Note that we don't define it as part of the class, in
-[[<<overloaded operators>>]], but only outside the class.
+[[<<overloaded operator declarations>>]], but only outside the class.
 This is to be able to do the overloading and controlling both parameters.
 As part of the class it implicitly gets the [[this]] parameter instead.
 <<headers to include>>=
 #include <iostream>
-<<overloaded operators>>=
-friend std::ostream& operator<<(std::ostream& os, const Fraction& f);
-<<implementation of overloaded operators>>=
+<<function declarations>>=
+std::ostream& operator<<(std::ostream& os, const Fraction& f);
+<<overloaded operator definitions>>=
 std::ostream& operator<<(std::ostream& os, const Fraction& f) {
   os << f.to_string();
   return os;
@@ -345,13 +345,13 @@ TEST(Fraction, Add) {
 @
 
 To achieve this, we need the method named [[operator+]].
-<<overloaded operators>>=
+<<overloaded operator declarations>>=
 Fraction operator+(const Fraction& other) const;
 @ We'll use a reference for [[other]], but make it [[const]] so that we can't 
 change it.
 We also add [[const]] to the method itself to indicate that it doesn't change 
 the object ([[this]]).
-<<implementation of overloaded operators>>=
+<<overloaded operator definitions>>=
 Fraction Fraction::operator+(const Fraction& other) const {
   <<add [[this]] and [[other]] into [[new_numerator]] and [[new_denominator]]>>
   return Fraction(new_numerator, new_denominator);
