@@ -148,7 +148,7 @@ That's because we introduced [[<<fracexample2.cpp>>]] that far down:
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
 We'll compile with
-\begin{minted}{bash}
+\begin{minted}[numbers=none]{bash}
 g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 \
   fracexample2.cpp fraction.cpp
 \end{minted}
@@ -157,7 +157,7 @@ The result is the following:
 didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
                "fracexample2.cpp fraction.cpp "
                "2>&1 | sed 's/{ return 0; }/.../g'", #| pyg can't handle {},
-               shell=True)
+               shell=True, minted_opts="numbers=none")
 \end{pycode}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
 line 136, rather than the tangled file [[fracexample2.cpp]].
