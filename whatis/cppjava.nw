@@ -74,7 +74,7 @@ We'll use the Google Test framework, so we need to link against that.
 We also need C++17.
 And then we also want the usual [[-W]] flags to catch common errors.
 <<cppfrac.mk>>=
-CXXFLAGS+=  -std=c++17 -Wall -Wextra -Werror
+CXXFLAGS+=  -std=c++17 -Wall -Wextra -Werror ${DEBUGFLAGS}
 LDFLAGS+=   -lstdc++
 @
 
@@ -133,7 +133,9 @@ We intentionally spell [[int]] as [[inte]] to trigger a compilation error.
 <<fracexample2.cpp>>=
 <<fracexample.cpp>>
 
-inte badreturntypefunc() { return 0; }
+inte bad_return_type_func() {
+  return 0;
+}
 @
 
 Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
@@ -143,7 +145,7 @@ Line 1 maps to the same line in the original \noweb{} source, just the same as
 above.
 But line 12 maps to line 136 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=132,lastline=138]{text}{cppjava.nw}
+\inputminted[firstline=132,lastline=139]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
@@ -156,12 +158,69 @@ The result is the following:
 \begin{pycode}
 didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
                "fracexample2.cpp fraction.cpp "
-               "2>&1 | sed 's/{ return 0; }/.../g'", #| pyg can't handle {},
+               "2>&1",
                shell=True, minted_opts="numbers=none")
 \end{pycode}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
 line 136, rather than the tangled file [[fracexample2.cpp]].
+Now, we'll get the same when debugging using [[gdb]], it will refer to the 
+literate source instead of the tangled file.
+\begin{minted}[highlightlines={18,21,29,40,43-44},numbers=none]{text}
+$ gdb fracexample
+GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
 
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from fracexample...
+(gdb) b 17
+Breakpoint 1 at 0x2411: file /home/dbosk/devel/edu/literate-programming/whatis/cppj
+ava.nw, line 17.
+(gdb) r
+Starting program: /home/dbosk/devel/edu/literate-programming/whatis/fracexample 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, main () at /home/dbosk/devel/edu/literate-programming/whatis/cppjava.
+nw:17
+17        std::cout @<< f1 @<< " + " @<< f2
+(gdb) l 10
+5       We want to do this twice, once for C++ and once for Java.
+6
+7       \subsection{C++}
+8
+9       The class should be used as the following example programs show.
+10      @<<fracexample.cpp>>=
+11      #include <iostream>
+12      #include "fraction.h"
+13
+14      int main() {
+(gdb) l
+15        Fraction f1(1, 2);
+16        Fraction f2(1, 3);
+17        std::cout @<< f1 @<< " + " @<< f2
+18                  @<< " = " @<< (f1 + f2) @<< std::endl;
+19      }
+20      @
+21
+22      The expected output is:
+23      \begin{pycode}
+24      didactic_shell("./fracexample", minted_opts="numbers=none")
+(gdb)
+\end{minted}
+We see above that the breakpoint refers to lines in the literate source.
+And, indeed, when we ask [[gdb]] to list the source around the breakpoint, it 
+lists the literate source.
 
 \subsubsection{Cleaning up}
 
