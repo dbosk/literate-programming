@@ -10,16 +10,24 @@ SRC+=		foo.bar foo.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile
+SRC+=		cppjava.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
 FIGS+=		figs/pythontex.pdf figs/web.pdf figs/noweb.pdf
 
+DEPENDS+=	fracexample
+SRC+=		fracexample.cpp
+SRC+=		fracexample2.cpp
+
+fracexample2.cpp: cppjava.nw
+	${NOTANGLE.cxx}
+
 notes.pdf: notes.tex didactic.sty
-notes.pdf: ${SRC} ${FIGS}
+notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 slides.pdf: slides.tex didactic.sty
-slides.pdf: ${SRC} ${FIGS}
+slides.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 contents.tex: whatis.nw
 	${NOWEAVE.tex}
@@ -54,7 +62,12 @@ clean:
 	${RM} tests_Makefile
 	${RM} didactic_output_*
 	${RM} didactic_code_*
+	${RM} cppfrac.mk
 
+cppfrac.mk: cppjava.nw
+	${NOTANGLE.mk}
+
+include cppfrac.mk
 
 INCLUDE_MAKEFILES=../makefiles
 include ${INCLUDE_MAKEFILES}/tex.mk
