@@ -27,4 +27,4 @@ fractest.cpp
 fraction.cpp
 fraction.h
 fraction.o
-
+frac.mk

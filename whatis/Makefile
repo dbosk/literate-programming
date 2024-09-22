@@ -16,7 +16,7 @@ FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
 FIGS+=		figs/pythontex.pdf figs/web.pdf figs/noweb.pdf
 
-DEPENDS+=	fracexample
+DEPENDS+=	fracexample fractest
 SRC+=		fracexample.cpp
 SRC+=		fracexample2.cpp
 
@@ -64,10 +64,10 @@ clean:
 	${RM} didactic_code_*
 	${RM} cppfrac.mk
 
-cppfrac.mk: cppjava.nw
+frac.mk: cppjava.nw
 	${NOTANGLE.mk}
 
-include cppfrac.mk
+include frac.mk
 
 INCLUDE_MAKEFILES=../makefiles
 include ${INCLUDE_MAKEFILES}/tex.mk
