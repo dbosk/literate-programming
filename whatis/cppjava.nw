@@ -170,6 +170,7 @@ Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on
 line 136, rather than the tangled file [[fracexample2.cpp]].
 Now, we'll get the same when debugging using [[gdb]], it will refer to the 
 literate source instead of the tangled file.
+(I've hightlighted some lines to make it easier to read the following output.)
 \begin{minted}[highlightlines={18,21,29,40,43-44},numbers=none]{text}
 $ gdb fracexample
 GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
