@@ -42,13 +42,11 @@ It contains only functions and imports.
 As mentioned, we want to write a function [[sorted]] that is our own 
 implementation of the corresponding Python built-in function.
 We already saw the module docstring above.
-\begin{frame}[fragile]
 <<module docstring>>=
 This module contains a few functions related to the Intro Sort algorithm. We 
 want our own implementation of the built-in Python function `sorted`, but which 
 uses Intro Sort.
 @
-\end{frame}
 
 We also want to test all the functions with [[pytest]].
 The test file for our example looks like this.
@@ -276,25 +274,25 @@ if n < 1:
   raise ValueError("The list must have at least one element.")
 @
 
-Consider the following list as an example:
 \begin{frame}
+Consider the following list as an example:
 \begin{center}
 \begin{tabular}{c c c c c c}
   3, & 1, & 2, & 5, & 4.
 \end{tabular}
 \end{center}
-\end{frame}
 The pivot element is the median of \(3, 2, 4\), which is \(3\).
+\end{frame}
 
 We want to keep the pivot element at the last index when we start.
 This essentially reduces the partitioning scheme to the Lomuto 
 partitioning\autocite{ProgrammingPearls}, which uses the last element as pivot.
 This makes the algorithm easier.
+\begin{frame}[fragile]
 <<swap elements around [[pivot]]>>=
 iterable[pivot], iterable[last] = iterable[last], iterable[pivot]
 pivot = last
 @ This leaves us with the following list:
-\begin{frame}
 \begin{center}
 \begin{tabular}{c c c c c c}
   4, & 1, & 2, & 5, & 3.
@@ -633,7 +631,6 @@ Once we encounter an element at position \(j\) that is less than the current
 element, we insert the current element at the next position (\(j+1\)).
 This works since we've already moved \(j+1\) out of the way (to \(j+2\), during 
 the previous round).
-\begin{frame}[fragile]
 <<insert element at \(i\) at correct position in \(1..i-1\)>>=
 current = iterable[i]
 for j in range(i-1, -1, -1):
@@ -645,7 +642,6 @@ for j in range(i-1, -1, -1):
 else:
   iterable[0] = current
 @
-\end{frame}
 We note that if we don't break out of the loop, that means that we moved the 
 element at index 0 to index 1.
 We're also at the beginning, which means that the [[current]] element is 
@@ -656,11 +652,10 @@ this case.
 
 Let's visualize the execution for the list \([3, 1, 2, 5, 4]\).
 The code as a whole looks like this.
-\begin{frame}[fragile]
 \begin{pycode}
+import introsort
 didactic_source(introsort.insertion_sort)
 \end{pycode}
-\end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
 had in mind.
 \begin{pycode}
@@ -759,7 +754,6 @@ by implementing the [[__lt__]] method as [[is_ordered]]\footnote{%
   {StackOverflow on \enquote{What do I use for a max-heap implementation in 
   Python?}}.
 }.
-\begin{frame}[fragile]
 <<heapify [[iterable]] into [[heap]]>>=
 class OrderedElement:
   def __init__(self, value):
@@ -780,7 +774,6 @@ heapq.heapify(heap)
 <<imports>>=
 import heapq
 @
-\end{frame}
 We note that this code could be done much better if would write our own version 
 of a heap, one that would use the [[is_ordered]] function.
 Then we could also adapt it to use less memory, so that we'd keep it in a part 
@@ -790,19 +783,16 @@ To pop the smallest element from the heap, we use the [[heappop]] function.
 Then we put that element at the correct index in [[iterable]].
 Remember, that we want to extract the original value, not use the 
 [[OrderedElement]] version.
-\begin{frame}[fragile]
 <<pop smallest element from [[heap]], put at index \(i\) in [[iterable]]>>=
 iterable[i] = heapq.heappop(heap).value
 @
-\end{frame}
 
 Let's visualize the execution for the list \([3, 1, 2, 5, 4]\), same as before.
 The code as a whole looks like this.
-\begin{frame}[fragile]
 \begin{pycode}
+import introsort
 didactic_source(introsort.heap_sort)
 \end{pycode}
-\end{frame}
 
 When we run the code with PySnooper, we get the following output.
 \begin{pycode}
@@ -819,14 +809,12 @@ fullwidth=False)
 \end{pycode}
 
 Let's try to sort a list.
-\begin{frame}[fragile]
 <<test functions>>=
 def test_heap_sort():
   lst = [3, 1, 2, 5, 4]
   heap_sort(lst)
   assert lst == [1, 2, 3, 4, 5]
 @
-\end{frame}
 
 
 \subsection{Docstrings and literate programming}
@@ -956,6 +944,4 @@ endef
 \end{frame}
 
 All in all, the [[Makefile]] in the [[/tests]] directory looks like this.
-\begin{frame}[fragile]
 \inputminted{make}{tests_Makefile}
-\end{frame}
