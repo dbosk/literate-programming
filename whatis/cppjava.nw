@@ -120,14 +120,21 @@ The [[noroots]] program simply lists all the root chunks of a \noweb{} source
 file.
 We use this one to see that they all look like root chunks, that is files to be 
 extracted.
-If we spell a chunks wrongly, it will not be used in the other code.
-Then it will be considered a root chunk and we can use the output from 
-[[noroots]] here to see that we've missed something.
 The output of [[noroots]] looks like this:
 \begin{pycode}
 didactic_shell("noroots cppjava.nw", shell=True, minted_opts="numbers=none")
 \end{pycode}
-They all look like files that we expect, so everything is fine\footnote{%
+
+\begin{activity}
+When could the output of [[noroots]] ever be useful?
+\end{activity}
+
+If we spell a chunks wrongly, it will not be used in the other code.
+Then it will be considered a root chunk and we can use the output from 
+[[noroots]] here to see that we've missed something.
+
+In the output above, all roots look like files that we expect, so everything is 
+fine\footnote{%
   In fact, when I first wrote this I had decided to have one [[cppfrac.mk]] 
   file for C++ and one [[javafrac.mk]] for Java.
   Later I decided to have one [[frac.mk]] file for both.
@@ -177,9 +184,9 @@ Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
 We note lines 1 and 12.
 Line 1 maps to the same line in the original \noweb{} source, just the same as 
 above.
-But line 12 maps to line 167 in the original \noweb{} source.
+But line 12 maps to line 177 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=163,lastline=170]{text}{cppjava.nw}
+\inputminted[firstline=173,lastline=180]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
@@ -196,7 +203,7 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
                shell=True, minted_opts="numbers=none")
 \end{pycode}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 167, rather than the tangled file [[fracexample2.cpp]].
+line 177, rather than the tangled file [[fracexample2.cpp]].
 Now, we'll get the same when debugging using [[gdb]], it will refer to the 
 literate source instead of the tangled file.
 (I've hightlighted some lines to make it easier to read the following output.)
@@ -281,8 +288,9 @@ didactic_shell("./fractest",
                hlgrep=["cppjava.nw"],
                minted_opts="numbers=none")
 \end{pycode}
-Let's have a peek at the lines around line 268 in [[cppjava.nw]]:
-\inputminted[firstline=262,lastline=272]{text}{cppjava.nw}
+Let's have a peek at the lines around line 279 in [[cppjava.nw]]:
+\inputminted[firstline=273,lastline=283]{text}{cppjava.nw}
+
 
 \subsubsection{The class}
 
