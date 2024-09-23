@@ -159,8 +159,13 @@ But Knuth is convinced that this works well:
 
 \softclearmargin
 
-\paragraph{Famous literate programs}
-
+\subsubsection{Famous literate programs}
+%
+\begin{frame}<presentation>
+\large
+Famous literate programs?
+\end{frame}%
+%
 \ltnote{%
   It will probably be better for the motivation to hear about some famous 
   examples of literate programs---that they wouldn't know were literate 
@@ -169,7 +174,7 @@ But Knuth is convinced that this works well:
 }%
 The first program that comes to mind is of course
 \begin{frame}%
-\only<presentation>{\centering\Huge}%
+\only<presentation>{\centering\large}%
 \TeX\autocite[this is in fact the literate source code of the program and a 
 published book]{TeXprogram}
 and, based on that,
@@ -334,13 +339,13 @@ We describe the second step before we describe the first step.
   \begin{columns}[t]
     \begin{column}{0.48\columnwidth}
       \inputminted[
-        firstline=2,firstnumber=1,lastline=8,fontsize=\footnotesize,
+        firstline=2,firstnumber=1,lastline=8,fontsize=\small,
         breaklines
       ]{text}{foo.nw}
     \end{column}
     \begin{column}{0.48\columnwidth}
       \inputminted[
-        firstline=9,firstnumber=9,fontsize=\footnotesize
+        firstline=9,firstnumber=9,fontsize=\small
       ]{text}{foo.nw}
     \end{column}
   \end{columns}
@@ -361,9 +366,7 @@ perspective) order, the code is extracted in the right order in \cref{foo.bar}.
 We can extract the documentation by weaving:
 [[noweave -n -latex foo.nw > foo.tex]].
 This yields:
-\begin{fullwidth}
 \inputminted[breaklines]{latex}{foo.tex}
-\end{fullwidth}
 \begin{onlyenv}<article>
 Compiled into a document, it looks like this:
 \input{foo.tex}
