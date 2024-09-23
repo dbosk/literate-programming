@@ -16,7 +16,8 @@ We want it to contain a drop-in replacement for the built-in function
 }%
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_pydoc("introsort.sorted", fullwidth=True)
+didactic_pydoc("introsort.sorted", fullwidth=False,
+               minted_opts=r"numbers=none")
 \end{pycode}
 \end{frame}
 It needs some extra optional arguments due to the nature of the Intro Sort 
@@ -99,21 +100,23 @@ Insertion Sort.
 <<[[sorted]] docstring>>=
 <<describe [[sorted]] arguments and return values>>
 
-This function uses the Intro Sort algorithm to sort the input list,
-instead of MergeSort as the built-in `sorted` function.
+This function uses the Intro Sort algorithm to sort the input list, instead of 
+MergeSort as the built-in `sorted` function.
 @
 \end{frame}
 
 Remember, we want to keep compatibility with the built-in [[sorted]] function.
 \begin{frame}[fragile]
 \begin{pycode}
-didactic_pydoc("sorted", builtin=True, fullwidth=True)
+didactic_pydoc("sorted", builtin=True, fullwidth=False,
+               minted_opts=r"numbers=none")
 \end{pycode}
 \end{frame}
 This means that the [[iterable]] argument should be positional (the [[/]] 
 delimiter) and the [[key]] and [[reverse]] arguments should be keyword-only 
 arguments (the [[*]] delimiter).
 But we can add more keyword arguments if we like, just not less.
+\begin{frame}[fragile]
 <<[[sorted]] arguments>>=
 iterable, /, *, key=None, reverse=False,
 <<describe [[sorted]] arguments and return values>>=
@@ -122,6 +125,7 @@ arguments are `key` and `reverse`, which are used to control the sorting
 behaviour. `key` is a function that is called on each element before comparing,
 and `reverse` is a boolean that controls the sorting order.
 @
+\end{frame}
 
 The Intro Sort algorithm needs some numbers to make its decisions.
 It needs the size of the list, \(n\).
@@ -488,7 +492,7 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.partition(lst)
 """,
 hlgrep=["iterable =", r"\.\. pivot ="],
-fullwidth=True)
+fullwidth=False)
 \end{pycode}
 \end{frame}
 
@@ -669,7 +673,7 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.insertion_sort(lst)
 """,
 hlgrep=["iterable =", r"\.\. current =", ".. [ij] ="],
-fullwidth=True)
+fullwidth=False)
 \end{pycode}
 
 Finally, let's add a test for the Insertion Sort algorithm, to see that it 
@@ -811,7 +815,7 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.heap_sort(lst)
 """,
 hlgrep=["iterable =", r"\.\. heap =", ".. i ="],
-fullwidth=True)
+fullwidth=False)
 \end{pycode}
 
 Let's try to sort a list.
@@ -831,11 +835,9 @@ We see that despite using literate programming, we used docstrings.
 Let's have a look at the docstrings for the module we wrote in this 
 section.
 
-\begin{frame}[fragile]
 \begin{pycode}
-didactic_pydoc("introsort", fullwidth=True)
+didactic_pydoc("introsort", fullwidth=False)
 \end{pycode}
-\end{frame}
 
 We note that the docstrings were just a subset of the documentation.
 What we wrote was everything in \cref{introsort}, but only a minor part show up 
