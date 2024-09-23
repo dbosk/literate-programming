@@ -138,27 +138,33 @@ farther away from the optimum depth we get.
 We can't always get optimal performance, so we use \(t\) to tune how far from 
 the optimal we can accept to go before switching from Quick Sort to Heap Sort.
 The default is \(t = 2\).
-\begin{frame}[fragile]
 <<[[sorted]] arguments>>=
 tuning=2,
 <<describe [[sorted]] arguments and return values>>=
 The tuning parameter is for calculating max depth for the Intro Sort algorithm, 
 that is the cut off between using Quick Sort or Heap Sort.
 @
-\end{frame}
 Now we only need to get the Intro Sort algorithm started.
-\begin{frame}[fragile]
 <<[[sorted]] set up>>=
-is_ordered = lambda x, y: x < y
 n = len(iterable)
 max_depth = tuning * math.floor(math.log(n))
-<<[[sorted]] body>>=
-return intro_sort(iterable.copy(), max_depth,
-                  <<pass keyword-only arguments for sorting behaviour>>)
 <<imports>>=
 import math
 @
+\begin{frame}[fragile]
+<<[[sorted]] body>>=
+return intro_sort(iterable.copy(), max_depth,
+                  <<pass keyword-only arguments for [[introsort]] behaviour>>
+                  <<pass keyword-only arguments for sorting behaviour>>)
+<<[[sorted]] arguments>>=
+<<keyword-only arguments for [[introsort]] behaviour>>
+<<keyword-only arguments for sorting behaviour>>
+<<describe [[sorted]] arguments and return values>>=
+<<doc for keyword-only arguments for [[introsort]] behaviour>>
+<<doc for keyword-only arguments for sorting behaviour>>
+@
 \end{frame}
+
 
 \subsection{The sorting algorithm: \texttt{intro\textunderscore sort}}
 
@@ -167,13 +173,15 @@ the [[max_depth]] parameter.
 We need to decrease it for every recursive call.
 \begin{frame}[fragile]
 <<functions>>=
-def intro_sort(iterable, max_depth, /, *, threshold_insertion=16,
+def intro_sort(iterable, max_depth, /, *,
+               <<keyword-only arguments for [[introsort]] behaviour>>
                <<keyword-only arguments for sorting behaviour>>):
   """
   This function returns iterable sorted (in-place) using the Intro Sort 
   algorithm. max_depth is the maximum depth of the recursion before switching 
   to Heap Sort.
 
+  <<doc for keyword-only arguments for [[introsort]] behaviour>>
   <<doc for keyword-only arguments for sorting behaviour>>
   """
   if len(iterable) <= threshold_insertion:
@@ -186,35 +194,56 @@ def intro_sort(iterable, max_depth, /, *, threshold_insertion=16,
 @
 \end{frame}
 
+\begin{frame}[fragile]
+We want to be able to adjust the threshold for when to switch to Insertion 
+Sort.
+We'll add this as a keyword-only argument for controlling the sorting 
+behaviour.
+<<keyword-only arguments for [[introsort]] behaviour>>=
+threshold_insertion=16,
+<<doc for keyword-only arguments for [[introsort]] behaviour>>=
+The `threshold_insertion` parameter is the maximum length of the list before 
+using Insertion Sort. The default is 16.
+<<pass keyword-only arguments for [[introsort]] behaviour>>=
+threshold_insertion=threshold_insertion,
+@
+\end{frame}
+
 Let's add some tests for the different cases.
 We start with the case when the list is small, to trigger Insertion Sort.
+\begin{frame}[fragile]
 <<test functions>>=
 def test_intro_sort_insertion():
   lst = [3, 1, 2, 5, 4]
   intro_sort(lst, 10)
   assert lst == [1, 2, 3, 4, 5]
 @
+\end{frame}
 
 We now want to trigger Heap Sort.
 We do this by setting the maximum depth to 0 and having a list longer than 16 
 elements.
+\begin{frame}[fragile]
 <<test functions>>=
 def test_intro_sort_heap():
   lst = [3, 1, 2, 5, 4] * 4
   intro_sort(lst, 0)
   assert lst == [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5]
 @
+\end{frame}
 
 Finally, we want to trigger Quick Sort.
 We do this by having a list longer than 16 elements and setting the maximum 
 depth to a value larger than 0.
 We set it to 100 to never switch to Heap Sort.
+\begin{frame}[fragile]
 <<test functions>>=
 def test_intro_sort_quick():
   lst = [3, 1, 2, 5, 4] * 4
   intro_sort(lst, 100)
   assert lst == [1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5]
 @
+\end{frame}
 
 
 \subsection{Using Quick Sort}
@@ -242,8 +271,9 @@ Now to the last piece of this part of the puzzle: the partitioning function.
 It selects the pivot element and moves all elements less than the pivot to the 
 left and all elements greater than the pivot to the right.
 (Less and greater than in terms of our preferred direction of sorting.)
+\begin{frame}[fragile]
 <<functions>>=
-def partition(iterable,
+def partition(iterable, /, *,
               <<keyword-only arguments for sorting behaviour>>):
   """
   This function partitions the input list in-place and returns the index of the 
@@ -257,6 +287,7 @@ def partition(iterable,
   <<swap elements around [[pivot]]>>
   return pivot
 @
+\end{frame}
 
 As discussed by \textcite{Musser1997}, we can select the pivot element as the 
 median of the first, middle, and last element.
@@ -607,7 +638,7 @@ in the already sorted part of the list (the left part, with lower indices).
 The loop invariant is that indices \(0..i-1\) are sorted.
 \begin{frame}[fragile]
 <<functions>>=
-def insertion_sort(iterable,
+def insertion_sort(iterable, /, *,
                    <<keyword-only arguments for sorting behaviour>>):
   """
   This function sorts the input list in-place using the Insertion Sort 
@@ -729,7 +760,7 @@ largest element (depending on sort order) from the heap and insert it at the
 end of the list.
 \begin{frame}[fragile]
 <<functions>>=
-def heap_sort(iterable,
+def heap_sort(iterable, /, *,
               <<keyword-only arguments for sorting behaviour>>):
   """
   This function sorts the input list in-place using the Heap Sort algorithm.
