@@ -484,7 +484,6 @@ Since the pivot is at the last index and the pivot is supposed to be
 \enquote{in the middle}, we can swap the pivot with the element at [[i]].
 This will not break the loop invariant, the list if correctly partitioned 
 around the pivot.
-\begin{frame}[fragile]
 \begin{center}
 \begin{tabular}{c c c c c c}
     &   &   &   & [[j]] \\
@@ -496,21 +495,19 @@ around the pivot.
 iterable[i], iterable[pivot] = iterable[pivot], iterable[i]
 pivot = i
 @
-\end{frame}
 
 Let's have a look at it's execution.
 The code as a whole looks like this.
-\begin{frame}[fragile]
 \begin{pycode}
 import introsort
 didactic_source(introsort.partition)
 \end{pycode}
-\end{frame}
 We'll run the code with PySnooper to see if the execution corresponds to what 
 we imagined above.
 We'll run the following code.
 (Actually, it's a slightly more complicated version of the code.
   The one we run allows us to highlight all lines matching a set of strings.)
+\begin{frame}[fragile]
 \begin{minted}{python}
 import pysnooper
 import introsort
@@ -519,8 +516,8 @@ lst = [3, 1, 2, 5, 4]
 with pysnooper.snoop(depth=2, color=False, normalize=True):
   introsort.partition(lst)
 \end{minted}
+\end{frame}
 Running that code yields the following output.
-\begin{frame}[fragile,allowframebreaks]
 \begin{pycode}
 didactic_run_code(r"""
 import pysnooper
@@ -533,7 +530,6 @@ with pysnooper.snoop(depth=2, color=False, normalize=True):
 hlgrep=["iterable =", r"\.\. pivot ="],
 fullwidth=False)
 \end{pycode}
-\end{frame}
 
 Now let's add a test for the partitioning function.
 We first add the same test as we did above.
@@ -560,6 +556,7 @@ def test_partition_sorted():
 
 Let's also add some corner cases, one where the list is empty and another where 
 there is only one element in the list.
+\begin{frame}[fragile]
 <<test functions>>=
 def test_partition_empty():
   lst = []
@@ -575,6 +572,7 @@ def test_partition_one_element():
   assert pivot == 0
   assert lst == [1]
 @
+\end{frame}
 
 
 \subsection{Controlling sorting behaviour}
@@ -740,6 +738,7 @@ def test_insertion_sort_duplicates():
 
 Let's also add the corner cases of an empty list and a list with only one 
 element.
+\begin{frame}[fragile]
 <<test functions>>=
 def test_insertion_sort_empty():
   lst = []
@@ -751,6 +750,7 @@ def test_insertion_sort_one_element():
   insertion_sort(lst)
   assert lst == [1]
 @
+\end{frame}
 
 
 \subsection{Using Heap Sort}
