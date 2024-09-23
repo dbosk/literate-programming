@@ -867,6 +867,7 @@ def test_heap_sort():
   assert lst == [1, 2, 3, 4, 5]
 @
 
+\mode<presentation>{\endinput}
 
 \subsection{Docstrings and literate programming}
 
