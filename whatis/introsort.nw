@@ -468,6 +468,16 @@ is_ordered=is_ordered,
 @
 \end{frame}
 
+\begin{onlyenv}<presentation>
+\begin{frame}[fragile]
+\begin{pycode}
+import introsort
+didactic_pydoc("introsort.intro_sort", fullwidth=False,
+               minted_opts=r"numbers=none")
+\end{pycode}
+\end{frame}
+\end{onlyenv}
+
 We can conclude that the loop invariant is that the [[i]] index always points 
 at the first element that is greater than the pivot.
 Since the pivot is at the last index and the pivot is supposed to be 
@@ -590,6 +600,16 @@ else:
   is_ordered = lambda x, y: key(x) < key(y)
 @
 \end{frame}
+
+\begin{onlyenv}<presentation>
+\begin{frame}[fragile]
+\begin{pycode}
+import introsort
+didactic_pydoc("introsort.sorted", fullwidth=False,
+               minted_opts=r"numbers=none")
+\end{pycode}
+\end{frame}
+\end{onlyenv}
 
 Let's add some tests for various combinations of these settings.
 We start with the default settings.
