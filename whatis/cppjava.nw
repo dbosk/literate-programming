@@ -14,6 +14,7 @@ try to write the same program and experiment with it.
 We'll start with the makefile.
 We'll write a file [[<<frac.mk>>]] to include from our [[Makefile]], this file 
 keeps only the building rules for this particular section.
+\begin{frame}[fragile]
 <<frac.mk>>=
 <<frac variable definitions>>
 
@@ -28,10 +29,12 @@ clean: clean-frac # since we already have a recipe for clean in Makefile
 clean-frac:
 	<<remove generated files>>
 @
+\end{frame}
 
 \subsection{C++}
 
 The class should be used as the following example programs show.
+\begin{frame}[fragile]
 <<fracexample.cpp>>=
 #include <iostream>
 #include "fraction.h"
@@ -48,31 +51,36 @@ The expected output is:
 \begin{pycode}
 didactic_shell("./fracexample", minted_opts="numbers=none")
 \end{pycode}
+\end{frame}
 
 To compile the [[fracexample]] program, we need its prerequisites.
 We need the header file [[fraction.h]] and object file [[fraction.o]]---that 
 provides the implementation of the class.
 We also need the source file [[fracexample.cpp]].
+\begin{frame}[fragile]
 <<frac targets>>=
 fracexample: fraction.o fracexample.cpp fraction.h
-<<more [[all]] targets to add depends>>=
-all: fracexample
 <<remove generated files>>=
 rm -f fracexample
 @ We want to use C++17.
-To use the built-in rules of [[make]]\footnote{%
+To use the built-in rules of [[make]]\only<article>{\footnote{%
   Worth noting in this context: (GNU) [[make]] has built-in rules for Knuth's 
   original WEB system, the one discussed in \cite{Knuth1984}.
-}, we need to define the variables [[CXXFLAGS]] and [[LDFLAGS]] to have the 
+}}, we need to define the variables [[CXXFLAGS]] and [[LDFLAGS]] to have the 
 options we need.
 We want the usual [[-W]] flags to catch common errors.
 <<frac variable definitions>>=
 CXXFLAGS+=  -std=c++17 -Wall -Wextra -Werror ${DEBUGFLAGS}
 LDFLAGS+=   -lstdc++
 @ We also need to add the test program to the [[all]] target and the cleaning.
+<<more [[all]] targets to add depends>>=
+all: fracexample
+@
+\end{frame}
 
 We also want to test the fraction class with the following test program.
 The test program will use Google Test framework.
+\begin{frame}[fragile]
 <<fractest.cpp>>=
 #include <gtest/gtest.h>
 <<headers to include>>
@@ -85,6 +93,7 @@ int main(int argc, char **argv) {
   return RUN_ALL_TESTS();
 }
 @
+\end{frame}
 
 To compile the test program, we've already covered parts of its needs above.
 We need the header file [[fraction.h]] and object file [[fraction.o]].
@@ -95,6 +104,7 @@ So we need a custom build rule for this that includes [[-lgtest]] and
 [[lgtest_main]] so that the linker links against the Google Test framework.
 (The alternative would be to add the Google Test framework to the [[LDFLAGS]], 
 but then we would link all programs against it---undesirable.)
+\begin{frame}[fragile]
 <<frac targets>>=
 fractest: fraction.o fractest.cpp fraction.h
 	${CXX} ${CXXFLAGS} -o $@ $^ ${LDFLAGS} -lgtest -lgtest_main
@@ -104,22 +114,26 @@ all: fractest
 <<remove generated files>>=
 rm -f fractest
 @
+\end{frame}
 
 \subsubsection{Tangling with the \texttt{-L} flag}
 
 These targets above depend on the source files.
 We need to build them from the \noweb{} source file.
+\begin{frame}[fragile]
 <<frac.mk>>=
 fraction.cpp fraction.h fractest.cpp fracexample.cpp: cppjava.nw
 	notangle -L -R$@ $< | cpif $@
 	noroots $<
 @ There are two things to note:
 the [[-L]] flag and the [[noroots]] program.
+\end{frame}
 
 The [[noroots]] program simply lists all the root chunks of a \noweb{} source 
 file.
 We use this one to see that they all look like root chunks, that is files to be 
 extracted.
+\begin{frame}[fragile]
 The output of [[noroots]] looks like this:
 \begin{pycode}
 didactic_shell("noroots cppjava.nw", shell=True, minted_opts="numbers=none")
@@ -128,6 +142,7 @@ didactic_shell("noroots cppjava.nw", shell=True, minted_opts="numbers=none")
 \begin{activity}
 When could the output of [[noroots]] ever be useful?
 \end{activity}
+\end{frame}
 
 If we spell a chunks wrongly, it will not be used in the other code.
 Then it will be considered a root chunk and we can use the output from 
@@ -149,27 +164,34 @@ The [[-L]] flag will rewrite the line numbers so that the compiler error
 messages will refer to the correct line in the \noweb{} source file, instead of 
 the tangled file.
 Without the [[-L]] flag, the tangled source will look as expected:
+\begin{frame}[fragile]
 \begin{pycode}
 didactic_shell("notangle -Rfracexample.cpp cppjava.nw",
                shell=True, lang="cpp")
 \end{pycode}
+\end{frame}
+\begin{frame}[fragile]
 But if we use the [[-L]] flag, the tangled source will include the directives 
 to rewrite line numbers:
 \begin{pycode}
 with open("fracexample.cpp", "r") as f:
   didactic_mint(f.read(), lang="cpp", hlgrep=["^#line"])
 \end{pycode}
+\end{frame}
 
 If we look at the file [[cppjava.nw]] (the source file for this section), we 
-can see this around line 36:
-\inputminted[firstline=32,lastline=40]{text}{cppjava.nw}
+can see this around line 39:
+\begin{frame}[fragile]
+\inputminted[firstline=36,lastline=48]{text}{cppjava.nw}
+\end{frame}
 That is, the contents of
 [[<<fracexample.cpp>>]]
-starts at line 36.
+starts at line 39.
 
 Let's introduce the file [[<<fracexample2.cpp>>]] and introduce an error in it.
 It should have the same contents as [[<<fracexample.cpp>>]], but we also add an 
 erroneous function definition.
+\begin{frame}[fragile]
 We intentionally spell [[int]] as [[inte]] to trigger a compilation error.
 <<fracexample2.cpp>>=
 <<fracexample.cpp>>
@@ -178,19 +200,23 @@ inte bad_return_type_func() {
   return 0;
 }
 @
+\end{frame}
 
 Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
+\begin{frame}[fragile]
 \inputminted[highlightlines={1,12}]{cpp}{fracexample2.cpp}
+\end{frame}
 We note lines 1 and 12.
 Line 1 maps to the same line in the original \noweb{} source, just the same as 
 above.
-But line 12 maps to line 177 in the original \noweb{} source.
+But line 12 maps to line 199 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=173,lastline=180]{text}{cppjava.nw}
+\inputminted[firstline=195,lastline=202]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
 We'll compile with
+\begin{frame}[fragile]
 \begin{minted}[numbers=none]{bash}
 g++ -g -std=c++17 -Wall -Wextra -Werror -o fracexample2 \
   fracexample2.cpp fraction.cpp
@@ -202,68 +228,10 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
                "2>&1",
                shell=True, minted_opts="numbers=none")
 \end{pycode}
+\end{frame}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 177, rather than the tangled file [[fracexample2.cpp]].
-Now, we'll get the same when debugging using [[gdb]], it will refer to the 
-literate source instead of the tangled file.
-(I've hightlighted some lines to make it easier to read the following output.)
-\begin{minted}[highlightlines={18,41,43,48}]{text}
-$ gdb ./fracexample
-GNU gdb (Ubuntu 12.1-0ubuntu1~22.04.2) 12.1
-Copyright (C) 2022 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-Type "show copying" and "show warranty" for details.
-This GDB was configured as "x86_64-linux-gnu".
-Type "show configuration" for configuration details.
-For bug reporting instructions, please see:
-<https://www.gnu.org/software/gdb/bugs/>.
-Find the GDB manual and other documentation resources online at:
-    <http://www.gnu.org/software/gdb/documentation/>.
-
-For help, type "help".
-Type "apropos word" to search for commands related to "word"...
-Reading symbols from ./fracexample...
-(gdb) l 35
-warning: Source file is more recent than executable.
-30      @
-31
-32      \subsection{C++}
-33
-34      The class should be used as the following example programs show.
-35      @<<fracexample.cpp>>=
-36      #include <iostream>
-37      #include "fraction.h"
-38
-39      int main() {
-(gdb) l
-40        Fraction f1(1, 2);
-41        Fraction f2(1, 3);
-42        std::cout @<< f1 @<< " + " @<< f2
-43                  @<< " = " @<< (f1 + f2) @<< std::endl;
-44      }
-45      @
-46
-47      The expected output is:
-48      \begin{pycode}
-49      didactic_shell("./fracexample", minted_opts="numbers=none")
-(gdb) b 42
-Breakpoint 1 at 0x2411: file /home/dbosk/devel/edu/literate-programming/whatis/cppjava.nw, line 42.
-(gdb) r
-Starting program: /home/dbosk/devel/edu/literate-programming/whatis/fracexample 
-[Thread debugging using libthread_db enabled]
-Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-
-Breakpoint 1, main () at /home/dbosk/devel/edu/literate-programming/whatis/cppjava.w:42
-42        std::cout @<< f1 @<< " + " @<< f2
-(gdb) 
-\end{minted}
-We see above that the breakpoint refers to lines in the literate source.
-And, indeed, when we ask [[gdb]] to list the source around the breakpoint, it 
-lists the literate source.
-(We used [[gdb]] in the example, this is what IDEs like VSCode do as well, so 
-it will work there too.)
+line 199, rather than the tangled file [[fracexample2.cpp]].
+\only<article>{\input{gdb.tex}}
 
 \begin{activity}
 Tangle the files with and without the [[-L]] flag and compile them.
@@ -303,6 +271,7 @@ We also want to overload the operator [[+]] to add two fractions.
 Finally, we also want to print a fraction in the form 
 [[numerator/denominator]]---shortened as much as possible.
 This gives us the following header file:
+\begin{frame}[fragile]
 <<fraction.h>>=
 <<headers to include>>
 
@@ -317,12 +286,14 @@ class Fraction {
     <<overloaded operators>>
 };
 @
+\end{frame}
 
 \subsubsection{Implementing the methods}
 
 Now we need to implement the methods, we have [[to_string]] and
 [[<<overloaded operators>>]] to implement.
 That should be done in the file [[<<fraction.cpp>>]].
+\begin{frame}[fragile]
 <<fraction.cpp>>=
 <<headers to include>>
 #include "fraction.h"
@@ -337,12 +308,14 @@ fraction.o: fraction.cpp fraction.h
 <<remove generated files>>=
 rm -f fraction.o
 @
+\end{frame}
 
 \subsubsection{The constructor}
 
 The constructor should initialize the attributes.
 We'll also want it to shorten the fraction as much as possible.
 But we'll return to that later.
+\begin{frame}[fragile]
 <<implementation of methods for Fraction>>=
 Fraction::Fraction(int numerator, int denominator)
   : numerator(numerator), denominator(denominator)
@@ -358,6 +331,7 @@ TEST(Fraction, Constructor) {
   EXPECT_EQ(f2.to_string(), "1/2");
 }
 @
+\end{frame}
 
 \subsubsection{Shortening the fraction}
 
@@ -390,6 +364,7 @@ TEST(Fraction, AddShorten) {
 
 We want to be able to print a fraction.
 We can do this by implementing a method [[to_string]].
+\begin{frame}[fragile]
 <<methods for Fraction>>=
 std::string to_string() const;
 <<implementation of methods for Fraction>>=
@@ -399,6 +374,7 @@ std::string Fraction::to_string() const {
 <<headers to include>>=
 #include <string>
 @
+\end{frame}
 
 Let's test this method.
 We'll test two things:
@@ -437,6 +413,7 @@ std::ostream& operator<<(std::ostream& os, const Fraction& f) {
 
 Let's turn to the overloaded [[+]] operator.
 Let's start with some tests to see what we want to achieve.
+\begin{frame}[fragile]
 <<tests for Fraction>>=
 TEST(Fraction, Add) {
   Fraction f1(1, 2);
@@ -450,6 +427,7 @@ TEST(Fraction, Add) {
   EXPECT_EQ(f6.to_string(), "2/3");
 }
 @
+\end{frame}
 
 To achieve this, we need the method named [[operator+]].
 <<overloaded operators>>=
@@ -458,6 +436,7 @@ Fraction operator+(const Fraction& other) const;
 change it.
 We also add [[const]] to the method itself to indicate that it doesn't change 
 the object ([[this]]).
+\begin{frame}[fragile]
 <<implementation of overloaded operators>>=
 Fraction Fraction::operator+(const Fraction& other) const {
   <<add [[this]] and [[other]] into [[new_numerator]] and [[new_denominator]]>>
@@ -466,6 +445,7 @@ Fraction Fraction::operator+(const Fraction& other) const {
 @ We don't need to do anything special to shorten the fraction here.
 Because the constructor already does that when we create the new [[Fraction]] 
 that is returned.
+\end{frame}
 
 To add two fractions, we need to find a common denominator.
 We can then just add the numerators.
@@ -493,12 +473,16 @@ representation of the fraction in the form
 Based on the ideas from the C++ part, write the corresponding Java program.
 \end{activity}
 
+\begin{frame}[fragile]
 \begin{activity}
 Java doesn't support the line preprocessor directive as the C++ compiler and 
 debugger do.
 Consequently, we can't use the exact same approach as for C++.
 Can we solve this in another, yet similar, way?
 \end{activity}
+\end{frame}
+
+\mode<presentation>{\endinput}
 
 \subsection{The \noweb{} source}
 
