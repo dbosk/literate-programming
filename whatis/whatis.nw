@@ -610,6 +610,10 @@ documentation for sure can be targeted at users.)
 \mode<all>{\input{cppjava.tex}}
 
 
+% chapter on make with noweb
+\input{noweb.tex}
+
+
 \begin{frame}
 \printbibliography{}
 \end{frame}

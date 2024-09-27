@@ -10,7 +10,7 @@ SRC+=		foo.bar foo.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile
-SRC+=		cppjava.tex
+SRC+=		cppjava.tex noweb.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
