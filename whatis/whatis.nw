@@ -1044,6 +1044,11 @@ documentation for sure can be targeted at users.)
 \mode<all>{\input{introsort.tex}}
 
 
+\section{C++, Java and compilation errors}
+
+\mode<all>{\input{cppjava.tex}}
+
+
 \begin{frame}
 \printbibliography{}
 \end{frame}

@@ -16,3 +16,15 @@ tests_Makefile
 didactic_output_*
 didactic_code_*
 whatis.tex
+cppfrac.mk
+cppjava.tex
+fracexample
+fracexample.cpp
+fracexample.noline.cpp
+fracexample2.cpp
+fractest
+fractest.cpp
+fraction.cpp
+fraction.h
+fraction.o
+
