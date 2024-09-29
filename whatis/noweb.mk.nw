@@ -18,7 +18,7 @@ There is also a [[NOWEAVE.pdf]] to weave directly to PDF.
 This assumes that the file is independent, \ie no special LaTeX preamble.
 
 
-\section{Overview of the include file}
+\subsection{Overview of the include file}
 
 The overall structure is the same as for other include files.
 We will cover the suffix rules for documentation first and then those for code.
@@ -34,7 +34,7 @@ NOWEB_MK = true
 endif
 @
 
-\section{Weaving documentation}
+\subsection{Weaving documentation}
 
 We will use the [[noweave]] command to weave the documentation.
 We are interested in two cases:
@@ -104,7 +104,7 @@ NOWEAVE.pdf?=       \
 NOWEAVEFLAGS.pdf?=  ${NOWEAVEFLAGS} -x -t2
 @
 
-\section{Tangling code}
+\subsection{Tangling code}
 
 We will now cover the rules for tangling the source code for different 
 languages.
@@ -130,7 +130,7 @@ CPIF?=          cpif
 @ However, since we use this variable, cpif(1) can be substituted for tee(1) in 
 desirable situations.
 
-\subsection{General pattern rules}
+\subsubsection{General pattern rules}
 
 There are two general pattern rules that we will add.
 <<general tangling rules>>=
@@ -161,7 +161,7 @@ $(foreach suf,${NOWEB_SUFFIXES},$(eval $(call with_suffix_target,${suf})))
 tangle a header file [[.h]] from a [[.cpp.nw]] file.
 We must add these rules manually, which we do below.
 
-\subsection{Rules for different languages}
+\subsubsection{Rules for different languages}
 
 We will now cover specialized instances of the general pattern rules defined 
 above.
