@@ -513,6 +513,117 @@ representation of the fraction in the form
 Based on the ideas from the C++ part, write the corresponding Java program.
 \end{activity}
 
+Since we have already covered the C++ version in detail, we'll be slightly less 
+detailed as to the program structure.
+But we'll emphasize more how we can use [[make]] with Java and literate 
+programming.
+
+We want the class to be used as the following example programs show.
+<<fracexample.java>>=
+public class FracExample {
+  public static void main(String[] args) {
+    Fraction f1 = new Fraction(1, 2);
+    Fraction f2 = new Fraction(1, 3);
+    System.out.println(f1 + " + " + f2 + " = " + f1.add(f2));
+  }
+}
+@
+
+This means that the class must be in a separate file.
+The implementation of the class is as follows.
+<<Fraction.java>>=
+public class Fraction {
+  private int numerator;
+  private int denominator;
+
+  public Fraction(int numerator, int denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+    shorten();
+  }
+
+  <<method [[shorten()]]>>
+
+  public Fraction add(Fraction other) {
+    int newNumerator = numerator * other.denominator
+                       + other.numerator * denominator;
+    int newDenominator = denominator * other.denominator;
+    return new Fraction(newNumerator, newDenominator);
+  }
+
+  public String toString() {
+    return numerator + "/" + denominator;
+  }
+}
+@
+
+The expected output is:
+\begin{pycode}
+didactic_shell("java FracExample", minted_opts="numbers=none")
+\end{pycode}
+
+Let's turn to the make file.
+What we want to do now is to build and run the Java program.
+Usually, this involves compiling using [[javac]] and then running using 
+[[java]].
+
+We'll add a (phony) target\footnote{%
+  See the GNU Make manual for more details on phony targets:
+  \cite[Chapter 4.6,
+  \url{https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html}% 
+  ]{GNUMake}.
+} to run the Java program.
+It needs the prerequisites to run it, which are the class files.
+<<frac targets>>=
+.PHONY: run
+run: FracExample.class Fraction.class
+	java FracExample
+@
+
+Next we need to tell [[make]] how to get [[.class]] files from [[.java]] files.
+We can do this with a pattern rule\footnote{%
+  See the GNU Make manual chapter 10.5 for more details on pattern rules:
+  \cite[Chapter 10.5,
+  \url{https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html}% 
+  ]{GNUMake}.
+}.
+What we want is a rule saying that any [[.class]] file depends on the 
+corresponding [[.java]] file.
+And the recipe is to use [[javac]] on the [[.java]] file to get the resulting 
+[[.class]] file.
+<<frac targets>>=
+%.class: %.java
+	javac $<
+@ In this case, we actually need the [[$<]] variable to refer to the 
+prerequisite, because we don't know it's name otherwise.
+
+Now, we also need to get the [[.java]] file from the [[.nw]] file.
+Let's create a rule for this.
+<<frac targets>>=
+%.java: %.nw
+	notangle -R$@ $< | cpif $@
+	noroots $<
+@ Here we create a [[.java]] file from a [[.nw]] file by running [[notangle]].
+
+<<frac targets>>=
+all: FracExample.class Fraction.class
+<<remove generated files>>=
+rm -f FracExample.class Fraction.class
+@
+
+<<method [[shorten()]]>>=
+private void shorten() {
+  int gcd = gcd(numerator, denominator);
+  numerator /= gcd;
+  denominator /= gcd;
+}
+
+private int gcd(int a, int b) {
+  return b == 0 ? a : gcd(b, a % b);
+}
+@
+
+
 \begin{frame}[fragile]
 \begin{activity}
 Java doesn't support the line preprocessor directive as the C++ compiler and 
@@ -528,3 +639,4 @@ Can we solve this in another, yet similar, way?
 
 Let's have a look at the \noweb{} source file for this section, \cref{cppjava}.
 \inputminted{text}{cppjava.nw}
+
