@@ -11,9 +11,24 @@ try to write the same program and experiment with it.
 
 \subsection{Compiling the files}
 
-We'll start with the makefile.
-We'll write a file [[<<frac.mk>>]] to include from our [[Makefile]], this file 
-keeps only the building rules for this particular section.
+We'll start with the makefile\footnote{%
+  If you've never come across [[make]] before, skim through chapter 2 of the 
+  GNU Make manual:
+  \cite[Chapter 2,
+  \url{https://www.gnu.org/software/make/manual/html_node/Introduction.html}%
+  ]{GNUMake}.
+}.
+We'll write a file [[<<frac.mk>>]] to include from our [[Makefile]]\footnote{%
+  See the GNU Make manual chapter 3.3 on including other makefiles:
+  \cite[Chapter 3.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Include.html}% 
+  ]{GNUMake}.
+}, this file keeps only the building rules for this particular section.
+The targets [[all]] and [[clean]] are standard targets.
+The target [[all]] is the default target, and its supposed to trigger a build 
+for all targets.
+The target [[clean]] is used to remove all generated files that the compilers 
+etc.\ produce.
 \begin{frame}[fragile]
 <<frac.mk>>=
 <<frac variable definitions>>
@@ -63,10 +78,16 @@ fracexample: fraction.o fracexample.cpp fraction.h
 <<remove generated files>>=
 rm -f fracexample
 @ We want to use C++17.
-To use the built-in rules of [[make]]\only<article>{\footnote{%
-  Worth noting in this context: (GNU) [[make]] has built-in rules for Knuth's 
-  original WEB system, the one discussed in \cite{Knuth1984}.
-}}, we need to define the variables [[CXXFLAGS]] and [[LDFLAGS]] to have the 
+To use the built-in rules of [[make]]\footnote{%
+  See the GNU Make manual chapter 10.2-10.3 for more details on built-in rules 
+  and their variables:
+  \cite[Chapter 10.2-10.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html}% 
+  ]{GNUMake}.
+  \only<article>{Worth noting in this context: (GNU) [[make]] has built-in 
+  rules for Knuth's original WEB system, the one discussed in 
+  \cite{Knuth1984}.}%
+}, we need to define the variables [[CXXFLAGS]] and [[LDFLAGS]] to have the 
 options we need.
 We want the usual [[-W]] flags to catch common errors.
 <<frac variable definitions>>=
@@ -125,9 +146,28 @@ We need to build them from the \noweb{} source file.
 fraction.cpp fraction.h fractest.cpp fracexample.cpp: cppjava.nw
 	notangle -L -R$@ $< | cpif $@
 	noroots $<
-@ There are two things to note:
-the [[-L]] flag and the [[noroots]] program.
+@ There are three things to note:
+the number of targets, the [[-L]] flag and the [[noroots]] program.
 \end{frame}
+
+We've now listed several targets (the [[.cpp]] and [[.h]] files), with only one 
+dependency (the \noweb{} source file, [[cppjava.nw]]).
+That's why we use the [[$@]] variable\footnote{%
+  See the GNU Make manual chapter 10.5.3 for more details on automatic 
+  variables:
+  \cite[Chapter 10.5.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html}% 
+  ]{GNUMake}.
+} to refer to the target in the rule.
+So each one of those targets will be built from the \noweb{} source file using 
+that same recipe.
+The source file is referred to through the [[$<]] variable.
+We could in this case have just written [[cppjava.nw]] instead of [[$<]], but 
+there is no way to avoid [[$@]]\footnote{%
+  Well, we could probably have written one separate target and dependecy for 
+  each file, and repeated the code for the recipe for each one.
+  But that repeats the same code so many times.
+}.
 
 The [[noroots]] program simply lists all the root chunks of a \noweb{} source 
 file.
