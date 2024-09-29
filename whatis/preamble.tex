@@ -1,7 +1,9 @@
 \usepackage[utf8]{inputenc}
 \usepackage[swedish,british]{babel}
 \usepackage{float}
-\usepackage[inline]{enumitem}
+\makeatletter
+\@ifclassloaded{beamer}{\relax}{\usepackage[inline]{enumitem}}
+\makeatother
 
 \usepackage{noweb}
 \usepackage{booktabs}
