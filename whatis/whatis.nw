@@ -628,7 +628,8 @@ documentation for sure can be targeted at users.)
 
 
 % chapter with weblogin as example
-\chapter{A real-world example: \texttt{weblogin}}
+\chapter{A real-world example: \texttt{weblogin}%
+  \protected\footnote{This section is adapted from \cite{weblogin}}}
 %\let\chapter\section
 \let\section\subsection
 \let\subsection\subsubsection
