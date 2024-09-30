@@ -410,7 +410,20 @@ However, adding support for Markdown in the weaving process is possible with
 \subsection{Using \noweb}
 
 To use literate programming we need some tooling.
-We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
+We'll use \noweb\autocite{Ramsey1994}\footnote{%
+  It can be found on its web page
+  \url{https://www.cs.tufts.edu/~nr/noweb/} and
+  GitHub repository
+  \url{https://github.com/nrnrnr/noweb}.
+  However, the easiest way is to install it using the package manager of your 
+  operating system.
+  For instance, on Ubuntu and Debian, you can install it using the command
+  [[sudo apt install noweb]].
+  On Mac, you install it using
+  [[brew install noweb]].
+  On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
+  or similar.
+}, we'll get back to in shortly.
 
 There has been several tools developed for literate programming over time.
 The original was Knuth's \web\autocite{Knuth1984}, which required the programs 

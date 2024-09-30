@@ -557,13 +557,13 @@ public class Fraction {
 }
 @
 
-The expected output is:
+The expected output from running [[FracExample]] is:
 \begin{pycode}
 didactic_shell(["java", "FracExample"], minted_opts="numbers=none")
 \end{pycode}
 
 Let's turn to the make file.
-What we want to do now is to build and run the Java program.
+How can we build and run the Java program?
 Usually, this involves compiling using [[javac]] and then running using 
 [[java]].
 
@@ -594,7 +594,8 @@ And the recipe is to use [[javac]] on the [[.java]] file to get the resulting
 <<frac targets>>=
 %.class: %.java
 	${COMPILE.java}
-@ In the same style as other patterns rules, use the variable [[COMPILE.java]].
+@ In the same style as other patterns rules~\autocite[see the end discussion of 
+Chapter 10.2]{GNUMake}, use the variable [[COMPILE.java]].
 We'll define this variable later.
 But we can point out that, in this case, we actually need the [[$<]] variable 
 to refer to the prerequisite, because we don't know it's name otherwise.
@@ -606,7 +607,7 @@ FracExample.class: Fraction.class
 @ However, we don't need any recipe here, as that's covered by the pattern rule 
 above.
 We just need to specify that [[FracExample.class]] depends on 
-[[Fraction.class]], that way, [[make]] will know that it needs to build 
+[[Fraction.class]]; that way, [[make]] will know that it needs to build 
 [[Fraction.class]] before [[FracExample.class]].
 
 Finally, let's add the class files to [[all]] and to cleaning.
@@ -623,11 +624,11 @@ We have one more thing that we need to do: tell [[make]] how to get the
 	${TANGLE.java}
 @ Here we create a [[.java]] file from a [[.nw]] file by running [[notangle]].
 However, since we don't have a [[.nw]] file named [[FracExample.nw]], we need 
-to specify this:
+to specify this relation explicitly:
 <<frac targets>>=
 FracExample.java Fraction.java: cppjava.nw
 	${TANGLE.java}
-@ This is the advantage of using these variables.
+@ This illustrates the advantage of using these [[COMPILE.x]] variables.
 This situation happens rather often, and it's nice to be able to just write the 
 recipe by one variable ([[TANGLE.java]]) instead of having to rewrite the 
 entire recipe.
@@ -769,9 +770,11 @@ What should [[NOTANGLE.java]] and [[COMPILE.java]] be set to?
 \end{frame}
 
 \begin{frame}[fragile]
-We'll defined the [[TANGLE.java]] variable to include the proper [[-L]] flag.
+We'll define the [[TANGLE.java]] variable to include the proper [[-L]] flag.
 <<frac targets>>=
-NOTANGLE.java=notangle -L'//line %L "%F"%N' -R$@ $< | cpif $@ && noroots $<
+NOTANGLE.java=notangle -L'//line %L "%F"%N' -R$@ $< \
+              | cpif $@ \
+              && noroots $<
 @
 \end{frame}
 
