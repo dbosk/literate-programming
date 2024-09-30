@@ -20,8 +20,14 @@ DEPENDS+=	fracexample fractest
 SRC+=		fracexample.cpp
 SRC+=		fracexample2.cpp
 
+DEPENDS+=	FracExample.class
+SRC+=		Fraction2.java
+
 fracexample2.cpp: cppjava.nw
 	${NOTANGLE.cxx}
+
+Fraction2.java: cppjava.nw
+	${NOTANGLE}
 
 notes.pdf: notes.tex didactic.sty
 notes.pdf: ${SRC} ${FIGS} ${DEPENDS}

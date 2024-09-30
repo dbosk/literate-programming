@@ -519,7 +519,7 @@ But we'll emphasize more how we can use [[make]] with Java and literate
 programming.
 
 We want the class to be used as the following example programs show.
-<<fracexample.java>>=
+<<FracExample.java>>=
 public class FracExample {
   public static void main(String[] args) {
     Fraction f1 = new Fraction(1, 2);
@@ -559,7 +559,7 @@ public class Fraction {
 
 The expected output is:
 \begin{pycode}
-didactic_shell("java FracExample", minted_opts="numbers=none")
+didactic_shell(["java", "FracExample"], minted_opts="numbers=none")
 \end{pycode}
 
 Let's turn to the make file.
@@ -593,24 +593,49 @@ And the recipe is to use [[javac]] on the [[.java]] file to get the resulting
 [[.class]] file.
 <<frac targets>>=
 %.class: %.java
-	javac $<
-@ In this case, we actually need the [[$<]] variable to refer to the 
-prerequisite, because we don't know it's name otherwise.
+	${COMPILE.java}
+@ In the same style as other patterns rules, use the variable [[COMPILE.java]].
+We'll define this variable later.
+But we can point out that, in this case, we actually need the [[$<]] variable 
+to refer to the prerequisite, because we don't know it's name otherwise.
 
-Now, we also need to get the [[.java]] file from the [[.nw]] file.
-Let's create a rule for this.
+Since we need [[Fraction]] in [[FracExample]], we'll need [[Fraction.class]] 
+when we compile [[FracExample.class]].
 <<frac targets>>=
-%.java: %.nw
-	notangle -R$@ $< | cpif $@
-	noroots $<
-@ Here we create a [[.java]] file from a [[.nw]] file by running [[notangle]].
+FracExample.class: Fraction.class
+@ However, we don't need any recipe here, as that's covered by the pattern rule 
+above.
+We just need to specify that [[FracExample.class]] depends on 
+[[Fraction.class]], that way, [[make]] will know that it needs to build 
+[[Fraction.class]] before [[FracExample.class]].
 
+Finally, let's add the class files to [[all]] and to cleaning.
 <<frac targets>>=
 all: FracExample.class Fraction.class
 <<remove generated files>>=
 rm -f FracExample.class Fraction.class
 @
 
+We have one more thing that we need to do: tell [[make]] how to get the 
+[[.java]] files from the [[.nw]] file.
+<<frac targets>>=
+%.java: %.nw
+	${TANGLE.java}
+@ Here we create a [[.java]] file from a [[.nw]] file by running [[notangle]].
+However, since we don't have a [[.nw]] file named [[FracExample.nw]], we need 
+to specify this:
+<<frac targets>>=
+FracExample.java Fraction.java: cppjava.nw
+	${TANGLE.java}
+@ This is the advantage of using these variables.
+This situation happens rather often, and it's nice to be able to just write the 
+recipe by one variable ([[TANGLE.java]]) instead of having to rewrite the 
+entire recipe.
+
+Now, let's instead return to the last piece of the Java program.
+We need to shorten the fraction.
+We won't use any library function, but rather implement the greatest common 
+divisor algorithm ourselves as a private method.
 <<method [[shorten()]]>>=
 private void shorten() {
   int gcd = gcd(numerator, denominator);
@@ -619,10 +644,68 @@ private void shorten() {
 }
 
 private int gcd(int a, int b) {
-  return b == 0 ? a : gcd(b, a % b);
+  <<Euclid's algorithm for [[a]] and [[b]]>>
 }
 @
 
+The [[gcd]] algorithm can easily be implemented recursively.
+If [[b]] is zero, the greatest common divisor is [[a]].
+Otherwise, the greatest common divisor is the greatest common divisor of [[b]] 
+and the remainder of the division of [[a]] by [[b]].
+<<Euclid's algorithm for [[a]] and [[b]]>>=
+return b == 0 ? a : gcd(b, a % b);
+@
+
+
+\subsubsection{Compilation-error messages in Java}
+
+Let's have a look at the tangled file [[Fraction.java]].
+We tangle it with the line
+[[notangle -RFraction.java cppjava.nw]].
+The result is the following:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("notangle -RFraction.java cppjava.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+
+We note that the line numbers are not rewritten.
+No surprise, we didn't use the [[-L]] flag.
+Let's look at a different version of the file where we introduce an error.
+We'll call this file [[Fraction2.java]].
+\begin{frame}[fragile]
+<<Fraction2.java>>=
+class BadFrac {
+  private int numerator;
+  private int denominator;
+
+  public BadFrac(int numerator, int denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+    shorten();
+  }
+
+  private void shorten() {
+    int gcd = gcd(numerator, denominator);
+    numerator /= gcd;
+    denominator /= gcd;
+  }
+}
+@
+\end{frame}
+The problem is that we don't have any method named [[gcd]].
+We tangle it with the line
+[[notangle -RFraction2.java cppjava.nw]].
+Then compile it with the command [[javac Fraction2.java]].
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("javac Fraction2.java 2>&1",
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+We see that the error message refers to the file [[Fraction2.java]] and line 
+12.
 
 \begin{frame}[fragile]
 \begin{activity}
@@ -633,9 +716,81 @@ Can we solve this in another, yet similar, way?
 \end{activity}
 \end{frame}
 
+We can write the line directives as comments in the tangled file.
+Then we can write a utility that filters through the file and rewrites the 
+output from the Java compiler.
+Fortunately, there is such a utility, [[noerr.pl]]\footnote{%
+  It can be downloaded from 
+  \url{https://github.com/svnk/noerr/releases/tag/v1.0}.
+  Its literate source code can also be found there.
+}.
+Sven Kloppenburg wrote this utility specifically for Java.
+
+Let's tangle the file [[Fraction2.java]] with the line
+\begin{center}
+  [[notangle -L'//line %L "%F"%N' -RFraction2.java cppjava.nw]].
+\end{center}
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("notangle -L'//line %L \"%F\"%N' -RFraction2.java cppjava.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+Then we'll filter the compilers messages through [[noerr.pl]]:
+\begin{center}
+[[javac Fraction2.java | noerr.pl -L'//line %L "%F"%N']]
+\end{center}
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("""
+notangle -L'//line %L \"%F\"%N' -RFraction2.java cppjava.nw > Fraction3.java;
+javac Fraction3.java 2>&1 | noerr -L'//line %L \"%F\"%N'
+               """,
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+Now we can return to the pattern rules.
+We want to get the [[.java]] file from the [[.nw]] file and the [[.class]] file 
+from [[.java]].
+
+\begin{frame}[fragile]
+\begin{activity}
+We had the rules
+\begin{minted}[numbers=none]{make}
+%.java: %.nw
+  ${TANGLE.java}
+
+%.class: %.java
+  ${COMPILE.java}
+\end{minted}
+What should [[NOTANGLE.java]] and [[COMPILE.java]] be set to?
+\end{activity}
+\end{frame}
+
+\begin{frame}[fragile]
+We'll defined the [[TANGLE.java]] variable to include the proper [[-L]] flag.
+<<frac targets>>=
+NOTANGLE.java=notangle -L'//line %L "%F"%N' -R$@ $< | cpif $@ && noroots $<
+@
+\end{frame}
+
+\begin{frame}[fragile]
+Now let's turn to the [[COMPILE.java]] variable.
+As with other such variables, we'll use [[JAVAC]] and [[JAVACFLAGS]] to specify 
+the compiler and its flags.
+We add the corresponding [[-L]] flag to [[noerr.pl]] in [[JAVACEXTRAS]].
+<<frac variable definitions>>=
+JAVAC=        javac
+JAVACFLAGS=
+JAVACEXTRAS=  | noerr.pl -L'//line %L \"%F\"%N'
+COMPILE.java= ${JAVAC} ${JAVACFLAGS} $< ${JAVACEXTRAS}
+@
+\end{frame}
+
 \mode<presentation>{\endinput}
 
-\subsection{The \noweb{} source}
+\subsection{The \noweb{} source for \cref{cppjava}}
 
 Let's have a look at the \noweb{} source file for this section, \cref{cppjava}.
 \inputminted{text}{cppjava.nw}
