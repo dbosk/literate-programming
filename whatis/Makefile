@@ -23,6 +23,11 @@ SRC+=		fracexample2.cpp
 DEPENDS+=	FracExample.class
 SRC+=		Fraction2.java
 
+SRC+=		../weblogin/doc/contents.tex
+
+../weblogin/doc/contents.tex: ../weblogin/doc/
+	${MAKE} -C $(dir $@) all
+
 fracexample2.cpp: cppjava.nw
 	${NOTANGLE.cxx}
 
@@ -69,6 +74,7 @@ clean:
 	${RM} didactic_output_*
 	${RM} didactic_code_*
 	${RM} cppfrac.mk
+	${MAKE} -C ../weblogin/doc/ clean
 
 frac.mk: cppjava.nw
 	${NOTANGLE.mk}
