@@ -1,8 +1,16 @@
 \mode*
 
+The course DD1301 Computer Introduction is given every period of the academic 
+year.
+However, period 1 is the main period as that's when teaching happens.
+Throughout the rest of the year it's a self-study course.
+However, there are most students in period 1, and many of them finish the 
+course in period 2, 3 and 4---and some even in the summer or the coming years.
+Due to this, we want to merge the course rooms in Canvas, so that the students 
+enrolling in period 2 can communicate with the students the started in period 
+1, and so on.
 IT automatically creates separate Canvas rooms for all the course instances.
-However, we want to merge them into one, so that all students can communicate 
-with each other.
+The problem we want to solve is to merge these Canvas rooms into one.
 
 IT creates the course instances 270 days before the course start.
 This gives us time to email them as soon as the new course rooms pops up in 
@@ -28,6 +36,8 @@ Canvas, we'll send an email to IT and ask them to merge the courses.
 However, we don't want to run this too often, so that we don't send another 
 email before IT has acted on the first.
 Essentially, we use IT as an asynchronous API call.
+Consequently, we need a timeout to allow the API call to finish before we 
+assume failure and try again.
 \begin{frame}[fragile]
 <<merge.sh>>=
 YEAR=$(date +%y)
@@ -46,7 +56,7 @@ YEAR=$(date +%y)
 We simply generate a message that we send to IT on the usual email address.
 \begin{frame}[fragile]
 <<send email to IT to merge Canvas rooms in [[course_rooms]]>>=
-<<adjust IFS for the loop>>
+<<adjust IFS for looping through [[course_rooms]]>>
 echo "
 Hej! Kan ni slå ihop följande canvasrum till ett,
 DD1301 HT${YEAR} (datintro${YEAR})?
@@ -61,8 +71,8 @@ $(<<print [[course_rooms]] as itemized list>>)
 @
 \end{frame}
 
-We need to adjust the IFS variable to loop over the course rooms, since those 
-contain spaces.
+We need to adjust the IFS variable to loop over the course rooms when we 
+itemize the list, since those contain spaces.
 \begin{frame}[fragile]
 \begin{example}
   [[course_rooms]] might look like this (year is set to 2023):
@@ -76,7 +86,7 @@ print(course_rooms)
 print(r"\end{minted}")
   \end{pycode}
 \end{example}
-<<adjust IFS for the loop>>=
+<<adjust IFS for looping through [[course_rooms]]>>=
 oldIFS="$IFS"
 IFS=$'\n'
 <<restore IFS>>=

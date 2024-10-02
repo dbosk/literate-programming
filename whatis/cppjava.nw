@@ -3,6 +3,28 @@
 
 We want to write a short class to work with fractions.
 We want to do this twice, once for C++ and once for Java.
+\ltnote{%
+  We need to do the same thing twice to contrast what we want the students to 
+  focus on, namely:
+  \begin{enumerate}
+  \item The [[-L]] flag that works for C++ but not for Java,
+  \item The [[noerr.pl]] utility that works for Java, or rather, how we can 
+  achieve the same thing in a different way without support of the tools we're 
+  using.
+  \item That we can complement our tools rather easily, without incurring any 
+  effort on our part.
+  That is, that if we use proper tools, like Make, we can do complex procedures 
+  without much effort.
+  \end{enumerate}
+  The missing example is Python.
+  The [[-L]] flag doesn't work at all for Python, because it breaks columns.
+  And Python is strict about indentation, so we can't just add line numbers.
+  But we can solve it for Python too, in a slightly different way.
+  \begin{enumerate}[resume]
+  \item We also want to compare the \noweb{} source to the C++ and Java source.
+  This is to generalize from the Python examples in earlier chapters.
+  \end{enumerate}
+}
 
 \begin{activity}
 While reading the rest of this section,
@@ -48,7 +70,12 @@ clean-frac:
 
 \subsection{C++}
 
-The class should be used as the following example programs show.
+The class should be used as the following example program shows.%
+\ltnote{%
+  This adheres to the variation theory principle of starting with the whole, to 
+  later break it down into parts by focusing on different aspects using 
+  patterns of variation.
+}%
 \begin{frame}[fragile]
 <<fracexample.cpp>>=
 #include <iostream>
@@ -99,7 +126,13 @@ all: fracexample
 @
 \end{frame}
 
-We also want to test the fraction class with the following test program.
+We also want to test the fraction class with the following test program.%
+\ltnote{%
+  Here we generalize the idea of including testing in the literate source.
+  We introduced it earlier using Python.
+  Now we vary the testing framework and the language, but keeping the idea of 
+  testing invariant.
+}
 The test program will use Google Test framework.
 \begin{frame}[fragile]
 <<fractest.cpp>>=
@@ -198,12 +231,19 @@ fine\footnote{%
   I could detect this with the help of [[noroots]].
 }.
 
+\ltnote{%
+  The important part here is to contrast what happens with an without the 
+  [[-L]] flag.
+  This opens up the dimension of line number translation, how we can map lines 
+  between files.
+}%
 Now we'll turn our focus to the [[-L]] flag.
 When we tangle the files, we want the [[-L]] flag.
 The [[-L]] flag will rewrite the line numbers so that the compiler error 
 messages will refer to the correct line in the \noweb{} source file, instead of 
 the tangled file.
-Without the [[-L]] flag, the tangled source will look as expected:
+Without the [[-L]] flag, the tangled source will look as expected; normal C++ 
+code:
 \begin{frame}[fragile]
 \begin{pycode}
 didactic_shell("notangle -Rfracexample.cpp cppjava.nw",
@@ -219,8 +259,8 @@ with open("fracexample.cpp", "r") as f:
 \end{pycode}
 \end{frame}
 
-If we look at the file [[cppjava.nw]] (the source file for this section), we 
-can see this around line 39:
+If we look at the file [[cppjava.nw]] (the source file for this section, also 
+found in full in \cref{cppjava.nw}), we can see this around line 39:
 \begin{frame}[fragile]
 \inputminted[firstline=36,lastline=48]{text}{cppjava.nw}
 \end{frame}
@@ -270,7 +310,8 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
 \end{pycode}
 \end{frame}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 199, rather than the tangled file [[fracexample2.cpp]].
+line 199 (in full in \cref{cppjava.nw}), rather than the tangled file 
+[[fracexample2.cpp]].
 \only<article>{\input{gdb.tex}}
 
 \begin{activity}
@@ -296,8 +337,17 @@ didactic_shell("./fractest",
                hlgrep=["cppjava.nw"],
                minted_opts="numbers=none")
 \end{pycode}
-Let's have a peek at the lines around line 279 in [[cppjava.nw]]:
-\inputminted[firstline=273,lastline=283]{text}{cppjava.nw}
+Let's have a peek at the lines around line 327 in [[cppjava.nw]]:
+\inputminted[firstline=321,lastline=333]{text}{cppjava.nw}
+\Citetitle{GoogleTestPrimer} states that \blockcquote{GoogleTestPrimer}{%
+  \textins{t}ests should be well organized and reflect the structure of the 
+  tested code.%
+} and
+\blockcquote{GoogleTestPrimer}{%
+  \textins{w}hen tests fail, they should provide as much information about the 
+  problem as possible.%
+} Arguably, by including the tests in the literate source, close to the code 
+that the test is testing, we improve one these two points even further.
 
 
 \subsubsection{The class}
@@ -330,8 +380,10 @@ class Fraction {
 
 \subsubsection{Implementing the methods}
 
-Now we need to implement the methods, we have [[to_string]] and
-[[<<overloaded operators>>]] to implement.
+Now we need to implement the methods, we have
+[[<<implementation of methods>>]] and
+[[<<overloaded operators>>]]
+to implement.
 That should be done in the file [[<<fraction.cpp>>]].
 \begin{frame}[fragile]
 <<fraction.cpp>>=
@@ -340,7 +392,7 @@ That should be done in the file [[<<fraction.cpp>>]].
 
 <<implementation of methods for Fraction>>
 <<implementation of overloaded operators>>
-@
+@ With [[<<headers to include>>]] we include the necessary headers when needed.
 
 To compile this file, we need the following simple rule.
 <<frac targets>>=
@@ -364,7 +416,10 @@ Fraction::Fraction(int numerator, int denominator)
 }
 @
 
-Let's test this:
+Let's test this.
+To do the test, we need a method [[to_string]] that returns the fraction as a 
+string.
+We'll cover that later.
 <<tests for Fraction>>=
 TEST(Fraction, Constructor) {
   Fraction f2(2, 4);
@@ -402,8 +457,16 @@ TEST(Fraction, AddShorten) {
 
 \subsubsection{Converting to string}
 
-We want to be able to print a fraction.
+We want to be able to print a fraction, or rather, to convert it into a string.
 We can do this by implementing a method [[to_string]].
+\ltnote{%
+  The code blocks
+  [[<<methods for Fraction>>]],
+  [[<<implementation of methods for Fraction>>]] and
+  [[<<headers to include>>]] as used here,
+  generalizes the \enquote{webby} organization of code used in web-based 
+  (\enquote{Knuthian}) literate programming.
+}%
 \begin{frame}[fragile]
 <<methods for Fraction>>=
 std::string to_string() const;
@@ -417,11 +480,7 @@ std::string Fraction::to_string() const {
 \end{frame}
 
 Let's test this method.
-We'll test two things:
-\begin{enumerate}
-\item That the fraction is printed correctly.
-\item That the fraction is shortened.
-\end{enumerate}
+We'll test that the fraction is printed correctly.
 <<tests for Fraction>>=
 TEST(Fraction, ToString) {
   Fraction f(1, 2);
@@ -453,6 +512,14 @@ std::ostream& operator<<(std::ostream& os, const Fraction& f) {
 
 Let's turn to the overloaded [[+]] operator.
 Let's start with some tests to see what we want to achieve.
+\ltnote{%
+  Now we introduce the tests first, unlike above where the tests have always 
+  followed the code it tests.
+  This introduces variation in the dimension of the order of the code.
+  We might just as well start with the tests to illustrate what we want the 
+  code to do.
+  What is suitable depends on the context.
+}%
 \begin{frame}[fragile]
 <<tests for Fraction>>=
 TEST(Fraction, Add) {
@@ -494,6 +561,31 @@ int new_numerator = numerator * other.denominator
                     + other.numerator * denominator;
 int new_denominator = denominator * other.denominator;
 @
+
+
+\subsubsection{The C++ files}
+
+Let's have a look at the tangled C++ files.
+
+[[<<fraction.h>>]] \hrulefill
+\inputminted{cpp}{fraction.h}
+
+[[<<fraction.cpp>>]] \hrulefill
+\inputminted{cpp}{fraction.cpp}
+
+[[<<fracexample.cpp>>]] \hrulefill
+\inputminted{cpp}{fracexample.cpp}
+
+[[<<fractest.cpp>>]] \hrulefill
+\inputminted{cpp}{fractest.cpp}
+
+One thing to note is the line numbers.
+There are lines in different files having the same line number in the 
+[[cppjava.nw]] file.
+This means that if we wouldn't have used literate programming, we would have 
+had to keep those lines in sync across the files.
+But thanks to literate programming, we have reduced the redundancy and it's now 
+easier to keep these lines in sync when we change the code.
 
 
 \subsection{Java}
@@ -632,6 +724,16 @@ FracExample.java Fraction.java: cppjava.nw
 This situation happens rather often, and it's nice to be able to just write the 
 recipe by one variable ([[TANGLE.java]]) instead of having to rewrite the 
 entire recipe.
+
+In our example, we have all files coming from the same source file, 
+[[cppjava.nw]].
+It doesn't have to be like that.
+We could have had [[FracExample.nw]] and [[Fraction.nw]], in which case the 
+pattern rule [[%.java: %.nw]] would have worked.
+We could still include everything in one document, for instance, by including 
+[[FracExample.tex]] and [[Fraction.tex]] in the main document.
+The structure of the source files can be adapted to what's suitable for the 
+project at hand.
 
 Now, let's instead return to the last piece of the Java program.
 We need to shorten the fraction.
@@ -791,10 +893,35 @@ COMPILE.java= ${JAVAC} ${JAVACFLAGS} $< ${JAVACEXTRAS}
 @
 \end{frame}
 
+All in all, this leaves us with the following make file.
+\inputminted{make}{frac.mk}
+
+
 \mode<presentation>{\endinput}
 
-\subsection{The \noweb{} source for \cref{cppjava}}
+\subsection{The \noweb{} source for \cref{cppjava}}\label{cppjava.nw}
 
 Let's have a look at the \noweb{} source file for this section, \cref{cppjava}.
+
+Before we look at the code, there are a few details we should mention.
+First, the weaved version of this code is meant to be included in a larger 
+\LaTeX{} document, so you need some packages to compile it\footnote{%
+  You can find the complete source at
+  \url{https://github.com/dbosk/literate-programming/tree/master/whatis}.
+  Look particularly at the file [[notes.tex]] and [[preamble.tex]] to get an 
+  idea of the needed packages.
+}.
+
+Second, the leading [[\mode*]] command is due to using the [[beamer]] class for 
+slides and [[beamerarticle]] package for notes, you don't need that for a 
+normal document.
+
+Third, we use some predefined functions in the [[pycode]] environments, for 
+example [[didactic_shell]].
+These come from the [[didactic]]~\autocite{didactic} package.
+You can write your own; I reuse mine across many documents, so I've put them in 
+a package.
+
+
 \inputminted{text}{cppjava.nw}
 

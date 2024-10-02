@@ -1,11 +1,12 @@
 \section{Pattern rules for Make and \noweb\protected\footnote{%
   This section is adapted from \cite{makefiles}.
+  It is licened under the MIT license.
 }}
 
 We want to write an include file for make(1) that can handle \noweb{} files.
 The [[noweb.mk]] include file provides suffix rules for weaving and tangling 
 (produce documentation and code, respectively).
-The framework uses the conventions of make~\autocite[Section~10.2]{GNUMake}.
+The framework uses the conventions of Make~\autocite[Section~10.2]{GNUMake}.
 
 The suffix rules of make works by taking a prerequisite with one suffix and 
 applying the recipe to get a target with another suffix.
@@ -16,6 +17,25 @@ However, we also provide [[NOWEAVE.tex]] to weave a TeX file ([[.tex]]) from a
 \noweb{} file ([[.nw]]).
 There is also a [[NOWEAVE.pdf]] to weave directly to PDF.
 This assumes that the file is independent, \ie no special LaTeX preamble.
+
+Consider the [[Makefile]] for this document as an example.
+\inputminted[highlightlines={34-35,37-38,40-41,43-44,79-80,85-86}]{make}{Makefile}
+We can see that we don't have to specify any recipes for [[notes.pdf]] and 
+[[slides.pdf]].
+That's because we have pattern rules for turning \TeX{} files in to PDF, 
+[[%.pdf: .tex]], in the [[tex.mk]] include file.
+We also see that for the files where the names don't match, for example 
+[[contents.tex: whatis.nw]] and [[Fraction2.java: cppjava.nw]], we use a 
+variable to specify the recipe, [[NOWEAVE.tex]] and [[NOTANGLE]], respectively.
+We get those \enquote{shortcuts} from the [[noweb.mk]] include file, which we 
+will look into next.
+
+Finally, we can see at the very end of the [[Makefile]] that I keep the include 
+files in a separate directory, [[../makefiles]].
+In fact, I keep them in a separate repository~\autocite[See][]{makefiles}, 
+which I include as a submodule in Git.
+This is because I reuse them in many projects and I want to keep them version 
+managed and be able to update them easily.
 
 
 \subsection{Overview of the include file}

@@ -1,4 +1,4 @@
-Now, we'll get the same when debugging using [[gdb]], it will refer to the 
+Now, we'll get the same when debugging using \texttt{gdb}, it will refer to the 
 literate source instead of the tangled file.
 (I've hightlighted some lines to make it easier to read the following output.)
 \begin{minted}[highlightlines={18,41,43,48}]{text}
@@ -26,7 +26,7 @@ warning: Source file is more recent than executable.
 32      \subsection{C++}
 33
 34      The class should be used as the following example programs show.
-35      @<<fracexample.cpp>>=
+35      <<fracexample.cpp>>=
 36      #include <iostream>
 37      #include "fraction.h"
 38
@@ -34,8 +34,8 @@ warning: Source file is more recent than executable.
 (gdb) l
 40        Fraction f1(1, 2);
 41        Fraction f2(1, 3);
-42        std::cout @<< f1 @<< " + " @<< f2
-43                  @<< " = " @<< (f1 + f2) @<< std::endl;
+42        std::cout << f1 << " + " << f2
+43                  << " = " << (f1 + f2) << std::endl;
 44      }
 45      @
 46
@@ -50,11 +50,11 @@ Starting program: /home/dbosk/devel/edu/literate-programming/whatis/fracexample
 Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
 
 Breakpoint 1, main () at /home/dbosk/devel/edu/literate-programming/whatis/cppjava.w:42
-42        std::cout @<< f1 @<< " + " @<< f2
+42        std::cout << f1 << " + " << f2
 (gdb) 
 \end{minted}
 We see above that the breakpoint refers to lines in the literate source.
-And, indeed, when we ask [[gdb]] to list the source around the breakpoint, it 
-lists the literate source.
-(We used [[gdb]] in the example, this is what IDEs like VSCode do as well, so 
-it will work there too.)
+And, indeed, when we ask \texttt{gdb} to list the source around the breakpoint, 
+it lists the literate source.
+(We used \texttt{gdb} in the example, this is what IDEs like VSCode do as well, 
+so it will work there too.)
