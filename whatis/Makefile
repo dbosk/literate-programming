@@ -11,6 +11,7 @@ SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile
 SRC+=		cppjava.tex noweb.tex
+SRC+=		gdb.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png

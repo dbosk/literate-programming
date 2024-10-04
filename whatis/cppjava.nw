@@ -260,13 +260,13 @@ with open("fracexample.cpp", "r") as f:
 \end{frame}
 
 If we look at the file [[cppjava.nw]] (the source file for this section, also 
-found in full in \cref{cppjava.nw}), we can see this around line 39:
+found in full in \cref{cppjava.nw}), we can see this around line 81:
 \begin{frame}[fragile]
-\inputminted[firstline=36,lastline=48]{text}{cppjava.nw}
+\inputminted[firstline=80,lastline=90]{text}{cppjava.nw}
 \end{frame}
 That is, the contents of
 [[<<fracexample.cpp>>]]
-starts at line 39.
+starts at line 81.
 
 Let's introduce the file [[<<fracexample2.cpp>>]] and introduce an error in it.
 It should have the same contents as [[<<fracexample.cpp>>]], but we also add an 
@@ -289,9 +289,9 @@ Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
 We note lines 1 and 12.
 Line 1 maps to the same line in the original \noweb{} source, just the same as 
 above.
-But line 12 maps to line 199 in the original \noweb{} source.
+But line 12 maps to line 279 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=195,lastline=202]{text}{cppjava.nw}
+\inputminted[firstline=275,lastline=282]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
@@ -310,7 +310,7 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
 \end{pycode}
 \end{frame}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 199 (in full in \cref{cppjava.nw}), rather than the tangled file 
+line 279 (in full in \cref{cppjava.nw}), rather than the tangled file 
 [[fracexample2.cpp]].
 \only<article>{\input{gdb.tex}}
 
@@ -337,8 +337,8 @@ didactic_shell("./fractest",
                hlgrep=["cppjava.nw"],
                minted_opts="numbers=none")
 \end{pycode}
-Let's have a peek at the lines around line 327 in [[cppjava.nw]]:
-\inputminted[firstline=321,lastline=333]{text}{cppjava.nw}
+Let's have a peek at the lines around line 328 in [[cppjava.nw]]:
+\inputminted[firstline=322,lastline=332]{text}{cppjava.nw}
 \Citetitle{GoogleTestPrimer} states that \blockcquote{GoogleTestPrimer}{%
   \textins{t}ests should be well organized and reflect the structure of the 
   tested code.%
