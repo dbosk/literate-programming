@@ -10,7 +10,8 @@ SRC+=		foo.bar foo.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile
-SRC+=		cppjava.tex
+SRC+=		cppjava.tex noweb.tex
+SRC+=		gdb.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -20,8 +21,19 @@ DEPENDS+=	fracexample fractest
 SRC+=		fracexample.cpp
 SRC+=		fracexample2.cpp
 
+DEPENDS+=	FracExample.class
+SRC+=		Fraction2.java
+
+SRC+=		../weblogin/doc/contents.tex
+
+../weblogin/doc/contents.tex: ../weblogin/doc/
+	${MAKE} -C $(dir $@) all
+
 fracexample2.cpp: cppjava.nw
 	${NOTANGLE.cxx}
+
+Fraction2.java: cppjava.nw
+	${NOTANGLE}
 
 notes.pdf: notes.tex didactic.sty
 notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
@@ -63,6 +75,7 @@ clean:
 	${RM} didactic_output_*
 	${RM} didactic_code_*
 	${RM} cppfrac.mk
+	${MAKE} -C ../weblogin/doc/ clean
 
 frac.mk: cppjava.nw
 	${NOTANGLE.mk}

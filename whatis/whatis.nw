@@ -1,8 +1,13 @@
 \title{%
-  What is literate programming?
+  An introduction to
+  Literate Programming
 }
 \author{%
-  Daniel Bosk
+  Daniel Bosk\thanks{%
+    This work is licensed under CC BY-NC-SA 4.0.
+    Part of the source code of this document was autocompleted using GitHub 
+    Copilot.
+  }
 }
 \institute{%
   KTH EECS
@@ -252,8 +257,16 @@ Let's start with a small example.
   \input{foo.tex}
 \end{example}
 
-\Cref{ALitProg} is the typeset version of a small example literate program.
-It's not what I typed, but how it was intended to be read.
+Let's return to the goals of literate programming\footnote{%
+ As a reminder, the goals are:
+ \LPgoals
+}.
+Although \cref{ALitProg} is a toy example, we see hints of why it can fulfil 
+the goals of literate programming.
+We'll see better examples later.
+But we can see that it seems to target the reader in explaining the program.
+We can also see that it seems to not be written in the order required by the 
+computer.
 
 \begin{frame}[fragile]
 \begin{onlyenv}<presentation>
@@ -289,6 +302,9 @@ It's not what I typed, but how it was intended to be read.
   \end{columns}
 \end{frame}
 \end{onlyenv}
+
+\Cref{ALitProg} is the typeset version of a small example literate program.
+It's not what I typed, but how it was intended to be read.
 
 \begin{frame}[fragile]
 \begin{example}[Literate source]\label{SmallLiterateExample}
@@ -368,8 +384,7 @@ We can extract the documentation by weaving:
 This yields:
 \inputminted[breaklines]{latex}{foo.tex}
 \begin{onlyenv}<article>
-Compiled into a document, it looks like this:
-\input{foo.tex}
+Compiled into a document, it looks exactly like \cref{ALitProg}.
 \end{onlyenv}
 \end{example}
 \end{frame}
@@ -382,7 +397,7 @@ When we use literate programming, there are generally three languages that
 interact:
 \begin{enumerate}
 \item The \emph{code} language, which is the language the computer understands 
-(\eg Python, C or C++).
+(\eg Python, C, C++ or Java).
 \item The \emph{documentation} language, which is the language that the 
 documentation is written in (\eg \LaTeX, \TeX{} or Markdown, not English).
 \item The \emph{web} language, which is the language that marks what is code 
@@ -410,7 +425,20 @@ However, adding support for Markdown in the weaving process is possible with
 \subsection{Using \noweb}
 
 To use literate programming we need some tooling.
-We'll use \noweb\autocite{Ramsey1994}, we'll get back to in shortly.
+We'll use \noweb\autocite{Ramsey1994}\footnote{%
+  It can be found on its web page
+  \url{https://www.cs.tufts.edu/~nr/noweb/} and
+  GitHub repository
+  \url{https://github.com/nrnrnr/noweb}.
+  However, the easiest way is to install it using the package manager of your 
+  operating system.
+  For instance, on Ubuntu and Debian, you can install it using the command
+  [[sudo apt install noweb]].
+  On Mac, you install it using
+  [[brew install noweb]].
+  On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
+  or similar.
+}, we'll get back to it shortly.
 
 There has been several tools developed for literate programming over time.
 The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
@@ -427,7 +455,7 @@ This comes with both advantages and disadvantages.
 The most obvious disadvantage is that we can't get prettyprinting (syntax 
 highlighting) in any straight-forward way; the system can't know what language 
 is being used.
-Some advantages are that
+We give two advantages:
 \begin{frame}[fragile]
 \begin{onlyenv}<presentation>
 \begin{onlyenv}<1>
@@ -447,10 +475,10 @@ Some advantages are that
 \end{onlyenv}
 
 \begin{enumerate}
-  \item<+> we can mix languages: for instance, we can write the Makefile in the 
+  \item<+> We can mix languages: for instance, we can write the Makefile in the 
   same file as the C program; that way we can include necessary building 
   instructions, for example, when we depend on certain libraries.
-  \item<+> we can also write the documentation in any format, for instance in 
+  \item<+> We can also write the documentation in any format, for instance in 
   Markdown, \LaTeX, or HTML.
   \noweb{} supports \LaTeX{} and HTML out of the box, but it's easy to extend 
   to make slight improvements for formats such as Markdown.
@@ -608,6 +636,27 @@ documentation for sure can be targeted at users.)
 \section{C++, Java and compilation errors}
 
 \mode<all>{\input{cppjava.tex}}
+
+
+\mode<article>{%
+% chapter on make with noweb
+\input{noweb.tex}
+
+
+% chapter with weblogin as example
+\chapter{A real-world example: \texttt{weblogin}%
+  \protected\footnote{This section is adapted from \cite{weblogin}.
+                      It is licensed under the MIT license.}}
+%\let\chapter\section
+\let\section\subsection
+\let\subsection\subsubsection
+\let\subsubsection\oldsubsubsection
+\subimport{../weblogin/doc/}{contents.tex}
+\let\oldsubsubsection\subsubsection
+\let\subsubsection\subsection
+\let\subsection\section
+\let\section\chapter
+}%
 
 
 \begin{frame}

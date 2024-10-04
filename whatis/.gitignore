@@ -28,3 +28,10 @@ fraction.cpp
 fraction.h
 fraction.o
 frac.mk
+noweb.tex
+FracExample.class
+FracExample.java
+Fraction.class
+Fraction.java
+Fraction2.java
+Fraction3.java
