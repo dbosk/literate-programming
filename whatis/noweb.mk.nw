@@ -19,7 +19,7 @@ There is also a [[NOWEAVE.pdf]] to weave directly to PDF.
 This assumes that the file is independent, \ie no special LaTeX preamble.
 
 Consider the [[Makefile]] for this document as an example.
-\inputminted[highlightlines={34-35,37-38,40-41,43-44,79-80,85-86}]{make}{Makefile}
+\inputminted[highlightlines={35-36,38-39,41-42,44-45,80-83,86-87}]{make}{Makefile}
 We can see that we don't have to specify any recipes for [[notes.pdf]] and 
 [[slides.pdf]].
 That's because we have pattern rules for turning \TeX{} files in to PDF, 
