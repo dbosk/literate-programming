@@ -1,0 +1,927 @@
+\mode*
+\label{cppjava}
+
+We want to write a short class to work with fractions.
+We want to do this twice, once for C++ and once for Java.
+\ltnote{%
+  We need to do the same thing twice to contrast what we want the students to 
+  focus on, namely:
+  \begin{enumerate}
+  \item The [[-L]] flag that works for C++ but not for Java,
+  \item The [[noerr.pl]] utility that works for Java, or rather, how we can 
+  achieve the same thing in a different way without support of the tools we're 
+  using.
+  \item That we can complement our tools rather easily, without incurring any 
+  effort on our part.
+  That is, that if we use proper tools, like Make, we can do complex procedures 
+  without much effort.
+  \end{enumerate}
+  The missing example is Python.
+  The [[-L]] flag doesn't work at all for Python, because it breaks columns.
+  And Python is strict about indentation, so we can't just add line numbers.
+  But we can solve it for Python too, in a slightly different way.
+  \begin{enumerate}[resume]
+  \item We also want to compare the \noweb{} source to the C++ and Java source.
+  This is to generalize from the Python examples in earlier chapters.
+  \end{enumerate}
+}
+
+\begin{activity}
+While reading the rest of this section,
+try to write the same program and experiment with it.
+\end{activity}
+
+\subsection{Compiling the files}
+
+We'll start with the makefile\footnote{%
+  If you've never come across [[make]] before, skim through chapter 2 of the 
+  GNU Make manual:
+  \cite[Chapter 2,
+  \url{https://www.gnu.org/software/make/manual/html_node/Introduction.html}%
+  ]{GNUMake}.
+}.
+We'll write a file [[<<frac.mk>>]] to include from our [[Makefile]]\footnote{%
+  See the GNU Make manual chapter 3.3 on including other makefiles:
+  \cite[Chapter 3.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Include.html}% 
+  ]{GNUMake}.
+}, this file keeps only the building rules for this particular section.
+The targets [[all]] and [[clean]] are standard targets.
+The target [[all]] is the default target, and its supposed to trigger a build 
+for all targets.
+The target [[clean]] is used to remove all generated files that the compilers 
+etc.\ produce.
+\begin{frame}[fragile]
+<<frac.mk>>=
+<<frac variable definitions>>
+
+.PHONY: all
+all: # to make it the first target in the file, if used as main file
+<<more [[all]] targets to add depends>>
+
+<<frac targets>>
+
+.PHONY: clean
+clean: clean-frac # since we already have a recipe for clean in Makefile
+clean-frac:
+	<<remove generated files>>
+@
+\end{frame}
+
+\subsection{C++}
+
+The class should be used as the following example program shows.%
+\ltnote{%
+  This adheres to the variation theory principle of starting with the whole, to 
+  later break it down into parts by focusing on different aspects using 
+  patterns of variation.
+}%
+\begin{frame}[fragile]
+<<fracexample.cpp>>=
+#include <iostream>
+#include "fraction.h"
+
+int main() {
+  Fraction f1(1, 2);
+  Fraction f2(1, 3);
+  std::cout << f1 << " + " << f2
+            << " = " << (f1 + f2) << std::endl;
+}
+@
+
+The expected output is:
+\begin{pycode}
+didactic_shell("./fracexample", minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+To compile the [[fracexample]] program, we need its prerequisites.
+We need the header file [[fraction.h]] and object file [[fraction.o]]---that 
+provides the implementation of the class.
+We also need the source file [[fracexample.cpp]].
+\begin{frame}[fragile]
+<<frac targets>>=
+fracexample: fraction.o fracexample.cpp fraction.h
+<<remove generated files>>=
+rm -f fracexample
+@ We want to use C++17.
+To use the built-in rules of [[make]]\footnote{%
+  See the GNU Make manual chapter 10.2-10.3 for more details on built-in rules 
+  and their variables:
+  \cite[Chapter 10.2-10.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Catalogue-of-Rules.html}% 
+  ]{GNUMake}.
+  \only<article>{Worth noting in this context: (GNU) [[make]] has built-in 
+  rules for Knuth's original WEB system, the one discussed in 
+  \cite{Knuth1984}.}%
+}, we need to define the variables [[CXXFLAGS]] and [[LDFLAGS]] to have the 
+options we need.
+We want the usual [[-W]] flags to catch common errors.
+<<frac variable definitions>>=
+CXXFLAGS+=  -std=c++17 -Wall -Wextra -Werror ${DEBUGFLAGS}
+LDFLAGS+=   -lstdc++
+@ We also need to add the test program to the [[all]] target and the cleaning.
+<<more [[all]] targets to add depends>>=
+all: fracexample
+@
+\end{frame}
+
+We also want to test the fraction class with the following test program.%
+\ltnote{%
+  Here we generalize the idea of including testing in the literate source.
+  We introduced it earlier using Python.
+  Now we vary the testing framework and the language, but keeping the idea of 
+  testing invariant.
+}
+The test program will use Google Test framework.
+\begin{frame}[fragile]
+<<fractest.cpp>>=
+#include <gtest/gtest.h>
+<<headers to include>>
+#include "fraction.h"
+
+<<tests for Fraction>>
+
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+@
+\end{frame}
+
+To compile the test program, we've already covered parts of its needs above.
+We need the header file [[fraction.h]] and object file [[fraction.o]].
+We also need the source file [[fractest.cpp]].
+Now, [[fractest]] is a special case, the built-in rules will not work.
+Here we need to link against the Google Test framework library.
+So we need a custom build rule for this that includes [[-lgtest]] and 
+[[lgtest_main]] so that the linker links against the Google Test framework.
+(The alternative would be to add the Google Test framework to the [[LDFLAGS]], 
+but then we would link all programs against it---undesirable.)
+\begin{frame}[fragile]
+<<frac targets>>=
+fractest: fraction.o fractest.cpp fraction.h
+	${CXX} ${CXXFLAGS} -o $@ $^ ${LDFLAGS} -lgtest -lgtest_main
+@ We also need to add the test program to the [[all]] target and the cleaning.
+<<more [[all]] targets to add depends>>=
+all: fractest
+<<remove generated files>>=
+rm -f fractest
+@
+\end{frame}
+
+\subsubsection{Tangling with the \texttt{-L} flag}
+
+These targets above depend on the source files.
+We need to build them from the \noweb{} source file.
+\begin{frame}[fragile]
+<<frac.mk>>=
+fraction.cpp fraction.h fractest.cpp fracexample.cpp: cppjava.nw
+	notangle -L -R$@ $< | cpif $@
+	noroots $<
+@ There are three things to note:
+the number of targets, the [[-L]] flag and the [[noroots]] program.
+\end{frame}
+
+We've now listed several targets (the [[.cpp]] and [[.h]] files), with only one 
+dependency (the \noweb{} source file, [[cppjava.nw]]).
+That's why we use the [[$@]] variable\footnote{%
+  See the GNU Make manual chapter 10.5.3 for more details on automatic 
+  variables:
+  \cite[Chapter 10.5.3,
+  \url{https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html}% 
+  ]{GNUMake}.
+} to refer to the target in the rule.
+So each one of those targets will be built from the \noweb{} source file using 
+that same recipe.
+The source file is referred to through the [[$<]] variable.
+We could in this case have just written [[cppjava.nw]] instead of [[$<]], but 
+there is no way to avoid [[$@]]\footnote{%
+  Well, we could probably have written one separate target and dependecy for 
+  each file, and repeated the code for the recipe for each one.
+  But that repeats the same code so many times.
+}.
+
+The [[noroots]] program simply lists all the root chunks of a \noweb{} source 
+file.
+We use this one to see that they all look like root chunks, that is files to be 
+extracted.
+\begin{frame}[fragile]
+The output of [[noroots]] looks like this:
+\begin{pycode}
+didactic_shell("noroots cppjava.nw", shell=True, minted_opts="numbers=none")
+\end{pycode}
+
+\begin{activity}
+When could the output of [[noroots]] ever be useful?
+\end{activity}
+\end{frame}
+
+If we spell a chunks wrongly, it will not be used in the other code.
+Then it will be considered a root chunk and we can use the output from 
+[[noroots]] here to see that we've missed something.
+
+In the output above, all roots look like files that we expect, so everything is 
+fine\footnote{%
+  In fact, when I first wrote this I had decided to have one [[cppfrac.mk]] 
+  file for C++ and one [[javafrac.mk]] for Java.
+  Later I decided to have one [[frac.mk]] file for both.
+  However, I forgot to change the name of the chunk above, so it was still 
+  named [[cppfrac.mk]].
+  I could detect this with the help of [[noroots]].
+}.
+
+\ltnote{%
+  The important part here is to contrast what happens with an without the 
+  [[-L]] flag.
+  This opens up the dimension of line number translation, how we can map lines 
+  between files.
+}%
+Now we'll turn our focus to the [[-L]] flag.
+When we tangle the files, we want the [[-L]] flag.
+The [[-L]] flag will rewrite the line numbers so that the compiler error 
+messages will refer to the correct line in the \noweb{} source file, instead of 
+the tangled file.
+Without the [[-L]] flag, the tangled source will look as expected; normal C++ 
+code:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("notangle -Rfracexample.cpp cppjava.nw",
+               shell=True, lang="cpp")
+\end{pycode}
+\end{frame}
+\begin{frame}[fragile]
+But if we use the [[-L]] flag, the tangled source will include the directives 
+to rewrite line numbers:
+\begin{pycode}
+with open("fracexample.cpp", "r") as f:
+  didactic_mint(f.read(), lang="cpp", hlgrep=["^#line"])
+\end{pycode}
+\end{frame}
+
+If we look at the file [[cppjava.nw]] (the source file for this section, also 
+found in full in \cref{cppjava.nw}), we can see this around line 81:
+\begin{frame}[fragile]
+\inputminted[firstline=80,lastline=90]{text}{cppjava.nw}
+\end{frame}
+That is, the contents of
+[[<<fracexample.cpp>>]]
+starts at line 81.
+
+Let's introduce the file [[<<fracexample2.cpp>>]] and introduce an error in it.
+It should have the same contents as [[<<fracexample.cpp>>]], but we also add an 
+erroneous function definition.
+\begin{frame}[fragile]
+We intentionally spell [[int]] as [[inte]] to trigger a compilation error.
+<<fracexample2.cpp>>=
+<<fracexample.cpp>>
+
+inte bad_return_type_func() {
+  return 0;
+}
+@
+\end{frame}
+
+Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
+\begin{frame}[fragile]
+\inputminted[highlightlines={1,12}]{cpp}{fracexample2.cpp}
+\end{frame}
+We note lines 1 and 12.
+Line 1 maps to the same line in the original \noweb{} source, just the same as 
+above.
+But line 12 maps to line 279 in the original \noweb{} source.
+That's because we introduced [[<<fracexample2.cpp>>]] that far down:
+\inputminted[firstline=275,lastline=282]{text}{cppjava.nw}
+
+Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
+message from the compiler.
+We'll compile with
+\begin{frame}[fragile]
+\begin{minted}[numbers=none]{bash}
+g++ -g -std=c++17 -Wall -Wextra -Werror -o fracexample2 \
+  fracexample2.cpp fraction.cpp
+\end{minted}
+The result is the following:
+\begin{pycode}
+didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
+               "fracexample2.cpp fraction.cpp "
+               "2>&1",
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
+line 279 (in full in \cref{cppjava.nw}), rather than the tangled file 
+[[fracexample2.cpp]].
+\only<article>{\input{gdb.tex}}
+
+\begin{activity}
+Tangle the files with and without the [[-L]] flag and compile them.
+See how it affects compiler messages and the debugger.
+\end{activity}
+
+We also want to see that this works also for the tests.
+We're going to add a test for a case that we intensionally \emph{don't} handle, 
+namely having a zero denominator.
+We would expect setting the denominator to zero to throw an exception.
+<<tests for Fraction>>=
+TEST(Fraction, ZeroDenominator) {
+  EXPECT_THROW(Fraction f(1, 0), std::invalid_argument);
+}
+<<headers to include>>=
+#include <stdexcept>
+@
+
+When we execute the tests, we'll get the following output:
+\begin{pycode}
+didactic_shell("./fractest",
+               hlgrep=["cppjava.nw"],
+               minted_opts="numbers=none")
+\end{pycode}
+Let's have a peek at the lines around line 328 in [[cppjava.nw]]:
+\inputminted[firstline=322,lastline=332]{text}{cppjava.nw}
+\Citetitle{GoogleTestPrimer} states that \blockcquote{GoogleTestPrimer}{%
+  \textins{t}ests should be well organized and reflect the structure of the 
+  tested code.%
+} and
+\blockcquote{GoogleTestPrimer}{%
+  \textins{w}hen tests fail, they should provide as much information about the 
+  problem as possible.%
+} Arguably, by including the tests in the literate source, close to the code 
+that the test is testing, we improve one these two points even further.
+
+
+\subsubsection{The class}
+
+The class [[Fraction]] should represent a fraction.
+The class needs two private attributes, [[numerator]] and [[denominator]] to 
+keep track of those values.
+We saw above that the class should have a constructor that takes two integers 
+and initializes the attributes.
+We also want to overload the operator [[+]] to add two fractions.
+Finally, we also want to print a fraction in the form 
+[[numerator/denominator]]---shortened as much as possible.
+This gives us the following header file:
+\begin{frame}[fragile]
+<<fraction.h>>=
+<<headers to include>>
+
+class Fraction {
+  private:
+    int numerator;
+    int denominator;
+  public:
+    Fraction(int numerator, int denominator);
+
+    <<methods for Fraction>>
+    <<overloaded operators>>
+};
+@
+\end{frame}
+
+\subsubsection{Implementing the methods}
+
+Now we need to implement the methods, we have
+[[<<implementation of methods>>]] and
+[[<<overloaded operators>>]]
+to implement.
+That should be done in the file [[<<fraction.cpp>>]].
+\begin{frame}[fragile]
+<<fraction.cpp>>=
+<<headers to include>>
+#include "fraction.h"
+
+<<implementation of methods for Fraction>>
+<<implementation of overloaded operators>>
+@ With [[<<headers to include>>]] we include the necessary headers when needed.
+
+To compile this file, we need the following simple rule.
+<<frac targets>>=
+fraction.o: fraction.cpp fraction.h
+<<remove generated files>>=
+rm -f fraction.o
+@
+\end{frame}
+
+\subsubsection{The constructor}
+
+The constructor should initialize the attributes.
+We'll also want it to shorten the fraction as much as possible.
+But we'll return to that later.
+\begin{frame}[fragile]
+<<implementation of methods for Fraction>>=
+Fraction::Fraction(int numerator, int denominator)
+  : numerator(numerator), denominator(denominator)
+{
+  <<shorten [[numerator]] and [[denominator]]>>
+}
+@
+
+Let's test this.
+To do the test, we need a method [[to_string]] that returns the fraction as a 
+string.
+We'll cover that later.
+<<tests for Fraction>>=
+TEST(Fraction, Constructor) {
+  Fraction f2(2, 4);
+  EXPECT_EQ(f2.to_string(), "1/2");
+}
+@
+\end{frame}
+
+\subsubsection{Shortening the fraction}
+
+To shorten the fraction, we need to find the greatest common divisor of the 
+numerator and the denominator.
+We can then divide both by this number.
+
+We can use the [[std::gcd]] function from the C++17 standard library.
+It requires the header [[<numeric>]].
+<<headers to include>>=
+#include <numeric>
+<<shorten [[numerator]] and [[denominator]]>>=
+int gcd = std::gcd(numerator, denominator);
+this->numerator /= gcd;
+this->denominator /= gcd;
+@
+
+Let's test this:
+<<tests for Fraction>>=
+TEST(Fraction, AddShorten) {
+  Fraction f7(2, 4);
+  EXPECT_EQ(f7.to_string(), "1/2");
+  Fraction f8(1, 2);
+  Fraction f9 = f7 + f8;
+  EXPECT_EQ(f9.to_string(), "1/1");
+}
+@
+
+\subsubsection{Converting to string}
+
+We want to be able to print a fraction, or rather, to convert it into a string.
+We can do this by implementing a method [[to_string]].
+\ltnote{%
+  The code blocks
+  [[<<methods for Fraction>>]],
+  [[<<implementation of methods for Fraction>>]] and
+  [[<<headers to include>>]] as used here,
+  generalizes the \enquote{webby} organization of code used in web-based 
+  (\enquote{Knuthian}) literate programming.
+}%
+\begin{frame}[fragile]
+<<methods for Fraction>>=
+std::string to_string() const;
+<<implementation of methods for Fraction>>=
+std::string Fraction::to_string() const {
+  return std::to_string(numerator) + "/" + std::to_string(denominator);
+}
+<<headers to include>>=
+#include <string>
+@
+\end{frame}
+
+Let's test this method.
+We'll test that the fraction is printed correctly.
+<<tests for Fraction>>=
+TEST(Fraction, ToString) {
+  Fraction f(1, 2);
+  EXPECT_EQ(f.to_string(), "1/2");
+  Fraction f2(4, 2);
+  EXPECT_EQ(f2.to_string(), "2/1");
+}
+@
+
+Now we also want to use this one to overload the [[<<]] operator so that we can 
+print fractions using [[std::cout]].
+Note that we don't define it as part of the class, in
+[[<<overloaded operators>>]], but only outside the class.
+This is to be able to do the overloading and controlling both parameters.
+As part of the class it implicitly gets the [[this]] parameter instead.
+<<headers to include>>=
+#include <iostream>
+<<overloaded operators>>=
+friend std::ostream& operator<<(std::ostream& os, const Fraction& f);
+<<implementation of overloaded operators>>=
+std::ostream& operator<<(std::ostream& os, const Fraction& f) {
+  os << f.to_string();
+  return os;
+}
+@
+
+
+\subsubsection{Adding fractions}
+
+Let's turn to the overloaded [[+]] operator.
+Let's start with some tests to see what we want to achieve.
+\ltnote{%
+  Now we introduce the tests first, unlike above where the tests have always 
+  followed the code it tests.
+  This introduces variation in the dimension of the order of the code.
+  We might just as well start with the tests to illustrate what we want the 
+  code to do.
+  What is suitable depends on the context.
+}%
+\begin{frame}[fragile]
+<<tests for Fraction>>=
+TEST(Fraction, Add) {
+  Fraction f1(1, 2);
+  Fraction f2(1, 3);
+  Fraction f3 = f1 + f2;
+  EXPECT_EQ(f3.to_string(), "5/6");
+
+  Fraction f4(1, 3);
+  Fraction f5(1, 3);
+  Fraction f6 = f4 + f5;
+  EXPECT_EQ(f6.to_string(), "2/3");
+}
+@
+\end{frame}
+
+To achieve this, we need the method named [[operator+]].
+<<overloaded operators>>=
+Fraction operator+(const Fraction& other) const;
+@ We'll use a reference for [[other]], but make it [[const]] so that we can't 
+change it.
+We also add [[const]] to the method itself to indicate that it doesn't change 
+the object ([[this]]).
+\begin{frame}[fragile]
+<<implementation of overloaded operators>>=
+Fraction Fraction::operator+(const Fraction& other) const {
+  <<add [[this]] and [[other]] into [[new_numerator]] and [[new_denominator]]>>
+  return Fraction(new_numerator, new_denominator);
+}
+@ We don't need to do anything special to shorten the fraction here.
+Because the constructor already does that when we create the new [[Fraction]] 
+that is returned.
+\end{frame}
+
+To add two fractions, we need to find a common denominator.
+We can then just add the numerators.
+<<add [[this]] and [[other]] into [[new_numerator]] and [[new_denominator]]>>=
+int new_numerator = numerator * other.denominator
+                    + other.numerator * denominator;
+int new_denominator = denominator * other.denominator;
+@
+
+
+\subsubsection{The C++ files}
+
+Let's have a look at the tangled C++ files.
+
+[[<<fraction.h>>]] \hrulefill
+\inputminted{cpp}{fraction.h}
+
+[[<<fraction.cpp>>]] \hrulefill
+\inputminted{cpp}{fraction.cpp}
+
+[[<<fracexample.cpp>>]] \hrulefill
+\inputminted{cpp}{fracexample.cpp}
+
+[[<<fractest.cpp>>]] \hrulefill
+\inputminted{cpp}{fractest.cpp}
+
+One thing to note is the line numbers.
+There are lines in different files having the same line number in the 
+[[cppjava.nw]] file.
+This means that if we wouldn't have used literate programming, we would have 
+had to keep those lines in sync across the files.
+But thanks to literate programming, we have reduced the redundancy and it's now 
+easier to keep these lines in sync when we change the code.
+
+
+\subsection{Java}
+
+The class should have two fields, \texttt{numerator} and \texttt{denominator}, 
+and a constructor that takes two integers and initializes the fields.
+
+The class should also have a method \texttt{add} (as Java doesn't support 
+operator overloading) that takes another fraction as an argument and returns a 
+new fraction that is the sum of the two fractions.
+
+Finally, the class should have a method \texttt{toString} that returns a string 
+representation of the fraction in the form 
+\texttt{numerator/denominator}---shortened as much as possible.
+
+\begin{activity}
+Based on the ideas from the C++ part, write the corresponding Java program.
+\end{activity}
+
+Since we have already covered the C++ version in detail, we'll be slightly less 
+detailed as to the program structure.
+But we'll emphasize more how we can use [[make]] with Java and literate 
+programming.
+
+We want the class to be used as the following example programs show.
+<<FracExample.java>>=
+public class FracExample {
+  public static void main(String[] args) {
+    Fraction f1 = new Fraction(1, 2);
+    Fraction f2 = new Fraction(1, 3);
+    System.out.println(f1 + " + " + f2 + " = " + f1.add(f2));
+  }
+}
+@
+
+This means that the class must be in a separate file.
+The implementation of the class is as follows.
+<<Fraction.java>>=
+public class Fraction {
+  private int numerator;
+  private int denominator;
+
+  public Fraction(int numerator, int denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+    shorten();
+  }
+
+  <<method [[shorten()]]>>
+
+  public Fraction add(Fraction other) {
+    int newNumerator = numerator * other.denominator
+                       + other.numerator * denominator;
+    int newDenominator = denominator * other.denominator;
+    return new Fraction(newNumerator, newDenominator);
+  }
+
+  public String toString() {
+    return numerator + "/" + denominator;
+  }
+}
+@
+
+The expected output from running [[FracExample]] is:
+\begin{pycode}
+didactic_shell(["java", "FracExample"], minted_opts="numbers=none")
+\end{pycode}
+
+Let's turn to the make file.
+How can we build and run the Java program?
+Usually, this involves compiling using [[javac]] and then running using 
+[[java]].
+
+We'll add a (phony) target\footnote{%
+  See the GNU Make manual for more details on phony targets:
+  \cite[Chapter 4.6,
+  \url{https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html}% 
+  ]{GNUMake}.
+} to run the Java program.
+It needs the prerequisites to run it, which are the class files.
+<<frac targets>>=
+.PHONY: run
+run: FracExample.class Fraction.class
+	java FracExample
+@
+
+Next we need to tell [[make]] how to get [[.class]] files from [[.java]] files.
+We can do this with a pattern rule\footnote{%
+  See the GNU Make manual chapter 10.5 for more details on pattern rules:
+  \cite[Chapter 10.5,
+  \url{https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html}% 
+  ]{GNUMake}.
+}.
+What we want is a rule saying that any [[.class]] file depends on the 
+corresponding [[.java]] file.
+And the recipe is to use [[javac]] on the [[.java]] file to get the resulting 
+[[.class]] file.
+<<frac targets>>=
+%.class: %.java
+	${COMPILE.java}
+@ In the same style as other patterns rules~\autocite[see the end discussion of 
+Chapter 10.2]{GNUMake}, use the variable [[COMPILE.java]].
+We'll define this variable later.
+But we can point out that, in this case, we actually need the [[$<]] variable 
+to refer to the prerequisite, because we don't know it's name otherwise.
+
+Since we need [[Fraction]] in [[FracExample]], we'll need [[Fraction.class]] 
+when we compile [[FracExample.class]].
+<<frac targets>>=
+FracExample.class: Fraction.class
+@ However, we don't need any recipe here, as that's covered by the pattern rule 
+above.
+We just need to specify that [[FracExample.class]] depends on 
+[[Fraction.class]]; that way, [[make]] will know that it needs to build 
+[[Fraction.class]] before [[FracExample.class]].
+
+Finally, let's add the class files to [[all]] and to cleaning.
+<<frac targets>>=
+all: FracExample.class Fraction.class
+<<remove generated files>>=
+rm -f FracExample.class Fraction.class
+@
+
+We have one more thing that we need to do: tell [[make]] how to get the 
+[[.java]] files from the [[.nw]] file.
+<<frac targets>>=
+%.java: %.nw
+	${TANGLE.java}
+@ Here we create a [[.java]] file from a [[.nw]] file by running [[notangle]].
+However, since we don't have a [[.nw]] file named [[FracExample.nw]], we need 
+to specify this relation explicitly:
+<<frac targets>>=
+FracExample.java Fraction.java: cppjava.nw
+	${TANGLE.java}
+@ This illustrates the advantage of using these [[COMPILE.x]] variables.
+This situation happens rather often, and it's nice to be able to just write the 
+recipe by one variable ([[TANGLE.java]]) instead of having to rewrite the 
+entire recipe.
+
+In our example, we have all files coming from the same source file, 
+[[cppjava.nw]].
+It doesn't have to be like that.
+We could have had [[FracExample.nw]] and [[Fraction.nw]], in which case the 
+pattern rule [[%.java: %.nw]] would have worked.
+We could still include everything in one document, for instance, by including 
+[[FracExample.tex]] and [[Fraction.tex]] in the main document.
+The structure of the source files can be adapted to what's suitable for the 
+project at hand.
+
+Now, let's instead return to the last piece of the Java program.
+We need to shorten the fraction.
+We won't use any library function, but rather implement the greatest common 
+divisor algorithm ourselves as a private method.
+<<method [[shorten()]]>>=
+private void shorten() {
+  int gcd = gcd(numerator, denominator);
+  numerator /= gcd;
+  denominator /= gcd;
+}
+
+private int gcd(int a, int b) {
+  <<Euclid's algorithm for [[a]] and [[b]]>>
+}
+@
+
+The [[gcd]] algorithm can easily be implemented recursively.
+If [[b]] is zero, the greatest common divisor is [[a]].
+Otherwise, the greatest common divisor is the greatest common divisor of [[b]] 
+and the remainder of the division of [[a]] by [[b]].
+<<Euclid's algorithm for [[a]] and [[b]]>>=
+return b == 0 ? a : gcd(b, a % b);
+@
+
+
+\subsubsection{Compilation-error messages in Java}
+
+Let's have a look at the tangled file [[Fraction.java]].
+We tangle it with the line
+[[notangle -RFraction.java cppjava.nw]].
+The result is the following:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("notangle -RFraction.java cppjava.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+
+We note that the line numbers are not rewritten.
+No surprise, we didn't use the [[-L]] flag.
+Let's look at a different version of the file where we introduce an error.
+We'll call this file [[Fraction2.java]].
+\begin{frame}[fragile]
+<<Fraction2.java>>=
+class BadFrac {
+  private int numerator;
+  private int denominator;
+
+  public BadFrac(int numerator, int denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+    shorten();
+  }
+
+  private void shorten() {
+    int gcd = gcd(numerator, denominator);
+    numerator /= gcd;
+    denominator /= gcd;
+  }
+}
+@
+\end{frame}
+The problem is that we don't have any method named [[gcd]].
+We tangle it with the line
+[[notangle -RFraction2.java cppjava.nw]].
+Then compile it with the command [[javac Fraction2.java]].
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("javac Fraction2.java 2>&1",
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+We see that the error message refers to the file [[Fraction2.java]] and line 
+12.
+
+\begin{frame}[fragile]
+\begin{activity}
+Java doesn't support the line preprocessor directive as the C++ compiler and 
+debugger do.
+Consequently, we can't use the exact same approach as for C++.
+Can we solve this in another, yet similar, way?
+\end{activity}
+\end{frame}
+
+We can write the line directives as comments in the tangled file.
+Then we can write a utility that filters through the file and rewrites the 
+output from the Java compiler.
+Fortunately, there is such a utility, [[noerr.pl]]\footnote{%
+  It can be downloaded from 
+  \url{https://github.com/svnk/noerr/releases/tag/v1.0}.
+  Its literate source code can also be found there.
+}.
+Sven Kloppenburg wrote this utility specifically for Java.
+
+Let's tangle the file [[Fraction2.java]] with the line
+\begin{center}
+  [[notangle -L'//line %L "%F"%N' -RFraction2.java cppjava.nw]].
+\end{center}
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("notangle -L'//line %L \"%F\"%N' -RFraction2.java cppjava.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+Then we'll filter the compilers messages through [[noerr.pl]]:
+\begin{center}
+[[javac Fraction2.java | noerr.pl -L'//line %L "%F"%N']]
+\end{center}
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("""
+notangle -L'//line %L \"%F\"%N' -RFraction2.java cppjava.nw > Fraction3.java;
+javac Fraction3.java 2>&1 | noerr -L'//line %L \"%F\"%N'
+               """,
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+Now we can return to the pattern rules.
+We want to get the [[.java]] file from the [[.nw]] file and the [[.class]] file 
+from [[.java]].
+
+\begin{frame}[fragile]
+\begin{activity}
+We had the rules
+\begin{minted}[numbers=none]{make}
+%.java: %.nw
+  ${TANGLE.java}
+
+%.class: %.java
+  ${COMPILE.java}
+\end{minted}
+What should [[NOTANGLE.java]] and [[COMPILE.java]] be set to?
+\end{activity}
+\end{frame}
+
+\begin{frame}[fragile]
+We'll define the [[TANGLE.java]] variable to include the proper [[-L]] flag.
+<<frac targets>>=
+NOTANGLE.java=notangle -L'//line %L "%F"%N' -R$@ $< \
+              | cpif $@ \
+              && noroots $<
+@
+\end{frame}
+
+\begin{frame}[fragile]
+Now let's turn to the [[COMPILE.java]] variable.
+As with other such variables, we'll use [[JAVAC]] and [[JAVACFLAGS]] to specify 
+the compiler and its flags.
+We add the corresponding [[-L]] flag to [[noerr.pl]] in [[JAVACEXTRAS]].
+<<frac variable definitions>>=
+JAVAC=        javac
+JAVACFLAGS=
+JAVACEXTRAS=  | noerr.pl -L'//line %L \"%F\"%N'
+COMPILE.java= ${JAVAC} ${JAVACFLAGS} $< ${JAVACEXTRAS}
+@
+\end{frame}
+
+All in all, this leaves us with the following make file.
+\inputminted{make}{frac.mk}
+
+
+\mode<presentation>{\endinput}
+
+\subsection{The \noweb{} source for \cref{cppjava}}\label{cppjava.nw}
+
+Let's have a look at the \noweb{} source file for this section, \cref{cppjava}.
+
+Before we look at the code, there are a few details we should mention.
+First, the weaved version of this code is meant to be included in a larger 
+\LaTeX{} document, so you need some packages to compile it\footnote{%
+  You can find the complete source at
+  \url{https://github.com/dbosk/literate-programming/tree/master/whatis}.
+  Look particularly at the file [[notes.tex]] and [[preamble.tex]] to get an 
+  idea of the needed packages.
+}.
+
+Second, the leading [[\mode*]] command is due to using the [[beamer]] class for 
+slides and [[beamerarticle]] package for notes, you don't need that for a 
+normal document.
+
+Third, we use some predefined functions in the [[pycode]] environments, for 
+example [[didactic_shell]].
+These come from the [[didactic]]~\autocite{didactic} package.
+You can write your own; I reuse mine across many documents, so I've put them in 
+a package.
+
+
+\inputminted{text}{cppjava.nw}
+
