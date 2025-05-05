@@ -216,6 +216,52 @@ This book is a literate program.
 
 \section{Literate programming}
 
+To use literate programming we need some tooling.
+There have been several tools developed for literate programming over time.
+The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
+to be written in Pascal and the documentation in \TeX.
+This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
+to be written in C and the documentation in \TeX.
+
+\ltnote{%
+  We provide the tools early on, that way the reader can experiment as we go.
+  This reduces the cognitive load of the reader who must keep more in their 
+  memory until they can practice it.
+}%
+We'll use \noweb\autocite{Ramsey1994}, which is language agnostic and can thus 
+be used with any programming language.
+\begin{frame}
+The tool can be found on its web page
+\begin{quote}
+\url{https://www.cs.tufts.edu/~nr/noweb/}
+\end{quote}
+and
+GitHub repository
+\begin{quote}
+\url{https://github.com/nrnrnr/noweb}.
+\end{quote}
+\end{frame}
+However, the easiest way is to install it using the package manager of your 
+operating system.
+For instance, on
+\begin{frame}
+Ubuntu and Debian, you can install it using the following command\footnote{%
+  \noweb is already installed on KTH's Linux systems, both
+  in the lab rooms and
+  on the shell servers.
+  So you don't need to do this yourself on any of those systems.
+}
+\begin{minted}{bash}
+sudo apt install noweb
+\end{minted}
+On Mac, you install it using Homebrew:
+\begin{minted}{bash}
+brew install noweb
+\end{minted}
+On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
+or similar.
+\end{frame}
+
 Let's start with a small example.
 
 \begin{example}[A literate program]\label{ALitProg}
@@ -476,37 +522,15 @@ However, adding support for Markdown in the weaving process is possible with
 
 \subsection{Using \noweb}
 
-To use literate programming we need some tooling.
-We'll use \noweb\autocite{Ramsey1994}\footnote{%
-  It can be found on its web page
-  \url{https://www.cs.tufts.edu/~nr/noweb/} and
-  GitHub repository
-  \url{https://github.com/nrnrnr/noweb}.
-  However, the easiest way is to install it using the package manager of your 
-  operating system.
-  For instance, on Ubuntu and Debian, you can install it using the command
-  [[sudo apt install noweb]].
-  On Mac, you install it using
-  [[brew install noweb]].
-  On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
-  or similar.
-}, we'll get back to it shortly.
-
-There has been several tools developed for literate programming over time.
-The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
-to be written in Pascal and the documentation in \TeX.
-This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
-to be written in C and the documentation in \TeX.
-
-\noweb, on the other hand, is language agnostic.
+As mentioned, \noweb, is language agnostic.
 It allows the programmer to write the programs in any language and the 
 documentation in any format.
 This makes it simpler, hence \enquote{simplified} in the title of the paper by 
 \textcite{Ramsey1994}.
 This comes with both advantages and disadvantages.
 The most obvious disadvantage is that we can't get prettyprinting (syntax 
-highlighting) in any straight-forward way; the system can't know what language 
-is being used.
+highlighting among other things) in any straight-forward way; the system can't 
+know what language is being used.
 We give two advantages:
 \begin{frame}[fragile]
 \begin{onlyenv}<presentation>
