@@ -26,6 +26,7 @@ SRC+=		fracexample2.cpp
 DEPENDS+=	FracExample.class
 SRC+=		Fraction2.java
 
+SRC+=		weblogin.tex
 SRC+=		../weblogin/doc/contents.tex
 
 ../weblogin/doc/contents.tex: ../weblogin/doc/
