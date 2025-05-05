@@ -37,6 +37,9 @@ fracexample2.cpp: cppjava.nw
 Fraction2.java: cppjava.nw
 	${NOTANGLE}
 
+lpbook.pdf: lpbook.tex didactic.sty
+lpbook.pdf: ${SRC} ${FIGS} ${DEPENDS}
+
 notes.pdf: notes.tex didactic.sty
 notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
