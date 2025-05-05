@@ -12,31 +12,4 @@ documentation for sure can be targeted at users.)
 \mode<all>{\input{introsort.tex}}
 
 
-\section{C++, Java and compilation errors}
-
-\mode<all>{\input{cppjava.tex}}
-
-
-\mode<article>{%
-% chapter on make with noweb
-\input{noweb.tex}
-
-
-% chapter with weblogin as example
-\chapter{A real-world example: \texttt{weblogin}%
-  \protected\footnote{This section is adapted from \cite{weblogin}.
-                      It is licensed under the MIT license.}}
-%\let\chapter\section
-\let\section\subsection
-\let\subsection\subsubsection
-\let\subsubsection\oldsubsubsection
-\subimport{../weblogin/doc/}{contents.tex}
-\let\oldsubsubsection\subsubsection
-\let\subsubsection\subsection
-\let\subsection\section
-\let\section\chapter
-}%
-
-\begin{frame}
-\printbibliography
-\end{frame}
+\mode<article>{\printbibliography[subbibintoc]}

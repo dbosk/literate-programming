@@ -582,7 +582,5 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
 \end{frame}
 
 
-\begin{frame}
-\printbibliography{}
-\end{frame}
+\mode<article>{\printbibliography[subbibintoc]}
 

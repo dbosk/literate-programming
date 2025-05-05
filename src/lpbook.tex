@@ -11,41 +11,7 @@
 %\usepackage{authblk}
 %\let\institute\affil
 
+\ltnoteoff
 \begin{document}
-\frontmatter
-\title{%
-  Literate Programming
-}
-\author{%
-  Daniel Bosk
-}
-\institute{%
-  KTH EECS
-}
-
-
-\begin{frame}
-  \maketitle
-\end{frame}
-
-\begin{abstract}
-  \input{abstract.tex}
-\end{abstract}
-
-\clearpage
-
-\begin{frame}
-  \only<presentation>{\tableofcontents[hideallsubsections]}
-  \only<article>{\tableofcontents}
-\end{frame}
-
-\clearpage
-
-\mainmatter
-
 \input{contents.tex}
-
-\backmatter
-
-\printbibliography
 \end{document}

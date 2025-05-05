@@ -1,0 +1,41 @@
+\frontmatter
+\title{%
+  Literate Programming
+}
+\author{%
+  Daniel Bosk
+}
+\institute{%
+  KTH EECS
+}
+
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\clearpage
+
+\begin{frame}
+  \only<presentation>{\tableofcontents[hideallsubsections]}
+  \only<article>{\tableofcontents}
+\end{frame}
+
+\clearpage
+
+\mainmatter
+
+\input{whatis.tex}
+\input{doctest.tex}
+\input{cppjava.tex}
+\input{noweb.tex}
+\input{weblogin.tex}
+
+
+\backmatter
+
+\printbibliography

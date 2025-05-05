@@ -5,7 +5,6 @@ merge.sh
 merge.tex
 notes.pdf
 slides.pdf
-contents.tex
 foo.bar
 foo.tex
 introsort.py
@@ -35,3 +34,5 @@ Fraction.class
 Fraction.java
 Fraction2.java
 Fraction3.java
+doctest.tex
+lpbook.pdf

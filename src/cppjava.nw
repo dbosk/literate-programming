@@ -1,3 +1,5 @@
+\chapter{C++, Java and compilation errors}
+
 \mode*
 \label{cppjava}
 
@@ -925,3 +927,5 @@ a package.
 
 \inputminted{text}{cppjava.nw}
 
+
+\mode<article>{\printbibliography[subbibintoc]}

@@ -63,7 +63,6 @@ test_introsort.py: introsort.nw
 .PHONY: clean
 clean:
 	${RM} notes.pdf slides.pdf
-	${RM} contents.tex
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
 	${RM} introsort.py introsort.tex
