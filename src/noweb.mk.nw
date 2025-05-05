@@ -20,14 +20,14 @@ There is also a [[NOWEAVE.pdf]] to weave directly to PDF.
 This assumes that the file is independent, \ie no special LaTeX preamble.
 
 Consider the [[Makefile]] for this document as an example.
-\inputminted[highlightlines={35-36,38-39,41-42,44-45,80-83,86-87}]{make}{Makefile}
-We can see that we don't have to specify any recipes for [[notes.pdf]] and 
+\inputminted[highlightlines={35-36,38-39,41-42,44-45,79-82,84-86}]{make}{Makefile}
+We can see that we don't have to specify any recipes for [[lpbook.pdf]] and 
 [[slides.pdf]].
 That's because we have pattern rules for turning \TeX{} files in to PDF, 
 [[%.pdf: .tex]], in the [[tex.mk]] include file.
-We also see that for the files where the names don't match, for example 
-[[contents.tex: whatis.nw]] and [[Fraction2.java: cppjava.nw]], we use a 
-variable to specify the recipe, [[NOWEAVE.tex]] and [[NOTANGLE]], respectively.
+We also see that for the files where the names don't match, for example
+[[Fraction2.java: cppjava.nw]], we use a variable to specify the recipe, 
+[[NOWEAVE.tex]] and [[NOTANGLE]], respectively.
 We get those \enquote{shortcuts} from the [[noweb.mk]] include file, which we 
 will look into next.
 
@@ -36,7 +36,8 @@ files in a separate directory, [[../makefiles]].
 In fact, I keep them in a separate repository~\autocite[See][]{makefiles}, 
 which I include as a submodule in Git.
 This is because I reuse them in many projects and I want to keep them version 
-managed and be able to update them easily.
+managed and be able to update them easily---but keep a version if I don't need 
+to update.
 
 
 \section{Overview of the include file}
