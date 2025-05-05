@@ -1,4 +1,9 @@
 \chapter{Docstrings and testing in Python}\label{DocAndTests}
+\mode*
+\chapterprecis{%
+  This chapter is primarily intended for
+  DD1385 Software Engineering.
+}
 
 We've briefly discussed how docstrings relate to literate programming.
 Now we'll see that we still want to use docstrings even though we use literate 

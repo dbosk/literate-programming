@@ -1,5 +1,10 @@
 \chapter{What is literate programming?}
 \mode*
+\chapterprecis{%
+  This chapter is for
+  DD1366 Programming Paradigms and
+  DD1385 Software Engineering.
+}%
 @ \only<presentation>{\section{Introduction}}%
 %
 Let's start off with some thinking.

@@ -1,7 +1,9 @@
-\chapter{C++, Java and compilation errors}
-
+\chapter{C++, Java and compilation errors}\label{cppjava}
 \mode*
-\label{cppjava}
+\chapterprecis{%
+  This chapter is primarily intended for
+  DD1385 Software Engineering.
+}
 
 We want to write a short class to work with fractions.
 We want to do this twice, once for C++ and once for Java.
