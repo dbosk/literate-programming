@@ -291,9 +291,9 @@ Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
 We note lines 1 and 12.
 Line 1 maps to the same line in the original \noweb{} source, just the same as 
 above.
-But line 12 maps to line 279 in the original \noweb{} source.
+But line 12 maps to line 281 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=275,lastline=282]{text}{cppjava.nw}
+\inputminted[firstline=275,lastline=285]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
@@ -312,7 +312,7 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
 \end{pycode}
 \end{frame}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 279 (in full in \cref{cppjava.nw}), rather than the tangled file 
+line 281 (in full in \cref{cppjava.nw}), rather than the tangled file 
 [[fracexample2.cpp]].
 \only<article>{\input{gdb.tex}}
 
@@ -383,8 +383,8 @@ class Fraction {
 \subsection{Implementing the methods}
 
 Now we need to implement the methods, we have
-[[<<implementation of methods>>]] and
-[[<<overloaded operators>>]]
+[[<<implementation of methods for Fraction>>]] and
+[[<<implementation of overloaded operators>>]]
 to implement.
 That should be done in the file [[<<fraction.cpp>>]].
 \begin{frame}[fragile]
