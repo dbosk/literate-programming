@@ -5,10 +5,10 @@ LATEXFLAGS+=	-shell-escape
 
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
-SRC+=		whatis.tex
+SRC+=		whatis.tex related.tex
 SRC+=		doctest.tex
 SRC+=		merge.sh merge.tex
-SRC+=		foo.bar foo.tex
+SRC+=		fib.py fib.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile

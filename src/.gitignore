@@ -5,8 +5,8 @@ merge.sh
 merge.tex
 notes.pdf
 slides.pdf
-foo.bar
-foo.tex
+fib.py
+fib.tex
 introsort.py
 introsort.tex
 test_introsort.py

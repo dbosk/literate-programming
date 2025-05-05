@@ -216,23 +216,24 @@ This book is a literate program.
 Let's start with a small example.
 
 \begin{example}[A literate program]\label{ALitProg}
-  \input{foo.tex}
+  \input{fib.tex}
 \end{example}
 
-Let's return to the goals of literate programming\footnote{%
+Let's study \cref{ALitProg} by returning to the goals of literate 
+programming\footnote{%
  As a reminder, the goals are:
  \LPgoals
 }.
 Although \cref{ALitProg} is a toy example, we see hints of why it can fulfil 
 the goals of literate programming.
-We'll see better examples later.
-But we can see that it seems to target the reader in explaining the program.
+(We'll see bigger examples later.)
+We can see that it seems to target the reader in explaining the program.
 We can also see that it seems to not be written in the order required by the 
 computer.
 
-\begin{frame}[fragile]
+\begin{frame}[fragile,allowframebreaks]
 \begin{onlyenv}<presentation>
-  \input{foo.tex}
+  \input{fib.tex}
 \end{onlyenv}
 \ltnote{%
   \Cref{ReadFooBar} serves two purposes.
@@ -242,7 +243,7 @@ computer.
   syntax without being taught how it works.
 }%
 \begin{activity}\label{ReadFooBar}
-  Write the code that you think this program ([[foo.bar]]) will execute.
+  What you expect this program ([[fib.py]]) to output?
 \end{activity}
 \end{frame}
 
@@ -250,7 +251,7 @@ computer.
 \begin{frame}[fragile]
   \begin{columns}
     \begin{column}{0.48\columnwidth}
-      \input{foo.tex}
+      \input{fib.tex}
     \end{column}
     \begin{column}{0.48\columnwidth}
       \LPgoals
@@ -266,20 +267,24 @@ computer.
 \end{onlyenv}
 
 \Cref{ALitProg} is the typeset version of a small example literate program.
-It's not what I typed, but how it was intended to be read.
+It's not what I typed, but how it was intended to be read---we have 
+\emph{weaved} it.
 
 \begin{frame}[fragile]
-\begin{example}[Literate source]\label{SmallLiterateExample}
-  We write the following literate source in [[foo.nw]].
-  \only<article>{\inputminted[firstline=2,firstnumber=1]{text}{foo.nw}}
-  \only<presentation>{\inputminted[
-    firstline=2,firstnumber=1,lastline=12
-  ]{text}{foo.nw}}
+\begin{example}[Literate source]\label{LiterateSource}
+  We write the following literate source in [[fib.nw]] to get the typeset 
+  program in \cref{ALitProg}:
+  \only<article>{\inputminted[firstline=2,firstnumber=1]{text}{fib.nw}}
+  \only<presentation>{%
+    \inputminted[
+      firstline=2,firstnumber=1,lastline=12
+    ]{text}{fib.nw}%
+  }
 \end{example}
 \end{frame}
 
 \ltnote{%
-  In \cref{SmallLiterateExample} and the following comment, we show how the 
+  In \cref{LiterateSource} and the following comment, we show how the 
   literate approach fulfils both the goals of literate programming.
   And not only ephemerally, as with some of the other methodologies.
 
@@ -310,7 +315,7 @@ We describe the second step before we describe the first step.
 
 \begin{frame}[fragile]
 \ltnote{%
-  \Cref{foo.bar} starts our work on LO~\ref{LOnoweb}.
+  \Cref{fib.py} starts our work on LO~\ref{LOnoweb}.
 }%
 \begin{onlyenv}<presentation>
   \vspace*{-1em}
@@ -319,40 +324,122 @@ We describe the second step before we describe the first step.
       \inputminted[
         firstline=2,firstnumber=1,lastline=8,fontsize=\small,
         breaklines
-      ]{text}{foo.nw}
+      ]{text}{fib.nw}
     \end{column}
     \begin{column}{0.48\columnwidth}
       \inputminted[
         firstline=9,firstnumber=9,fontsize=\small
-      ]{text}{foo.nw}
+      ]{text}{fib.nw}
     \end{column}
   \end{columns}
 \end{onlyenv}
-\begin{example}[Tangling]\label{foo.bar}
+\begin{example}[Tangling]\label{fib.py}
 We can extract the computer readable code by tangling:
-[[notangle -Rfoo.bar foo.nw > foo.bar]].
-This yields:
-\inputminted{text}{foo.bar}
+\begin{minted}{bash}
+notangle -Rfib.py fib.nw > fib.py
+\end{minted}
+This yields the following Python code:
+\inputminted{python}{fib.py}
 \end{example}
 \end{frame}
 
 Despite being described in the \enquote{wrong} (from the computer's 
-perspective) order, the code is extracted in the right order in \cref{foo.bar}.
+perspective) order, the code is extracted in the right order in \cref{fib.py}.
+
+\ltnote{%
+  Here we introduce contrast in the root-ness aspect of the web source.
+  All the examples following will generalize this.
+}%
+We note that the [[-Rfib.py]] option to [[notangle]] is used to specify the 
+name of the root chunk---the root of the tree that we want to extract.
+
+\begin{example}
+  We could use any of the chunk names in the source code.
+  For instance,
+  \begin{minted}{bash}
+notangle -R"module functions" fib.nw
+  \end{minted}
+  would yield
+  \begin{pycode}
+didactic_shell(["notangle", "-Rmodule functions", "fib.nw"], lang="python")
+  \end{pycode}
+  And
+  \begin{minted}{bash}
+notangle -R"test code" fib.nw
+  \end{minted}
+  would yield
+  \begin{pycode}
+didactic_shell(["notangle", "-Rtest code", "fib.nw"], lang="python")
+  \end{pycode}
+\end{example}
+
+More details can be found in the [[notangle]] manual page.
+Run the following line in the terminal to read it:
+\begin{frame}
+\begin{minted}{bash}
+man notangle
+\end{minted}
+\end{frame}
+
+Finally, another useful command is [[noroots]].
+This will list all the roots in the source code, \ie chunks that are not used 
+in any other chunk.
+This can help us to find typos in the chunk names.
 
 \begin{frame}[fragile]
-\begin{example}[Weaving]
+\begin{example}[Listing roots]
+  The following command line will give us a list of all the roots in the 
+  [[fib.nw]] source code.
+  \begin{minted}{bash}
+noroots fib.nw
+  \end{minted}
+  The output will look like this:
+  \begin{pycode}
+didactic_shell(["noroots", "fib.nw"])
+  \end{pycode}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Listing more roots]
+  If we look at [[introsort.nw]] (\cref{introsort}), we can see that it has 
+  several roots.
+  \begin{minted}{bash}
+noroots introsort.nw
+  \end{minted}
+  The output will look like this:
+  \begin{pycode}
+didactic_shell(["noroots", "introsort.nw"])
+  \end{pycode}
+\end{example}
+\end{frame}
+
+\subsection{Weaving}
+
+Now, the literate source of \cref{LiterateSource} is not of much use to the 
+human reader either.
+And it's of no use to \LaTeX{}.
+During the weaving process we get a \LaTeX{} file that can be compiled into a 
+document.
+
+\begin{frame}[fragile]
+\begin{example}[Weaving]\label{WeavingFib}
 We can extract the documentation by weaving:
-[[noweave -n -latex foo.nw > foo.tex]].
-This yields:
-\inputminted[breaklines]{latex}{foo.tex}
+\begin{minted}{bash}
+noweave -n -latex fib.nw > fib.tex
+\end{minted}
+This yields the following \LaTeX{} code, which, when compiled into a document, 
+looks exactly like \cref{ALitProg}.
+(Don't worry that you can't read this \LaTeX{} code, it's meant to be read only 
+by \TeX{}.)
+\inputminted{latex}{fib.tex}
 \begin{onlyenv}<article>
-Compiled into a document, it looks exactly like \cref{ALitProg}.
 \end{onlyenv}
 \end{example}
 \end{frame}
 
 \begin{frame}<presentation>
-\input{foo.tex}
+\input{fib.tex}
 \end{frame}
 
 When we use literate programming, there are generally three languages that 
@@ -370,13 +457,13 @@ The web language is used to extract the code and the documentation from the
 source into separate files.
 (See \cref{web} for an illustration.)
 We extract the code by \emph{tangling} the literate source, using the tool 
-[[ctangle]] (\cweb) or [[notangle]] (\noweb, \cref{noweb}).
+[[ctangle]] (\cweb) or [[notangle]] (\noweb, \cref{noweb,LiterateSource}).
 This results in a file with the code as readable by the computer (compiler or 
-interpreter)
+interpreter).
 We extract the documentation (and code) by \emph{weaving} the literate source, 
-using the tool [[cweave]] (\cweb) or [[noweave]] (\noweb).
+using the tool [[cweave]] (\cweb) or [[noweave]] (\noweb, \cref{WeavingFib}).
 This results in \TeX-code that can be compiled into a document readable by 
-humans.
+humans (\cref{ALitProg}).
 
 Traditionally, the documentation is written in \TeX{}.
 However, \noweb{}, for instance, supports other formats as well, such as HTML.
@@ -457,27 +544,30 @@ documentation.
 
 \begin{frame}
 \begin{figure}
+\begin{sidecaption}
+  {My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.}
+  [myflow]
+  \raggedleft
   \includegraphics[width=0.8\columnwidth]{figs/pythontex.pdf}
-  \caption{\label{myflow}%
-    My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.%
-  }
+\end{sidecaption}
 \end{figure}
 \end{frame}
 
 \begin{frame}[fragile]
 \begin{example}[Python\TeX{}]
-We saw in
-\only<article>{\cref{foo.bar}}%
+Since the code
+\only<article>{in \cref{fib.py}}%
 \only<presentation>{above}
-that it's actually valid Python.
+([[fib.py]])
+is valid Python.
 We can do this:
 \begin{minted}{latex}
 \begin{pyblock}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"],
+proc = subprocess.run(["python3", "fib.py"],
                       capture_output=True)
-print(proc.stdout)
+print(proc.stdout.decode("utf-8"))
 print(r"\end{verbatim}")
 \end{pyblock}
 \end{minted}
@@ -485,20 +575,27 @@ The results looks like this:
 \begin{pycode}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"],
+proc = subprocess.run(["python3", "fib.py"],
                       capture_output=True)
-print(proc.stdout)
+print(proc.stdout.decode("utf-8"))
 print(r"\end{verbatim}")
 \end{pycode}
 \end{example}
 \end{frame}
 
+This is advantageous because it helps keep example output in sync with the 
+code.
+When we hardcode example outputs, we must remember to update them when we 
+change the code.
+As an example, the documentation of the [[ladok3]] Python 
+package\autocite{ladok3} contains a lot of example outputs: over 1500 pages!
+
 \begin{frame}
 \begin{example}
 You can find the source code for this
-\only<presentation>{slides (and article)}%
-\only<article>{article (and slides)}
-at GitHub:
+\only<presentation>{slides (and text)}%
+\only<article>{text (and slides)}
+on GitHub:
 \begin{center}
 \url{https://github.com/dbosk/literate-programming/tree/master/src}.
 \end{center}
