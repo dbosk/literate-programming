@@ -1,4 +1,4 @@
-\chapter{Docstrings and testing in Python}
+\chapter{Docstrings and testing in Python}\label{DocAndTests}
 
 We've briefly discussed how docstrings relate to literate programming.
 Now we'll see that we still want to use docstrings even though we use literate 

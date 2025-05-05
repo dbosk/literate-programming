@@ -153,7 +153,9 @@ and, based on that,
 \TeX{} was, of course, among the first literate programs to be written.
 
 \Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
-\TeX{} in \citetitle{ErrorsOfTeX}\autocite{ErrorsOfTeX}.
+\TeX{} in \citetitle{ErrorsOfTeX}\autocite[it's also in this paper that Knuth 
+famously stated that he wrote code for six months without compiling it a single 
+time.]{ErrorsOfTeX}.
 This text might be of interest to many as it shows that everyone suffers from 
 making mistakes and that it might take days (or nights) to debug errors for 
 anyone---even for the Professor of the Art of Computer Programming\footnote{%
@@ -343,8 +345,14 @@ It's not what I typed, but how it was intended to be read---we have
   We do this by keeping literate programming invariant and let the program 
   examples vary.
 }%
-Note the order of the exposition in \cref{SmallLiterateExample}.
-We describe the second step before we describe the first step.
+
+\subsection{Tangling}
+
+Now, the source code is \cref{LiterateSource} is not of much use to the 
+Python interpreter.
+For Python to be able to execute it, we must extract the code from the literate 
+source.
+This is done by \emph{tangling} the source.
 
 \begin{frame}
 \begin{figure}
@@ -653,18 +661,24 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \end{activity}
 \end{frame}
 
+Literate programming is a methodology that focuses on human readers rather than 
+syntactic parsing of compilers.
+Instead of writing code in the order required by the computer, the programmer 
+can explain the ideas and logic in an order that best supports human 
+understanding.
+
 \subsection{Other tools}
 
 We note that Haskell supports literate programming out of the box.
 This is done by using a file with the extension [[.lhs]] instead of [[.hs]].
 In a [[.lhs]] file, the code is written in code blocks:
 \begin{frame}[fragile]
-\begin{minted}{text}
+\begin{minted}{markdown}
 Let's create a small Haskell program.
 > main = putStrLn "Hello, world!"
 \end{minted}
 or, equivalently
-\begin{minted}{text}
+\begin{minted}{LaTeX}
 Let's create a small Haskell program.
 \begin{code}
 main = putStrLn "Hello, world!"
@@ -678,6 +692,8 @@ This is actually fine due to the nature of Haskell, where the order of
 definitions doesn't matter.
 This means that we can still, despite this, write the code in the order we want 
 to explain it---adapted for human understanding, not the computer's.
+However, we can't mix the source code with documented tests to the same extent 
+that we will see in \cref{DocAndTests}.
 
 Another related tool, Agda, allows for the same type of literate 
 programming.
