@@ -179,6 +179,9 @@ anyone---even for the Professor of the Art of Computer Programming\footnote{%
   \end{onlyenv}
 
   \begin{figure}
+    \begin{sidecaption}{%
+      The book \citetitle{PBR} and its authors.
+    }[fig:pbr]
     \begin{subfigure}{0.48\columnwidth}
       \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
       \caption{The cover of the book \citetitle{PBR}.}
@@ -187,7 +190,7 @@ anyone---even for the Professor of the Art of Computer Programming\footnote{%
       \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
       \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
     \end{subfigure}
-    \caption{\label{fig:pbr}The book \citetitle{PBR} and its authors.}
+    \end{sidecaption}
   \end{figure}
 \end{frame}
 
