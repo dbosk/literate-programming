@@ -246,7 +246,7 @@ GitHub repository
 However, the easiest way is to install it using the package manager of your 
 operating system.
 For instance, on
-\begin{frame}
+\begin{frame}[fragile]
 Ubuntu and Debian, you can install it using the following command\footnote{%
   \noweb is already installed on KTH's Linux systems, both
   in the lab rooms and
@@ -266,9 +266,11 @@ or similar.
 
 Let's start with a small example.
 
+\begin{frame}[fragile]
 \begin{example}[A literate program]\label{ALitProg}
   \input{fib.tex}
 \end{example}
+\end{frame}
 
 Let's study \cref{ALitProg} by returning to the goals of literate 
 programming\footnote{%
@@ -432,7 +434,7 @@ didactic_shell(["notangle", "-Rtest code", "fib.nw"], lang="python")
 
 More details can be found in the [[notangle]] manual page.
 Run the following line in the terminal to read it:
-\begin{frame}
+\begin{frame}[fragile]
 \begin{minted}{bash}
 man notangle
 \end{minted}

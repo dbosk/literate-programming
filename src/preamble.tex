@@ -14,7 +14,6 @@
   citestyle=verbose,
   singletitle=false,
   maxbibnames=99,
-  refsegment=chapter,
 ]{biblatex}
 \addbibresource{bibliography.bib}
 
@@ -71,5 +70,9 @@
 \NewDocumentCommand{\cweb}{}{\textsc{cweb}}
 \NewDocumentCommand{\noweb}{}{\textsc{noweb}}
 
-\usepackage[colorlinks]{hyperref}
+\makeatletter
+\@ifpackageloaded{beamer}
+  {\relax}
+  {\usepackage[colorlinks]{hyperref}}
+\makeatother
 \usepackage[capitalize]{cleveref}
