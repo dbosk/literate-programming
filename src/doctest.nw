@@ -11,5 +11,3 @@ documentation for sure can be targeted at users.)
 
 \mode<all>{\input{introsort.tex}}
 
-
-\mode<article>{\printbibliography[subbibintoc]}

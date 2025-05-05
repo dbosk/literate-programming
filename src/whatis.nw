@@ -1,11 +1,8 @@
 \chapter{What is literate programming?}
 \mode*
-
-@
-
-\section{Introduction}
-
-Let's start of with some thinking.
+@ \only<presentation>{\section{Introduction}}%
+%
+Let's start off with some thinking.
 
 \ltnote{%
   We want to investigate how many know of or have heard of literate 
@@ -64,7 +61,7 @@ As Knuth says:
 }
 \end{frame}
 
-\subsection{Motivation}
+\section{Motivation}
 
 Let's start with a quote that summarizes Knuth's motivation for literate 
 programming:
@@ -131,22 +128,21 @@ But Knuth is convinced that this works well:
   methodology encourages me to do a better job.%
 }
 
-\softclearmargin
-
-\subsubsection{Famous literate programs}
+\subsection{Famous literate programs}
 %
-\begin{frame}<presentation>
-\large
-Famous literate programs?
-\end{frame}%
-%
+\only<presentation>{%
+  \begin{frame}
+    \large
+    Famous literate programs?
+  \end{frame}
+}%
+The first program that comes to mind is of course
 \ltnote{%
   It will probably be better for the motivation to hear about some famous 
   examples of literate programs---that they wouldn't know were literate 
   programs.
   This surprise effect might have slightly deterring effect on sleepiness.
 }%
-The first program that comes to mind is of course
 \begin{frame}%
 \only<presentation>{\centering\large}%
 \TeX\autocite[this is in fact the literate source code of the program and a 
@@ -580,7 +576,4 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
   GNU Make
 \end{center}
 \end{frame}
-
-
-\mode<article>{\printbibliography[subbibintoc]}
 

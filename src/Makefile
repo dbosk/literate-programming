@@ -1,5 +1,5 @@
 .PHONY: all
-all: notes.pdf slides.pdf lpbook.pdf
+all: lpbook.pdf slides.pdf
 
 LATEXFLAGS+=	-shell-escape
 
@@ -40,9 +40,6 @@ Fraction2.java: cppjava.nw
 lpbook.pdf: lpbook.tex didactic.sty
 lpbook.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
-notes.pdf: notes.tex didactic.sty
-notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
-
 slides.pdf: slides.tex didactic.sty
 slides.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
@@ -65,7 +62,7 @@ test_introsort.py: introsort.nw
 
 .PHONY: clean
 clean:
-	${RM} notes.pdf slides.pdf
+	${RM} lpbook.pdf slides.pdf
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
 	${RM} introsort.py introsort.tex
