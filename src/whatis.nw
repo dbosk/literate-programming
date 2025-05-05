@@ -150,12 +150,15 @@ published book]{TeXprogram}
 and, based on that,
 \LaTeX\footnote{\url{https://latex-project.org}}%
 \end{frame}.
-\TeX{} was of course among the first literate programs to be written.
+\TeX{} was, of course, among the first literate programs to be written.
 
 \Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
 \TeX{} in \citetitle{ErrorsOfTeX}\autocite{ErrorsOfTeX}.
-This text might be of interest to students as it shows that everyone suffers 
-from making mistakes and that it might take days to debug errors for anyone.
+This text might be of interest to many as it shows that everyone suffers from 
+making mistakes and that it might take days (or nights) to debug errors for 
+anyone---even for the Professor of the Art of Computer Programming\footnote{%
+  That is Knuth's title at Stanford University.
+}.
 
 \begin{frame}
   On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
