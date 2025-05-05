@@ -1,10 +1,12 @@
 .PHONY: all
-all: notes.pdf slides.pdf
+all: notes.pdf slides.pdf lpbook.pdf
 
 LATEXFLAGS+=	-shell-escape
 
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
+SRC+=		whatis.tex
+SRC+=		doctest.tex
 SRC+=		merge.sh merge.tex
 SRC+=		foo.bar foo.tex
 SRC+=		introsort.tex introsort.py
@@ -40,9 +42,6 @@ notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 slides.pdf: slides.tex didactic.sty
 slides.pdf: ${SRC} ${FIGS} ${DEPENDS}
-
-contents.tex: whatis.nw
-	${NOWEAVE.tex}
 
 ${FIGS}::
 	${MAKE} -C $(dir $@) $(notdir $@)

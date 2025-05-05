@@ -1,0 +1,51 @@
+\documentclass[a4paper,10pt,oneside,oldfontcommands]{memoir}
+
+%\newsubfloat{figure}
+
+\input{preamble.tex}
+\noweboptions{longxref,breakcode}
+
+\usepackage[noamsthm,notheorems]{beamerarticle}
+%\setjobnamebeamerversion{slides}
+
+%\usepackage{authblk}
+%\let\institute\affil
+
+\begin{document}
+\frontmatter
+\title{%
+  Literate Programming
+}
+\author{%
+  Daniel Bosk
+}
+\institute{%
+  KTH EECS
+}
+
+
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\begin{abstract}
+  \input{abstract.tex}
+\end{abstract}
+
+\clearpage
+
+\begin{frame}
+  \only<presentation>{\tableofcontents[hideallsubsections]}
+  \only<article>{\tableofcontents}
+\end{frame}
+
+\clearpage
+
+\mainmatter
+
+\input{contents.tex}
+
+\backmatter
+
+\printbibliography
+\end{document}
