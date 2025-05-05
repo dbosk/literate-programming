@@ -1,4 +1,4 @@
-\chapter{Pattern rules for Make and \noweb}
+\chapter{Pattern rules for GNU Make and \noweb}
 \chapterprecis{%
   This chapter is adapted from \cite{makefiles}.
   It is licensed under the MIT license.
