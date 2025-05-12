@@ -12,7 +12,8 @@ publish: ${release_files}
 		${release_files}
 
 src/%:
-	${MAKE} -C src clean $@
+	${MAKE} -C src clean
+	${MAKE} -C src $@
 
 INCLUDE_MAKEFILES=./makefiles
 include $(INCLUDE_MAKEFILES)/subdir.mk
