@@ -179,11 +179,9 @@ or similar.
 
 Let's start with a small example.
 
-\begin{frame}[fragile]
 \begin{example}[A literate program]\label{ALitProg}
   \input{fib.tex}
 \end{example}
-\end{frame}
 
 Let's study \cref{ALitProg} by returning to the goals of literate 
 programming\footnote{%
@@ -210,25 +208,19 @@ computer.
 }%
 \begin{activity}\label{ReadFooBar}
   What you expect this program ([[fib.py]]) to output?
+  Is it correct?
 \end{activity}
 \end{frame}
 
 \begin{onlyenv}<presentation>
 \begin{frame}[fragile]
-  \begin{columns}
-    \begin{column}{0.48\columnwidth}
-      \input{fib.tex}
-    \end{column}
-    \begin{column}{0.48\columnwidth}
-      \LPgoals
+  \begin{block}{The goals}
+    \LPgoals
+  \end{block}
 
-      \begin{remark}
-        \begin{itemize}
-          \item Note the order of exposition.
-        \end{itemize}
-      \end{remark}
-    \end{column}
-  \end{columns}
+  \begin{activity}
+    Why does literate programming fulfil these goals?
+  \end{activity}
 \end{frame}
 \end{onlyenv}
 
@@ -239,9 +231,11 @@ It's not what I typed, but how it was intended to be read---we have
 \begin{frame}[fragile]
 \begin{example}[Literate source]\label{LiterateSource}
   We write the following literate source in [[fib.nw]] to get the typeset 
-  program in \cref{ALitProg}:
-  \only<article>{\inputminted[firstline=2,firstnumber=1]{text}{fib.nw}}
+  program
+  \only<article>{in \cref{ALitProg}:
+  \inputminted[firstline=2,firstnumber=1]{text}{fib.nw}}
   \only<presentation>{%
+    above:
     \inputminted[
       firstline=2,firstnumber=1,lastline=12
     ]{text}{fib.nw}%
@@ -285,26 +279,16 @@ This is done by \emph{tangling} the source.
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]
 \ltnote{%
   \Cref{fib.py} starts our work on LO~\ref{LOnoweb}.
 }%
 \begin{onlyenv}<presentation>
-  \vspace*{-1em}
-  \begin{columns}[t]
-    \begin{column}{0.48\columnwidth}
-      \inputminted[
-        firstline=2,firstnumber=1,lastline=8,fontsize=\small,
-        breaklines
-      ]{text}{fib.nw}
-    \end{column}
-    \begin{column}{0.48\columnwidth}
-      \inputminted[
-        firstline=9,firstnumber=9,fontsize=\small
-      ]{text}{fib.nw}
-    \end{column}
-  \end{columns}
+  \inputminted[
+    firstline=2,firstnumber=1,lastline=10,fontsize=\small,
+    breaklines
+  ]{text}{fib.nw}
 \end{onlyenv}
+\begin{frame}[fragile]
 \begin{example}[Tangling]\label{fib.py}
 We can extract the computer readable code by tangling:
 \begin{minted}{bash}
@@ -325,7 +309,8 @@ perspective) order, the code is extracted in the right order in \cref{fib.py}.
 We note that the [[-Rfib.py]] option to [[notangle]] is used to specify the 
 name of the root chunk---the root of the tree that we want to extract.
 
-\begin{example}
+\begin{frame}[fragile]
+\begin{example}[Other chunks as root]
   We could use any of the chunk names in the source code.
   For instance,
   \begin{minted}{bash}
@@ -335,7 +320,12 @@ notangle -R"module functions" fib.nw
   \begin{pycode}
 didactic_shell(["notangle", "-Rmodule functions", "fib.nw"], lang="python")
   \end{pycode}
-  And
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Other chunks as root]
+  Another chunk as root.
   \begin{minted}{bash}
 notangle -R"test code" fib.nw
   \end{minted}
@@ -344,6 +334,7 @@ notangle -R"test code" fib.nw
 didactic_shell(["notangle", "-Rtest code", "fib.nw"], lang="python")
   \end{pycode}
 \end{example}
+\end{frame}
 
 More details can be found in the [[notangle]] manual page.
 Run the following line in the terminal to read it:
@@ -497,7 +488,7 @@ documentation.
 \begin{sidecaption}
   {My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.}
   [myflow]
-  \raggedleft
+  \only<article>{\raggedleft}
   \includegraphics[width=0.8\columnwidth]{figs/pythontex.pdf}
 \end{sidecaption}
 \end{figure}
@@ -565,9 +556,12 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \subsection{Summary}
 
 \ltnote{%
-  This question is purely phenomenographic.
+  This question serves two purposes:
+  First, it collects phenomenographic data.
   We want to know how they perceive literate programming, what aspects they 
   distinguish now.
+  Second, trying to summarize what you've learned helps reflection and 
+  retention.
 }%
 \begin{frame}
 \begin{activity}
@@ -599,6 +593,13 @@ Let's create a small Haskell program.
 main = putStrLn "Hello, world!"
 \end{code}
 \end{minted}
+
+\begin{example}[Literate Haskell typeset]
+Let's create a small Haskell program.
+\begin{haskellcode}
+main = putStrLn "Hello, world!"
+\end{haskellcode}
+\end{example}
 \end{frame}
 
 We note that the code blocks of literate Haskell doesn't allow for the same web 
