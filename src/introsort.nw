@@ -878,7 +878,8 @@ Let's have a look at the docstrings for the module we wrote in this
 section.
 
 \begin{pycode}
-didactic_pydoc("introsort", fullwidth=False)
+didactic_pydoc("introsort", fullwidth=False,
+               minted_opts=r"breaklines")
 \end{pycode}
 
 We note that the docstrings were just a subset of the documentation.
