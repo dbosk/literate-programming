@@ -128,93 +128,6 @@ But Knuth is convinced that this works well:
   methodology encourages me to do a better job.%
 }
 
-\subsection{Famous literate programs}
-%
-\only<presentation>{%
-  \begin{frame}
-    \large
-    Famous literate programs?
-  \end{frame}
-}%
-The first program that comes to mind is of course
-\ltnote{%
-  It will probably be better for the motivation to hear about some famous 
-  examples of literate programs---that they wouldn't know were literate 
-  programs.
-  This surprise effect might have slightly deterring effect on sleepiness.
-}%
-\begin{frame}%
-\only<presentation>{\centering\large}%
-\TeX\autocite[this is in fact the literate source code of the program and a 
-published book]{TeXprogram}
-and, based on that,
-\LaTeX\footnote{\url{https://latex-project.org}}%
-\end{frame}.
-\TeX{} was, of course, among the first literate programs to be written.
-
-\Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
-\TeX{} in \citetitle{ErrorsOfTeX}\autocite[it's also in this paper that Knuth 
-famously stated that he wrote code for six months without compiling it a single 
-time.]{ErrorsOfTeX}.
-This text might be of interest to many as it shows that everyone suffers from 
-making mistakes and that it might take days (or nights) to debug errors for 
-anyone---even for the Professor of the Art of Computer Programming\footnote{%
-  That is Knuth's title at Stanford University.
-}.
-
-\begin{frame}
-  On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
-  awarded the 2013 Scientific and Technical Academy Award for Physically Based 
-  Rendering\autocite[][award for an earlier edition]{PBR}.
-  \begin{onlyenv}<article>
-    See \cref{fig:pbr}.
-    The motivation:
-    \blockquote{%
-      Physically based rendering has transformed computer graphics lighting by 
-      more accurately simulating materials and lights, allowing digital artists 
-      to focus on cinematography rather than the intricacies of rendering. 
-      First published in 2004, Physically Based Rendering is both a textbook 
-      and a complete source-code implementation that has provided a widely 
-      adopted practical roadmap for most physically based shading and lighting 
-      systems used in film production.
-    }
-  \end{onlyenv}
-
-  \begin{figure}
-    \begin{sidecaption}{%
-      The book \citetitle{PBR} and its authors.
-    }[fig:pbr]
-    \begin{subfigure}{0.48\columnwidth}
-      \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
-      \caption{The cover of the book \citetitle{PBR}.}
-    \end{subfigure}
-    \begin{subfigure}{0.48\columnwidth}
-      \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
-      \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
-    \end{subfigure}
-    \end{sidecaption}
-  \end{figure}
-\end{frame}
-
-Knuth said of this: \blockquote{This book has deservedly won an Academy Award. 
-I believe it should also be nominated for a Pulitzer Prize.}
-This book is a literate program.
-%See \cref{fig:pbrlit} for an excerpt from the book.
-%By the end of this text we'll be better equipped to read that text.
-%
-%\begin{frame}
-%  \begin{figure}
-%    \centering
-%    \includegraphics[width=\columnwidth]{figs/pbr.png}
-%    \caption{\label{fig:pbrlit}%
-%      An excerpt from the book \citetitle{PBR} (online version).
-%    }
-%  \end{figure}
-%\end{frame}
-
-
-\input{related.tex}
-
 
 \section{Literate programming}
 
@@ -721,4 +634,94 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
   GNU Make
 \end{center}
 \end{frame}
+
+
+\section{Famous literate programs}
+%
+\only<presentation>{%
+  \begin{frame}
+    \large
+    Famous literate programs?
+  \end{frame}
+}%
+The first program that comes to mind is of course
+\ltnote{%
+  It will probably be better for the motivation to hear about some famous 
+  examples of literate programs---that they wouldn't know were literate 
+  programs.
+  This surprise effect might have slightly deterring effect on sleepiness.
+}%
+\begin{frame}%
+\only<presentation>{\centering\large}%
+\TeX\autocite[this is in fact the literate source code of the program and a 
+published book]{TeXprogram}
+and, based on that,
+\LaTeX\footnote{\url{https://latex-project.org}}%
+\end{frame}.
+\TeX{} was, of course, among the first literate programs to be written.
+
+\Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
+\TeX{} in \citetitle{ErrorsOfTeX}\autocite[it's also in this paper that Knuth 
+famously stated that he wrote code for six months without compiling it a single 
+time.]{ErrorsOfTeX}.
+This text might be of interest to many as it shows that everyone suffers from 
+making mistakes and that it might take days (or nights) to debug errors for 
+anyone---even for the Professor of the Art of Computer Programming\footnote{%
+  That is Knuth's title at Stanford University.
+}.
+
+\begin{frame}
+  On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
+  awarded the 2013 Scientific and Technical Academy Award for Physically Based 
+  Rendering\autocite[][award for an earlier edition]{PBR}.
+  \begin{onlyenv}<article>
+    See \cref{fig:pbr}.
+    The motivation:
+    \blockquote{%
+      Physically based rendering has transformed computer graphics lighting by 
+      more accurately simulating materials and lights, allowing digital artists 
+      to focus on cinematography rather than the intricacies of rendering. 
+      First published in 2004, Physically Based Rendering is both a textbook 
+      and a complete source-code implementation that has provided a widely 
+      adopted practical roadmap for most physically based shading and lighting 
+      systems used in film production.
+    }
+  \end{onlyenv}
+
+  \begin{figure}
+    \begin{sidecaption}{%
+      The book \citetitle{PBR} and its authors.
+    }[fig:pbr]
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
+      \caption{The cover of the book \citetitle{PBR}.}
+    \end{subfigure}
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
+      \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
+    \end{subfigure}
+    \end{sidecaption}
+  \end{figure}
+\end{frame}
+
+Knuth said of this: \blockquote{This book has deservedly won an Academy Award. 
+I believe it should also be nominated for a Pulitzer Prize.}
+This book is a literate program.
+See \cref{fig:pbrlit} for an excerpt from the book.
+
+\begin{frame}
+  \begin{figure}
+    \begin{sidecaption}{%
+      An excerpt from the book by \cite{PBR} (online version).
+    }[fig:pbrlit]
+      \raggedleft
+      \includegraphics[width=\columnwidth]{figs/pbr.png}
+    \end{sidecaption}
+  \end{figure}
+\end{frame}
+
+
+
+%%% \section{Related approaches}
+\mode<all>{\input{related.tex}}
 
