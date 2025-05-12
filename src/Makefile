@@ -1,12 +1,14 @@
 .PHONY: all
-all: notes.pdf slides.pdf
+all: lpbook.pdf lpbook-teachers.pdf slides.pdf
 
 LATEXFLAGS+=	-shell-escape
 
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
+SRC+=		whatis.tex related.tex
+SRC+=		doctest.tex
 SRC+=		merge.sh merge.tex
-SRC+=		foo.bar foo.tex
+SRC+=		fib.py fib.tex
 SRC+=		introsort.tex introsort.py
 SRC+=		test_introsort.py
 SRC+=		tests_Makefile
@@ -24,6 +26,7 @@ SRC+=		fracexample2.cpp
 DEPENDS+=	FracExample.class
 SRC+=		Fraction2.java
 
+SRC+=		weblogin.tex
 SRC+=		../weblogin/doc/contents.tex
 
 ../weblogin/doc/contents.tex: ../weblogin/doc/
@@ -35,14 +38,14 @@ fracexample2.cpp: cppjava.nw
 Fraction2.java: cppjava.nw
 	${NOTANGLE}
 
-notes.pdf: notes.tex didactic.sty
-notes.pdf: ${SRC} ${FIGS} ${DEPENDS}
+lpbook.pdf: lpbook.tex didactic.sty
+lpbook.pdf: ${SRC} ${FIGS} ${DEPENDS}
+
+lpbook-teachers.pdf: lpbook-teachers.tex didactic.sty
+lpbook-teachers.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 slides.pdf: slides.tex didactic.sty
 slides.pdf: ${SRC} ${FIGS} ${DEPENDS}
-
-contents.tex: whatis.nw
-	${NOWEAVE.tex}
 
 ${FIGS}::
 	${MAKE} -C $(dir $@) $(notdir $@)
@@ -63,8 +66,7 @@ test_introsort.py: introsort.nw
 
 .PHONY: clean
 clean:
-	${RM} notes.pdf slides.pdf
-	${RM} contents.tex
+	${RM} lpbook.pdf lpbook-teachers.pdf slides.pdf
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
 	${RM} introsort.py introsort.tex

@@ -1,42 +1,8 @@
-\title{%
-  An introduction to
-  Literate Programming
-}
-\author{%
-  Daniel Bosk\thanks{%
-    This work is licensed under CC BY-NC-SA 4.0.
-    Part of the source code of this document was autocompleted using GitHub 
-    Copilot.
-  }
-}
-\institute{%
-  KTH EECS
-}
-
+\chapter{What is literate programming?}
 \mode*
-
-@
-
-\begin{frame}
-  \maketitle
-\end{frame}
-
-\begin{abstract}
-  \input{abstract.tex}
-\end{abstract}
-
-\clearpage
-
-\begin{frame}
-  \only<presentation>{\tableofcontents[hideallsubsections]}
-  \only<article>{\tableofcontents}
-\end{frame}
-
-\clearpage
-
-\section{Introduction}
-
-Let's start of with some thinking.
+@ \only<presentation>{\section{Introduction}}%
+%
+Let's start off with some thinking.
 
 \ltnote{%
   We want to investigate how many know of or have heard of literate 
@@ -95,7 +61,7 @@ As Knuth says:
 }
 \end{frame}
 
-\subsection{Motivation}
+\section{Motivation}
 
 Let's start with a quote that summarizes Knuth's motivation for literate 
 programming:
@@ -162,115 +128,76 @@ But Knuth is convinced that this works well:
   methodology encourages me to do a better job.%
 }
 
-\softclearmargin
-
-\subsubsection{Famous literate programs}
-%
-\begin{frame}<presentation>
-\large
-Famous literate programs?
-\end{frame}%
-%
-\ltnote{%
-  It will probably be better for the motivation to hear about some famous 
-  examples of literate programs---that they wouldn't know were literate 
-  programs.
-  This surprise effect might have slightly deterring effect on sleepiness.
-}%
-The first program that comes to mind is of course
-\begin{frame}%
-\only<presentation>{\centering\large}%
-\TeX\autocite[this is in fact the literate source code of the program and a 
-published book]{TeXprogram}
-and, based on that,
-\LaTeX\footnote{\url{https://latex-project.org}}%
-\end{frame}.
-\TeX{} was of course among the first literate programs to be written.
-
-\Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
-\TeX{} in \citetitle{ErrorsOfTeX}\autocite{ErrorsOfTeX}.
-This text might be of interest to students as it shows that everyone suffers 
-from making mistakes and that it might take days to debug errors for anyone.
-
-\begin{frame}
-  On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
-  awarded the 2013 Scientific and Technical Academy Award for Physically Based 
-  Rendering\autocite[][award for an earlier edition]{PBR}.
-  \begin{onlyenv}<article>
-    See \cref{fig:pbr}.
-    The motivation:
-    \blockquote{%
-      Physically based rendering has transformed computer graphics lighting by 
-      more accurately simulating materials and lights, allowing digital artists 
-      to focus on cinematography rather than the intricacies of rendering. 
-      First published in 2004, Physically Based Rendering is both a textbook 
-      and a complete source-code implementation that has provided a widely 
-      adopted practical roadmap for most physically based shading and lighting 
-      systems used in film production.
-    }
-  \end{onlyenv}
-
-  \begin{figure}
-    \begin{subfigure}{0.48\columnwidth}
-      \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
-      \caption{The cover of the book \citetitle{PBR}.}
-    \end{subfigure}
-    \begin{subfigure}{0.48\columnwidth}
-      \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
-      \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
-    \end{subfigure}
-    \caption{\label{fig:pbr}The book \citetitle{PBR} and its authors.}
-  \end{figure}
-\end{frame}
-
-Knuth said of this: \blockquote{This book has deservedly won an Academy Award. 
-I believe it should also be nominated for a Pulitzer Prize.}
-This book is a literate program.
-%See \cref{fig:pbrlit} for an excerpt from the book.
-%By the end of this text we'll be better equipped to read that text.
-%
-%\begin{frame}
-%  \begin{figure}
-%    \centering
-%    \includegraphics[width=\columnwidth]{figs/pbr.png}
-%    \caption{\label{fig:pbrlit}%
-%      An excerpt from the book \citetitle{PBR} (online version).
-%    }
-%  \end{figure}
-%\end{frame}
-
-\begin{onlyenv}<presentation>
-\begin{frame}
-  Whatever Daniel wrote during the last decade \dots
-\end{frame}
-\end{onlyenv}
-
-
-\input{related.tex}
-
 
 \section{Literate programming}
+
+To use literate programming we need some tooling.
+There have been several tools developed for literate programming over time.
+The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
+to be written in Pascal and the documentation in \TeX.
+This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
+to be written in C and the documentation in \TeX.
+
+\ltnote{%
+  We provide the tools early on, that way the reader can experiment as we go.
+  This reduces the cognitive load of the reader who must keep more in their 
+  memory until they can practice it.
+}%
+We'll use \noweb\autocite{Ramsey1994}, which is language agnostic and can thus 
+be used with any programming language.
+\begin{frame}
+The tool can be found on its web page
+\begin{quote}
+\url{https://www.cs.tufts.edu/~nr/noweb/}
+\end{quote}
+and
+GitHub repository
+\begin{quote}
+\url{https://github.com/nrnrnr/noweb}.
+\end{quote}
+\end{frame}
+However, the easiest way is to install it using the package manager of your 
+operating system.
+For instance, on
+\begin{frame}[fragile]
+Ubuntu and Debian, you can install it using the following command\footnote{%
+  \noweb is already installed on KTH's Linux systems, both
+  in the lab rooms and
+  on the shell servers.
+  So you don't need to do this yourself on any of those systems.
+}
+\begin{minted}{bash}
+sudo apt install noweb
+\end{minted}
+On Mac, you install it using Homebrew:
+\begin{minted}{bash}
+brew install noweb
+\end{minted}
+On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
+or similar.
+\end{frame}
 
 Let's start with a small example.
 
 \begin{example}[A literate program]\label{ALitProg}
-  \input{foo.tex}
+  \input{fib.tex}
 \end{example}
 
-Let's return to the goals of literate programming\footnote{%
+Let's study \cref{ALitProg} by returning to the goals of literate 
+programming\footnote{%
  As a reminder, the goals are:
  \LPgoals
 }.
 Although \cref{ALitProg} is a toy example, we see hints of why it can fulfil 
 the goals of literate programming.
-We'll see better examples later.
-But we can see that it seems to target the reader in explaining the program.
+(We'll see bigger examples later.)
+We can see that it seems to target the reader in explaining the program.
 We can also see that it seems to not be written in the order required by the 
 computer.
 
-\begin{frame}[fragile]
+\begin{frame}[fragile,allowframebreaks]
 \begin{onlyenv}<presentation>
-  \input{foo.tex}
+  \input{fib.tex}
 \end{onlyenv}
 \ltnote{%
   \Cref{ReadFooBar} serves two purposes.
@@ -280,44 +207,44 @@ computer.
   syntax without being taught how it works.
 }%
 \begin{activity}\label{ReadFooBar}
-  Write the code that you think this program ([[foo.bar]]) will execute.
+  What you expect this program ([[fib.py]]) to output?
+  Is it correct?
 \end{activity}
 \end{frame}
 
 \begin{onlyenv}<presentation>
 \begin{frame}[fragile]
-  \begin{columns}
-    \begin{column}{0.48\columnwidth}
-      \input{foo.tex}
-    \end{column}
-    \begin{column}{0.48\columnwidth}
-      \LPgoals
+  \begin{block}{The goals}
+    \LPgoals
+  \end{block}
 
-      \begin{remark}
-        \begin{itemize}
-          \item Note the order of exposition.
-        \end{itemize}
-      \end{remark}
-    \end{column}
-  \end{columns}
+  \begin{activity}
+    Why does literate programming fulfil these goals?
+  \end{activity}
 \end{frame}
 \end{onlyenv}
 
 \Cref{ALitProg} is the typeset version of a small example literate program.
-It's not what I typed, but how it was intended to be read.
+It's not what I typed, but how it was intended to be read---we have 
+\emph{weaved} it.
 
 \begin{frame}[fragile]
-\begin{example}[Literate source]\label{SmallLiterateExample}
-  We write the following literate source in [[foo.nw]].
-  \only<article>{\inputminted[firstline=2,firstnumber=1]{text}{foo.nw}}
-  \only<presentation>{\inputminted[
-    firstline=2,firstnumber=1,lastline=12
-  ]{text}{foo.nw}}
+\begin{example}[Literate source]\label{LiterateSource}
+  We write the following literate source in [[fib.nw]] to get the typeset 
+  program
+  \only<article>{in \cref{ALitProg}:
+  \inputminted[firstline=2,firstnumber=1]{text}{fib.nw}}
+  \only<presentation>{%
+    above:
+    \inputminted[
+      firstline=2,firstnumber=1,lastline=12
+    ]{text}{fib.nw}%
+  }
 \end{example}
 \end{frame}
 
 \ltnote{%
-  In \cref{SmallLiterateExample} and the following comment, we show how the 
+  In \cref{LiterateSource} and the following comment, we show how the 
   literate approach fulfils both the goals of literate programming.
   And not only ephemerally, as with some of the other methodologies.
 
@@ -327,8 +254,14 @@ It's not what I typed, but how it was intended to be read.
   We do this by keeping literate programming invariant and let the program 
   examples vary.
 }%
-Note the order of the exposition in \cref{SmallLiterateExample}.
-We describe the second step before we describe the first step.
+
+\subsection{Tangling}
+
+Now, the source code is \cref{LiterateSource} is not of much use to the 
+Python interpreter.
+For Python to be able to execute it, we must extract the code from the literate 
+source.
+This is done by \emph{tangling} the source.
 
 \begin{frame}
 \begin{figure}
@@ -346,51 +279,130 @@ We describe the second step before we describe the first step.
 \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]
 \ltnote{%
-  \Cref{foo.bar} starts our work on LO~\ref{LOnoweb}.
+  \Cref{fib.py} starts our work on LO~\ref{LOnoweb}.
 }%
 \begin{onlyenv}<presentation>
-  \vspace*{-1em}
-  \begin{columns}[t]
-    \begin{column}{0.48\columnwidth}
-      \inputminted[
-        firstline=2,firstnumber=1,lastline=8,fontsize=\small,
-        breaklines
-      ]{text}{foo.nw}
-    \end{column}
-    \begin{column}{0.48\columnwidth}
-      \inputminted[
-        firstline=9,firstnumber=9,fontsize=\small
-      ]{text}{foo.nw}
-    \end{column}
-  \end{columns}
+  \inputminted[
+    firstline=2,firstnumber=1,lastline=10,fontsize=\small,
+    breaklines
+  ]{text}{fib.nw}
 \end{onlyenv}
-\begin{example}[Tangling]\label{foo.bar}
+\begin{frame}[fragile]
+\begin{example}[Tangling]\label{fib.py}
 We can extract the computer readable code by tangling:
-[[notangle -Rfoo.bar foo.nw > foo.bar]].
-This yields:
-\inputminted{text}{foo.bar}
+\begin{minted}{bash}
+notangle -Rfib.py fib.nw > fib.py
+\end{minted}
+This yields the following Python code:
+\inputminted{python}{fib.py}
 \end{example}
 \end{frame}
 
 Despite being described in the \enquote{wrong} (from the computer's 
-perspective) order, the code is extracted in the right order in \cref{foo.bar}.
+perspective) order, the code is extracted in the right order in \cref{fib.py}.
+
+\ltnote{%
+  Here we introduce contrast in the root-ness aspect of the web source.
+  All the examples following will generalize this.
+}%
+We note that the [[-Rfib.py]] option to [[notangle]] is used to specify the 
+name of the root chunk---the root of the tree that we want to extract.
 
 \begin{frame}[fragile]
-\begin{example}[Weaving]
+\begin{example}[Other chunks as root]
+  We could use any of the chunk names in the source code.
+  For instance,
+  \begin{minted}{bash}
+notangle -R"module functions" fib.nw
+  \end{minted}
+  would yield
+  \begin{pycode}
+didactic_shell(["notangle", "-Rmodule functions", "fib.nw"], lang="python")
+  \end{pycode}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Other chunks as root]
+  Another chunk as root.
+  \begin{minted}{bash}
+notangle -R"test code" fib.nw
+  \end{minted}
+  would yield
+  \begin{pycode}
+didactic_shell(["notangle", "-Rtest code", "fib.nw"], lang="python")
+  \end{pycode}
+\end{example}
+\end{frame}
+
+More details can be found in the [[notangle]] manual page.
+Run the following line in the terminal to read it:
+\begin{frame}[fragile]
+\begin{minted}{bash}
+man notangle
+\end{minted}
+\end{frame}
+
+Finally, another useful command is [[noroots]].
+This will list all the roots in the source code, \ie chunks that are not used 
+in any other chunk.
+This can help us to find typos in the chunk names.
+
+\begin{frame}[fragile]
+\begin{example}[Listing roots]
+  The following command line will give us a list of all the roots in the 
+  [[fib.nw]] source code.
+  \begin{minted}{bash}
+noroots fib.nw
+  \end{minted}
+  The output will look like this:
+  \begin{pycode}
+didactic_shell(["noroots", "fib.nw"])
+  \end{pycode}
+\end{example}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{example}[Listing more roots]
+  If we look at [[introsort.nw]] (\cref{introsort}), we can see that it has 
+  several roots.
+  \begin{minted}{bash}
+noroots introsort.nw
+  \end{minted}
+  The output will look like this:
+  \begin{pycode}
+didactic_shell(["noroots", "introsort.nw"])
+  \end{pycode}
+\end{example}
+\end{frame}
+
+\subsection{Weaving}
+
+Now, the literate source of \cref{LiterateSource} is not of much use to the 
+human reader either.
+And it's of no use to \LaTeX{}.
+During the weaving process we get a \LaTeX{} file that can be compiled into a 
+document.
+
+\begin{frame}[fragile]
+\begin{example}[Weaving]\label{WeavingFib}
 We can extract the documentation by weaving:
-[[noweave -n -latex foo.nw > foo.tex]].
-This yields:
-\inputminted[breaklines]{latex}{foo.tex}
+\begin{minted}{bash}
+noweave -n -latex fib.nw > fib.tex
+\end{minted}
+This yields the following \LaTeX{} code, which, when compiled into a document, 
+looks exactly like \cref{ALitProg}.
+(Don't worry that you can't read this \LaTeX{} code, it's meant to be read only 
+by \TeX{}.)
+\inputminted{latex}{fib.tex}
 \begin{onlyenv}<article>
-Compiled into a document, it looks exactly like \cref{ALitProg}.
 \end{onlyenv}
 \end{example}
 \end{frame}
 
 \begin{frame}<presentation>
-\input{foo.tex}
+\input{fib.tex}
 \end{frame}
 
 When we use literate programming, there are generally three languages that 
@@ -408,13 +420,13 @@ The web language is used to extract the code and the documentation from the
 source into separate files.
 (See \cref{web} for an illustration.)
 We extract the code by \emph{tangling} the literate source, using the tool 
-[[ctangle]] (\cweb) or [[notangle]] (\noweb, \cref{noweb}).
+[[ctangle]] (\cweb) or [[notangle]] (\noweb, \cref{noweb,LiterateSource}).
 This results in a file with the code as readable by the computer (compiler or 
-interpreter)
+interpreter).
 We extract the documentation (and code) by \emph{weaving} the literate source, 
-using the tool [[cweave]] (\cweb) or [[noweave]] (\noweb).
+using the tool [[cweave]] (\cweb) or [[noweave]] (\noweb, \cref{WeavingFib}).
 This results in \TeX-code that can be compiled into a document readable by 
-humans.
+humans (\cref{ALitProg}).
 
 Traditionally, the documentation is written in \TeX{}.
 However, \noweb{}, for instance, supports other formats as well, such as HTML.
@@ -424,37 +436,15 @@ However, adding support for Markdown in the weaving process is possible with
 
 \subsection{Using \noweb}
 
-To use literate programming we need some tooling.
-We'll use \noweb\autocite{Ramsey1994}\footnote{%
-  It can be found on its web page
-  \url{https://www.cs.tufts.edu/~nr/noweb/} and
-  GitHub repository
-  \url{https://github.com/nrnrnr/noweb}.
-  However, the easiest way is to install it using the package manager of your 
-  operating system.
-  For instance, on Ubuntu and Debian, you can install it using the command
-  [[sudo apt install noweb]].
-  On Mac, you install it using
-  [[brew install noweb]].
-  On Windows, it's easiest to use WSL, reducing the problem to that of Ubuntu 
-  or similar.
-}, we'll get back to it shortly.
-
-There has been several tools developed for literate programming over time.
-The original was Knuth's \web\autocite{Knuth1984}, which required the programs 
-to be written in Pascal and the documentation in \TeX.
-This was later generalized to \cweb\autocite{CWEB}, which allowed the programs 
-to be written in C and the documentation in \TeX.
-
-\noweb, on the other hand, is language agnostic.
+As mentioned, \noweb, is language agnostic.
 It allows the programmer to write the programs in any language and the 
 documentation in any format.
 This makes it simpler, hence \enquote{simplified} in the title of the paper by 
 \textcite{Ramsey1994}.
 This comes with both advantages and disadvantages.
 The most obvious disadvantage is that we can't get prettyprinting (syntax 
-highlighting) in any straight-forward way; the system can't know what language 
-is being used.
+highlighting among other things) in any straight-forward way; the system can't 
+know what language is being used.
 We give two advantages:
 \begin{frame}[fragile]
 \begin{onlyenv}<presentation>
@@ -495,27 +485,30 @@ documentation.
 
 \begin{frame}
 \begin{figure}
+\begin{sidecaption}
+  {My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.}
+  [myflow]
+  \only<article>{\raggedleft}
   \includegraphics[width=0.8\columnwidth]{figs/pythontex.pdf}
-  \caption{\label{myflow}%
-    My workflow with \texttt{beamerarticle}, \texttt{beamer} and Python\TeX.%
-  }
+\end{sidecaption}
 \end{figure}
 \end{frame}
 
 \begin{frame}[fragile]
 \begin{example}[Python\TeX{}]
-We saw in
-\only<article>{\cref{foo.bar}}%
+Since the code
+\only<article>{in \cref{fib.py}}%
 \only<presentation>{above}
-that it's actually valid Python.
+([[fib.py]])
+is valid Python.
 We can do this:
 \begin{minted}{latex}
 \begin{pyblock}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"],
+proc = subprocess.run(["python3", "fib.py"],
                       capture_output=True)
-print(proc.stdout)
+print(proc.stdout.decode("utf-8"))
 print(r"\end{verbatim}")
 \end{pyblock}
 \end{minted}
@@ -523,22 +516,29 @@ The results looks like this:
 \begin{pycode}
 import subprocess
 print(r"\begin{verbatim}")
-proc = subprocess.run(["python3", "foo.bar"],
+proc = subprocess.run(["python3", "fib.py"],
                       capture_output=True)
-print(proc.stdout)
+print(proc.stdout.decode("utf-8"))
 print(r"\end{verbatim}")
 \end{pycode}
 \end{example}
 \end{frame}
 
+This is advantageous because it helps keep example output in sync with the 
+code.
+When we hardcode example outputs, we must remember to update them when we 
+change the code.
+As an example, the documentation of the [[ladok3]] Python 
+package\autocite{ladok3} contains a lot of example outputs: over 1500 pages!
+
 \begin{frame}
 \begin{example}
 You can find the source code for this
-\only<presentation>{slides (and article)}%
-\only<article>{article (and slides)}
-at GitHub:
+\only<presentation>{slides (and text)}%
+\only<article>{text (and slides)}
+on GitHub:
 \begin{center}
-\url{https://github.com/dbosk/literate-programming/tree/master/whatis}.
+\url{https://github.com/dbosk/literate-programming/tree/master/src}.
 \end{center}
 \end{example}
 \end{frame}
@@ -556,9 +556,12 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \subsection{Summary}
 
 \ltnote{%
-  This question is purely phenomenographic.
+  This question serves two purposes:
+  First, it collects phenomenographic data.
   We want to know how they perceive literate programming, what aspects they 
   distinguish now.
+  Second, trying to summarize what you've learned helps reflection and 
+  retention.
 }%
 \begin{frame}
 \begin{activity}
@@ -567,23 +570,36 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
 \end{activity}
 \end{frame}
 
+Literate programming is a methodology that focuses on human readers rather than 
+syntactic parsing of compilers.
+Instead of writing code in the order required by the computer, the programmer 
+can explain the ideas and logic in an order that best supports human 
+understanding.
+
 \subsection{Other tools}
 
 We note that Haskell supports literate programming out of the box.
 This is done by using a file with the extension [[.lhs]] instead of [[.hs]].
 In a [[.lhs]] file, the code is written in code blocks:
 \begin{frame}[fragile]
-\begin{minted}{text}
+\begin{minted}{markdown}
 Let's create a small Haskell program.
 > main = putStrLn "Hello, world!"
 \end{minted}
 or, equivalently
-\begin{minted}{text}
+\begin{minted}{LaTeX}
 Let's create a small Haskell program.
 \begin{code}
 main = putStrLn "Hello, world!"
 \end{code}
 \end{minted}
+
+\begin{example}[Literate Haskell typeset]
+Let's create a small Haskell program.
+\begin{haskellcode}
+main = putStrLn "Hello, world!"
+\end{haskellcode}
+\end{example}
 \end{frame}
 
 We note that the code blocks of literate Haskell doesn't allow for the same web 
@@ -592,6 +608,8 @@ This is actually fine due to the nature of Haskell, where the order of
 definitions doesn't matter.
 This means that we can still, despite this, write the code in the order we want 
 to explain it---adapted for human understanding, not the computer's.
+However, we can't mix the source code with documented tests to the same extent 
+that we will see in \cref{DocAndTests}.
 
 Another related tool, Agda, allows for the same type of literate 
 programming.
@@ -619,47 +637,92 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
 \end{frame}
 
 
-\section{Docstrings and testing in Python}
-
-We've briefly discussed how docstrings relate to literate programming.
-Now we'll see that we still want to use docstrings even though we use literate 
-programming.
-We still want to have those when we use the modules we've written as an API.
-The literate documentation is rather targeted at the maintainers of the code, 
-not users.
-(Although there can be some overlap and some parts of the literate 
-documentation for sure can be targeted at users.)
-
-\mode<all>{\input{introsort.tex}}
-
-
-\section{C++, Java and compilation errors}
-
-\mode<all>{\input{cppjava.tex}}
-
-
-\mode<article>{%
-% chapter on make with noweb
-\input{noweb.tex}
-
-
-% chapter with weblogin as example
-\chapter{A real-world example: \texttt{weblogin}%
-  \protected\footnote{This section is adapted from \cite{weblogin}.
-                      It is licensed under the MIT license.}}
-%\let\chapter\section
-\let\section\subsection
-\let\subsection\subsubsection
-\let\subsubsection\oldsubsubsection
-\subimport{../weblogin/doc/}{contents.tex}
-\let\oldsubsubsection\subsubsection
-\let\subsubsection\subsection
-\let\subsection\section
-\let\section\chapter
+\section{Famous literate programs}
+%
+\only<presentation>{%
+  \begin{frame}
+    \large
+    Famous literate programs?
+  \end{frame}
 }%
+The first program that comes to mind is of course
+\ltnote{%
+  It will probably be better for the motivation to hear about some famous 
+  examples of literate programs---that they wouldn't know were literate 
+  programs.
+  This surprise effect might have slightly deterring effect on sleepiness.
+}%
+\begin{frame}%
+\only<presentation>{\centering\large}%
+\TeX\autocite[this is in fact the literate source code of the program and a 
+published book]{TeXprogram}
+and, based on that,
+\LaTeX\footnote{\url{https://latex-project.org}}%
+\end{frame}.
+\TeX{} was, of course, among the first literate programs to be written.
 
+\Citeauthor{ErrorsOfTeX} goes quite into the details of the development of 
+\TeX{} in \citetitle{ErrorsOfTeX}\autocite[it's also in this paper that Knuth 
+famously stated that he wrote code for six months without compiling it a single 
+time.]{ErrorsOfTeX}.
+This text might be of interest to many as it shows that everyone suffers from 
+making mistakes and that it might take days (or nights) to debug errors for 
+anyone---even for the Professor of the Art of Computer Programming\footnote{%
+  That is Knuth's title at Stanford University.
+}.
 
 \begin{frame}
-\printbibliography{}
+  On 8th January 2014, Matt Pharr, Greg Humphreys, and Pat Hanrahan were 
+  awarded the 2013 Scientific and Technical Academy Award for Physically Based 
+  Rendering\autocite[][award for an earlier edition]{PBR}.
+  \begin{onlyenv}<article>
+    See \cref{fig:pbr}.
+    The motivation:
+    \blockquote{%
+      Physically based rendering has transformed computer graphics lighting by 
+      more accurately simulating materials and lights, allowing digital artists 
+      to focus on cinematography rather than the intricacies of rendering. 
+      First published in 2004, Physically Based Rendering is both a textbook 
+      and a complete source-code implementation that has provided a widely 
+      adopted practical roadmap for most physically based shading and lighting 
+      systems used in film production.
+    }
+  \end{onlyenv}
+
+  \begin{figure}
+    \begin{sidecaption}{%
+      The book \citetitle{PBR} and its authors.
+    }[fig:pbr]
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbrcover.jpg}
+      \caption{The cover of the book \citetitle{PBR}.}
+    \end{subfigure}
+    \begin{subfigure}{0.48\columnwidth}
+      \includegraphics[width=\columnwidth]{figs/pbr-authors-academy.jpg}
+      \caption{\Citeauthor{PBR} at the Academy Awards ceremony.}
+    \end{subfigure}
+    \end{sidecaption}
+  \end{figure}
 \end{frame}
+
+Knuth said of this: \blockquote{This book has deservedly won an Academy Award. 
+I believe it should also be nominated for a Pulitzer Prize.}
+This book is a literate program.
+See \cref{fig:pbrlit} for an excerpt from the book.
+
+\begin{frame}
+  \begin{figure}
+    \begin{sidecaption}{%
+      An excerpt from the book by \cite{PBR} (online version).
+    }[fig:pbrlit]
+      \raggedleft
+      \includegraphics[width=\columnwidth]{figs/pbr.png}
+    \end{sidecaption}
+  \end{figure}
+\end{frame}
+
+
+
+%%% \section{Related approaches}
+\mode<all>{\input{related.tex}}
 

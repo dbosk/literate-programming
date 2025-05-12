@@ -80,11 +80,14 @@ itemize the list, since those contain spaces.
 import subprocess
 year = 23
 course_rooms = subprocess.check_output(
-    f"canvaslms courses 'DD1301.(HT{year}|VT{year+1})'", shell=True).decode()
+    f"canvaslms courses -a 'DD1301.(HT{year}|VT{year+1})'",
+    shell=True).decode().strip()
 print(r"\begin{minted}{text}")
 print(course_rooms)
 print(r"\end{minted}")
   \end{pycode}
+  (Note that this data was generated when compiling this document,
+  we simply executed the [[canvaslms]] command using Python\TeX{}.)
 \end{example}
 <<adjust IFS for looping through [[course_rooms]]>>=
 oldIFS="$IFS"
@@ -197,7 +200,7 @@ What we want to note here is that we can keep related things closer together.
 And we can explain them in the order that makes it the clearest to us.
 Consider the following.
 \begin{frame}[fragile]
-  \inputminted[firstline=32,lastline=43]{text}{merge.nw}
+  \inputminted[firstline=42,lastline=53]{text}{merge.nw}
   \begin{remark}
     [[<<condition to not send too often>>]] depends on how we solve
     [[<<send email to IT to merge Canvas rooms in [[course_rooms]]>>]].

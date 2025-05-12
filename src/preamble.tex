@@ -13,7 +13,7 @@
   style=verbose,
   citestyle=verbose,
   singletitle=false,
-  maxbibnames=99
+  maxbibnames=99,
 ]{biblatex}
 \addbibresource{bibliography.bib}
 
@@ -36,6 +36,7 @@
 
 \usepackage[outputdir=ltxobj]{minted}
 \setminted{autogobble,linenos}
+\newminted{haskell}{linenos=false}
 
 \usepackage[makestderr]{pythontex}
 \setpythontexoutputdir{.}
@@ -51,7 +52,7 @@
 
 \usepackage[binary-units]{siunitx}
 
-\usepackage[marginparmargin=right]{didactic}
+\usepackage[marginparmargin=outer]{didactic}
 \ProvideSemanticEnv{lo}{Learning Objective}
   [style=definition,numbered=yes]
   {LO}{LO}
@@ -70,5 +71,9 @@
 \NewDocumentCommand{\cweb}{}{\textsc{cweb}}
 \NewDocumentCommand{\noweb}{}{\textsc{noweb}}
 
-\usepackage[colorlinks]{hyperref}
+\makeatletter
+\@ifclassloaded{beamer}
+  {\relax}
+  {\usepackage[colorlinks]{hyperref}}
+\makeatother
 \usepackage[capitalize]{cleveref}

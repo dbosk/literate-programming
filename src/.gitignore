@@ -5,9 +5,8 @@ merge.sh
 merge.tex
 notes.pdf
 slides.pdf
-contents.tex
-foo.bar
-foo.tex
+fib.py
+fib.tex
 introsort.py
 introsort.tex
 test_introsort.py
@@ -35,3 +34,6 @@ Fraction.class
 Fraction.java
 Fraction2.java
 Fraction3.java
+doctest.tex
+lpbook.pdf
+lpbook-teachers.pdf

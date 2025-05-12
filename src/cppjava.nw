@@ -1,3 +1,5 @@
+\chapter{C++, Java and compilation errors}
+
 \mode*
 \label{cppjava}
 
@@ -31,7 +33,7 @@ While reading the rest of this section,
 try to write the same program and experiment with it.
 \end{activity}
 
-\subsection{Compiling the files}
+\section{Compiling the files}
 
 We'll start with the makefile\footnote{%
   If you've never come across [[make]] before, skim through chapter 2 of the 
@@ -68,7 +70,7 @@ clean-frac:
 @
 \end{frame}
 
-\subsection{C++}
+\section{C++}
 
 The class should be used as the following example program shows.%
 \ltnote{%
@@ -170,7 +172,7 @@ rm -f fractest
 @
 \end{frame}
 
-\subsubsection{Tangling with the \texttt{-L} flag}
+\subsection{Tangling with the \texttt{-L} flag}
 
 These targets above depend on the source files.
 We need to build them from the \noweb{} source file.
@@ -289,9 +291,9 @@ Let's have a look at the tangled file [[<<fracexample2.cpp>>]].
 We note lines 1 and 12.
 Line 1 maps to the same line in the original \noweb{} source, just the same as 
 above.
-But line 12 maps to line 279 in the original \noweb{} source.
+But line 12 maps to line 281 in the original \noweb{} source.
 That's because we introduced [[<<fracexample2.cpp>>]] that far down:
-\inputminted[firstline=275,lastline=282]{text}{cppjava.nw}
+\inputminted[firstline=275,lastline=285]{text}{cppjava.nw}
 
 Let's try to compile [[<<fracexample2.cpp>>]] and have a look at the error 
 message from the compiler.
@@ -310,7 +312,7 @@ didactic_shell("g++ -std=c++17 -Wall -Wextra -Werror -o fracexample2 "
 \end{pycode}
 \end{frame}
 Indeed, we note that the compiler's error refers to the file [[cppjava.nw]] on 
-line 279 (in full in \cref{cppjava.nw}), rather than the tangled file 
+line 281 (in full in \cref{cppjava.nw}), rather than the tangled file 
 [[fracexample2.cpp]].
 \only<article>{\input{gdb.tex}}
 
@@ -350,7 +352,7 @@ Let's have a peek at the lines around line 328 in [[cppjava.nw]]:
 that the test is testing, we improve one these two points even further.
 
 
-\subsubsection{The class}
+\subsection{The class}
 
 The class [[Fraction]] should represent a fraction.
 The class needs two private attributes, [[numerator]] and [[denominator]] to 
@@ -378,11 +380,11 @@ class Fraction {
 @
 \end{frame}
 
-\subsubsection{Implementing the methods}
+\subsection{Implementing the methods}
 
 Now we need to implement the methods, we have
-[[<<implementation of methods>>]] and
-[[<<overloaded operators>>]]
+[[<<implementation of methods for Fraction>>]] and
+[[<<implementation of overloaded operators>>]]
 to implement.
 That should be done in the file [[<<fraction.cpp>>]].
 \begin{frame}[fragile]
@@ -402,7 +404,7 @@ rm -f fraction.o
 @
 \end{frame}
 
-\subsubsection{The constructor}
+\subsection{The constructor}
 
 The constructor should initialize the attributes.
 We'll also want it to shorten the fraction as much as possible.
@@ -428,7 +430,7 @@ TEST(Fraction, Constructor) {
 @
 \end{frame}
 
-\subsubsection{Shortening the fraction}
+\subsection{Shortening the fraction}
 
 To shorten the fraction, we need to find the greatest common divisor of the 
 numerator and the denominator.
@@ -455,7 +457,7 @@ TEST(Fraction, AddShorten) {
 }
 @
 
-\subsubsection{Converting to string}
+\subsection{Converting to string}
 
 We want to be able to print a fraction, or rather, to convert it into a string.
 We can do this by implementing a method [[to_string]].
@@ -508,7 +510,7 @@ std::ostream& operator<<(std::ostream& os, const Fraction& f) {
 @
 
 
-\subsubsection{Adding fractions}
+\subsection{Adding fractions}
 
 Let's turn to the overloaded [[+]] operator.
 Let's start with some tests to see what we want to achieve.
@@ -563,7 +565,7 @@ int new_denominator = denominator * other.denominator;
 @
 
 
-\subsubsection{The C++ files}
+\subsection{The C++ files}
 
 Let's have a look at the tangled C++ files.
 
@@ -588,7 +590,7 @@ But thanks to literate programming, we have reduced the redundancy and it's now
 easier to keep these lines in sync when we change the code.
 
 
-\subsection{Java}
+\section{Java}
 
 The class should have two fields, \texttt{numerator} and \texttt{denominator}, 
 and a constructor that takes two integers and initializes the fields.
@@ -760,7 +762,7 @@ return b == 0 ? a : gcd(b, a % b);
 @
 
 
-\subsubsection{Compilation-error messages in Java}
+\subsection{Compilation-error messages in Java}
 
 Let's have a look at the tangled file [[Fraction.java]].
 We tangle it with the line
@@ -899,7 +901,7 @@ All in all, this leaves us with the following make file.
 
 \mode<presentation>{\endinput}
 
-\subsection{The \noweb{} source for \cref{cppjava}}\label{cppjava.nw}
+\section{The \noweb{} source for \cref{cppjava}}\label{cppjava.nw}
 
 Let's have a look at the \noweb{} source file for this section, \cref{cppjava}.
 

@@ -1,0 +1,13 @@
+\chapter{Docstrings and testing in Python}\label{DocAndTests}
+
+We've briefly discussed how docstrings relate to literate programming.
+Now we'll see that we still want to use docstrings even though we use literate 
+programming.
+We still want to have those when we use the modules we've written as an API.
+The literate documentation is rather targeted at the maintainers of the code, 
+not users.
+(Although there can be some overlap and some parts of the literate 
+documentation for sure can be targeted at users.)
+
+\mode<all>{\input{introsort.tex}}
+
