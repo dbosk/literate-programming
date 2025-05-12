@@ -21,26 +21,25 @@
 
 \clearpage
 
-\begin{frame}
-  \only<presentation>{\tableofcontents[hideallsubsections]}
-  \only<article>{\tableofcontents}
-\end{frame}
+\tableofcontents
 
 \clearpage
 
 \mainmatter
 
-\mode<all>{%
-\input{whatis.tex}
-\input{doctest.tex}
-\input{cppjava.tex}
-\input{noweb.tex}
-\input{weblogin.tex}
+\mode<all>{\input{whatis.tex}}
+\mode<presentation>{%
+  \section{References}
+  \begin{frame}
+    \printbibliography[heading=none]
+  \end{frame}
 }
+\mode<article>{\input{doctest.tex}}
+\mode<article>{\input{cppjava.tex}}
+\mode<article>{\input{noweb.tex}}
+\mode<article>{\input{weblogin.tex}}
 
 
 \backmatter
 
-\begin{frame}[allowframebreaks]
-  \printbibliography
-\end{frame}
+\printbibliography
