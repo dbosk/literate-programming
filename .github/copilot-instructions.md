@@ -5,7 +5,7 @@ This is a literate programming research project that creates academic documentat
 
 ## Technology Stack
 - **LaTeX**: Primary document preparation system for academic papers and books
-- **Noweb**: Literate programming tool for creating documented code examples
+- **Noweb**: Literate programming tool for creating documented code examples and for extracting compilable source files (e.g. .py) from the literate source files (.nw)
 - **Make**: Build system for compiling LaTeX documents to PDF
 - **Git**: Version control with submodules for external dependencies
 
@@ -16,8 +16,8 @@ This is a literate programming research project that creates academic documentat
 │   ├── *.nw               # Noweb literate programming files
 │   └── figs/              # Figure assets
 ├── makefiles/             # Build system makefiles
-├── didactic/              # Educational materials
-├── weblogin/              # Web-related components
+├── didactic/              # A LaTeX package for typesetting educational material
+├── weblogin/              # A python package written using literate programming. Used as an example
 └── README.md              # Project documentation
 ```
 
