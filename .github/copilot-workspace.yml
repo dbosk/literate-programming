@@ -1,0 +1,58 @@
+# GitHub Copilot Workspace Configuration
+
+# Project context and language preferences
+languages:
+  - latex
+  - tex
+  - noweb
+  - makefile
+  - markdown
+
+# File patterns that are important for understanding the codebase
+important_files:
+  - "src/*.tex"
+  - "src/*.nw" 
+  - "src/bibliography.bib"
+  - "Makefile"
+  - "README.md"
+
+# Directories containing source code and documentation
+source_directories:
+  - "src/"
+  - "didactic/"
+  - "weblogin/"
+
+# Build and output directories to generally ignore for suggestions
+ignore_directories:
+  - ".git/"
+  - "latex.out/"
+  - "_minted*/"
+
+# File extensions that contain the main project logic
+code_extensions:
+  - ".tex"
+  - ".nw"
+  - ".bib"
+
+# Documentation file extensions
+documentation_extensions:
+  - ".md"
+  - ".txt"
+
+# Project-specific conventions
+conventions:
+  indentation: "spaces"
+  line_length: 80
+  
+# Build commands that Copilot should be aware of
+build_commands:
+  - "make"
+  - "make -C src"
+  - "make publish"
+
+# Common file patterns for this project type
+patterns:
+  latex_main_files: "src/*.tex"
+  noweb_files: "src/*.nw"  
+  bibliography: "src/bibliography.bib"
+  makefiles: "**/Makefile"
