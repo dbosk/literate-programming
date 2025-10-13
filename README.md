@@ -26,8 +26,8 @@ make publish
 
 ## Structure
 - `src/` - Main LaTeX and Noweb source files
-- `didactic/` - Educational materials
-- `weblogin/` - Web-related components  
+- `didactic/` - A LaTeX package for typesetting educational materials
+- `weblogin/` - A Python package used to log in to web services. Here it's included as an example, since it's written using literate programming
 - `makefiles/` - Build system configuration
 
 ## Requirements
