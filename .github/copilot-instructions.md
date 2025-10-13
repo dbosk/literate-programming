@@ -111,9 +111,15 @@ This is the documentation explaining the feature.
 <<main function>>
 @
 
+Now we define the imports needed for the module.
+Even for simple chunks, explain their purpose and context.
+
 <<imports>>=
 import sys
 @
+
+The main function provides the entry point for the program.
+Always document each chunk, even if the implementation is straightforward.
 
 <<main function>>=
 def main():
@@ -176,7 +182,7 @@ This is an educational/research project focused on:
 ## Development Workflow
 
 ### When Adding New Content
-1. Create or modify `.nw` (Noweb) or `.tex` (LaTeX) files in `src/`
+1. Create or modify `.nw` (Noweb) or `.tex` (LaTeX) files in `src/` (note: do not manually edit `.tex` files that are generated from `.nw` files)
 2. Update `src/Makefile` to include new dependencies if needed
 3. Test compilation: `make -C src <target>.pdf`
 4. If adding code examples, extract and test them: `make -C src test`
