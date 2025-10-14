@@ -11,14 +11,20 @@ Comprehensive instructions for GitHub Copilot that provide context about:
 - File types and conventions
 - Build processes and common tasks
 - Academic/educational context
+- Development workflow and best practices
+- Testing and validation guidelines
+- Error handling patterns
+- Security and academic integrity considerations
+- Example patterns and code templates
 
 ### `copilot-workspace.yml`
 Workspace configuration for GitHub Copilot including:
 - Language preferences
 - Important file patterns
 - Source directories
-- Build commands
+- Build and test commands
 - Project conventions
+- Tools and utilities used
 
 ### `CODEOWNERS`
 Defines code ownership patterns for the repository to help with:
