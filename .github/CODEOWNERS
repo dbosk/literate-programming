@@ -1,0 +1,18 @@
+# Code ownership for Literate Programming project
+# This helps Copilot understand project structure and responsibilities
+
+# Global ownership
+* @dbosk
+
+# LaTeX source files
+src/*.tex @dbosk
+src/*.nw @dbosk
+src/bibliography.bib @dbosk
+
+# Build system
+Makefile @dbosk
+makefiles/ @dbosk
+
+# Documentation
+README.md @dbosk
+.github/ @dbosk

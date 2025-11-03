@@ -1,0 +1,39 @@
+# GitHub Copilot ignore file
+# Exclude build artifacts and temporary files from Copilot analysis
+
+# LaTeX build outputs
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+*.dvi
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.run.xml
+*.bcf
+
+# LaTeX auxiliary directories
+latex.out/
+_minted*/
+
+# Git directory
+.git/
+
+# Backup files
+*.bak
+*.backup
+*~
+.*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build directories
+build/
+dist/
+output/
