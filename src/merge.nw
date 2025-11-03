@@ -108,7 +108,8 @@ We'll skip the long name of the course (second column), we keep the rest.
 import subprocess
 year = 23
 course_rooms = subprocess.check_output(
-    f"canvaslms courses 'DD1301.(HT{year}|VT{year+1})'", shell=True).decode()
+    f"canvaslms courses -a 'DD1301.(HT{year}|VT{year+1})'",
+    shell=True).decode()
 print(r"\begin{minted}{text}")
 print(course_rooms)
 print(r"\end{minted}")
