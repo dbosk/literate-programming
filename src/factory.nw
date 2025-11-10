@@ -1,0 +1,691 @@
+\chapter{Java, Design Patterns and Literate Programming}
+
+\mode*
+\label{factory}
+
+\section{Introduction}
+
+\ltnote{%
+  We start with a try-first activity to activate prior knowledge about the
+  Factory Pattern. This follows variation theory's principle of starting with
+  students' existing understanding before introducing the formal concept.
+  This also helps us assess what students already know about design patterns.
+}%
+\begin{frame}
+\begin{activity}\label{WhatIsFactory}
+  Have you heard of the Factory Pattern before?
+  What problem do you think it solves?
+  Think about it before continuing.
+\end{activity}
+\end{frame}
+
+In this tutorial, we'll learn how to write Java programs using literate
+programming, specifically using the \noweb{} system.
+We'll implement the Factory Pattern---a fundamental design pattern that
+provides an interface for creating objects without specifying their exact
+classes.
+
+\ltnote{%
+  We explain the purpose upfront: learning literate programming through a
+  design pattern example. This sets expectations and helps students understand
+  why we're combining these two topics.
+}%
+
+We'll build a document management system where different types of documents
+(PDF, Word, Text) can be created through a factory.
+Along the way, you'll learn:
+\begin{itemize}
+\item How to organize Java code using literate programming
+\item How to compile Java programs from \noweb{} sources using Make
+\item How to handle Java compilation errors with line number translation
+\item How the Factory Pattern promotes loose coupling and extensibility
+\end{itemize}
+
+\begin{frame}
+\begin{activity}
+While reading this tutorial, try to write the code yourself and experiment
+with it.
+The best way to learn is by doing!
+\end{activity}
+\end{frame}
+
+\section{The Whole Picture}
+
+\ltnote{%
+  Following variation theory, we start with the whole before breaking it into
+  parts. Students see the complete, working example first, which provides
+  context for the detailed explanations that follow.
+  This also follows the literate programming principle of introducing concepts
+  in psychological order rather than compiler-required order.
+}%
+
+Let's start by seeing how our document management system will be used.
+Here's an example program that creates different types of documents:
+\begin{frame}[fragile]
+<<DocumentExample.java>>=
+public class DocumentExample {
+  public static void main(String[] args) {
+    DocumentFactory factory = new DocumentFactory();
+
+    <<create documents using factory>>
+    <<process each document>>
+  }
+}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+We use the factory to create different document types:
+<<create documents using factory>>=
+Document pdf = factory.createDocument("PDF");
+Document word = factory.createDocument("WORD");
+Document text = factory.createDocument("TEXT");
+@
+\end{frame}
+
+\begin{frame}[fragile]
+Then we process each document polymorphically:
+<<process each document>>=
+System.out.println("Processing documents:");
+pdf.open();
+pdf.save();
+pdf.close();
+
+word.open();
+word.save();
+word.close();
+
+text.open();
+text.save();
+text.close();
+@
+\end{frame}
+
+\ltnote{%
+  By showing the usage first, students can see the benefits of the Factory
+  Pattern: the client code doesn't need to know about concrete classes, just
+  the interface. This creates a contrast with the traditional approach of
+  using 'new' directly.
+}%
+
+When we run this program, we see:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell(["java", "DocumentExample"], minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+\begin{frame}
+\begin{activity}\label{FactoryBenefit}
+  What advantage does using a factory provide compared to creating objects
+  with [[new PDFDocument()]], [[new WordDocument()]], etc. directly?
+  Think about what would happen if we needed to add a new document type.
+\end{activity}
+\end{frame}
+
+\ltnote{%
+  This try-first activity helps students discern the critical aspect of the
+  Factory Pattern: loose coupling. They should realize that with a factory,
+  adding new document types doesn't require changing client code.
+  This is the separation pattern: we vary the creation mechanism while keeping
+  the usage invariant.
+}%
+
+\section{The Document Interface}
+
+Now let's understand how this works.
+We start with an interface that defines what all documents must do:
+\begin{frame}[fragile]
+<<Document.java>>=
+public interface Document {
+  void open();
+  void save();
+  void close();
+}
+@
+\end{frame}
+
+\ltnote{%
+  We introduce the interface next to show the abstraction. This is the
+  invariant aspect: all documents share these operations. In the next
+  sections, we'll vary the implementations while keeping the interface
+  constant (generalization pattern).
+}%
+
+The interface defines the contract that all document types must follow.
+This allows us to treat different document types uniformly.
+
+\section{Concrete Document Implementations}
+
+Now we implement three concrete document types.
+Each one provides its own behavior for opening, saving, and closing documents.
+
+\ltnote{%
+  Here we apply the generalization pattern: the same interface (invariant)
+  appears in different concrete implementations (variant). This helps students
+  discern that the interface defines the structure, while implementations
+  provide specific behaviors.
+}%
+
+\subsection{PDF Documents}
+
+\begin{frame}[fragile]
+<<PDFDocument.java>>=
+public class PDFDocument implements Document {
+  @Override
+  public void open() {
+    System.out.println("Opening PDF document with Adobe Reader");
+  }
+
+  @Override
+  public void save() {
+    System.out.println("Saving PDF document");
+  }
+
+  @Override
+  public void close() {
+    System.out.println("Closing PDF document");
+  }
+}
+@
+\end{frame}
+
+\subsection{Word Documents}
+
+\begin{frame}[fragile]
+<<WordDocument.java>>=
+public class WordDocument implements Document {
+  @Override
+  public void open() {
+    System.out.println("Opening Word document with Microsoft Word");
+  }
+
+  @Override
+  public void save() {
+    System.out.println("Saving Word document");
+  }
+
+  @Override
+  public void close() {
+    System.out.println("Closing Word document");
+  }
+}
+@
+\end{frame}
+
+\subsection{Text Documents}
+
+\begin{frame}[fragile]
+<<TextDocument.java>>=
+public class TextDocument implements Document {
+  @Override
+  public void open() {
+    System.out.println("Opening text document with text editor");
+  }
+
+  @Override
+  public void save() {
+    System.out.println("Saving text document");
+  }
+
+  @Override
+  public void close() {
+    System.out.println("Closing text document");
+  }
+}
+@
+\end{frame}
+
+\begin{frame}
+\begin{activity}\label{AddNewType}
+  How would you add a new document type, say [[HTMLDocument]]?
+  What files would you need to modify?
+  Try to answer before continuing.
+\end{activity}
+\end{frame}
+
+\ltnote{%
+  This try-first activity reinforces the key benefit of the Factory Pattern.
+  Students should realize they need to: (1) create HTMLDocument.java
+  implementing Document, and (2) add a case in the factory. Importantly, they
+  don't need to modify client code like DocumentExample.java.
+  This creates contrast between the Factory Pattern and tight coupling.
+}%
+
+\section{The Document Factory}
+
+The factory is where the magic happens.
+It encapsulates the logic for creating the right type of document:
+
+\begin{frame}[fragile]
+<<DocumentFactory.java>>=
+public class DocumentFactory {
+  public Document createDocument(String type) {
+    <<create document based on type>>
+  }
+}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<create document based on type>>=
+switch (type.toUpperCase()) {
+  case "PDF":
+    return new PDFDocument();
+  case "WORD":
+    return new WordDocument();
+  case "TEXT":
+    return new TextDocument();
+  default:
+    throw new IllegalArgumentException("Unknown document type: " + type);
+}
+@
+\end{frame}
+
+\ltnote{%
+  The factory centralizes object creation. This is the fusion pattern:
+  students must now see how the interface (abstraction), implementations
+  (concrete classes), and factory (creation logic) work together as a whole.
+  The critical aspect to discern is that the factory returns the interface
+  type, not concrete types, enabling polymorphism.
+}%
+
+Notice that the factory method returns [[Document]], not a concrete type.
+This is crucial: the client code only knows about the interface, not the
+specific implementations.
+
+\section{Building with Make}
+
+\ltnote{%
+  Now we shift focus to the practical aspects of literate programming with
+  Java: how to build projects from \noweb{} sources. This is critical for
+  students to actually use literate programming in practice.
+}%
+
+Now let's see how to build this system using Make.
+We'll create a [[factory.mk]] file that contains the build rules.
+
+\begin{frame}
+\begin{activity}\label{MakeExperience}
+  Are you familiar with Make and Makefiles?
+  If not, skim through chapter 2 of the GNU Make manual before continuing:
+  \url{https://www.gnu.org/software/make/manual/html_node/Introduction.html}
+\end{activity}
+\end{frame}
+
+\begin{frame}[fragile]
+<<factory.mk>>=
+<<factory variable definitions>>
+
+.PHONY: all
+all:
+<<factory targets to build>>
+
+<<factory build rules>>
+
+.PHONY: clean
+clean: clean-factory
+clean-factory:
+	<<remove generated factory files>>
+@
+\end{frame}
+
+\subsection{Compiling Java Files}
+
+\ltnote{%
+  We introduce the pattern rule for Java compilation. This is a critical
+  aspect of using Make with Java. The pattern rule creates a reusable recipe
+  for any [[.class]] file from its corresponding [[.java]] file.
+}%
+
+We need pattern rules to compile Java files and extract them from \noweb{}
+sources:
+
+\begin{frame}[fragile]
+<<factory build rules>>=
+%.class: %.java
+	${COMPILE.java}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<factory variable definitions>>=
+JAVAC=        javac
+JAVACFLAGS=   -Xlint:all
+JAVACEXTRAS=  2>&1 | noerr -L'//line %L \"%F\"%N'
+COMPILE.java= ${JAVAC} ${JAVACFLAGS} $< ${JAVACEXTRAS}
+@
+\end{frame}
+
+\ltnote{%
+  The [[JAVACEXTRAS]] variable is crucial: it pipes compiler output through
+  [[noerr]] to translate line numbers back to the \noweb{} source. This is
+  the Java equivalent of the [[-L]] flag for C++, but implemented as a
+  post-processing step since Java doesn't support [[#line]] directives.
+  This creates a contrast: different languages require different approaches
+  for line number translation.
+}%
+
+\subsection{Dependencies Between Classes}
+
+Java classes often depend on other classes.
+We need to specify these dependencies explicitly:
+
+\begin{frame}[fragile]
+<<factory build rules>>=
+DocumentExample.class: Document.class DocumentFactory.class
+DocumentFactory.class: Document.class
+DocumentFactory.class: PDFDocument.class WordDocument.class TextDocument.class
+PDFDocument.class: Document.class
+WordDocument.class: Document.class
+TextDocument.class: Document.class
+@
+\end{frame}
+
+\ltnote{%
+  These dependencies ensure Make builds classes in the correct order. This is
+  important for students to understand: unlike C/C++ where headers declare
+  interfaces, Java requires the actual [[.class]] files to be present.
+  This is separation pattern: we isolate the dependency graph from the
+  compilation recipe.
+}%
+
+\subsection{Adding to the Main Targets}
+
+\begin{frame}[fragile]
+<<factory targets to build>>=
+all: DocumentExample.class
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<remove generated factory files>>=
+rm -f Document.class
+rm -f PDFDocument.class WordDocument.class TextDocument.class
+rm -f DocumentFactory.class DocumentExample.class
+@
+\end{frame}
+
+\section{Extracting Java Code from Noweb}
+
+\ltnote{%
+  This section focuses on tangling: extracting Java source files from the
+  \noweb{} document. The key challenge with Java is that it doesn't support
+  [[#line]] directives like C++, so we use comment-based line directives and
+  the [[noerr]] tool.
+}%
+
+Now we need rules to extract the Java files from this \noweb{} source.
+This is called "tangling" in literate programming terminology.
+
+\begin{frame}[fragile]
+<<factory build rules>>=
+%.java: factory.nw
+	${TANGLE.java}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<factory variable definitions>>=
+TANGLE.java= notangle -L'//line %L \"%F\"%N' -R$@ $< \
+             | cpif $@ \
+             && noroots $<
+@
+\end{frame}
+
+\ltnote{%
+  The [[-L]] flag with custom format creates comment-based line directives
+  that [[noerr]] can parse. The [[cpif]] utility only updates the file if
+  content changed (avoiding unnecessary recompilation). The [[noroots]] check
+  helps catch typos in chunk names.
+}%
+
+Let's look at what [[notangle]] produces with the line directives:
+
+\begin{frame}[fragile]
+\begin{activity}\label{TangleWithL}
+  What do you think the [[-L]] flag does?
+  Why would we want line directives in the generated Java files?
+\end{activity}
+\end{frame}
+
+\section{Line Number Translation in Java}
+
+\ltnote{%
+  This is a critical practical aspect. We create contrast between C++ (which
+  has built-in [[#line]] support) and Java (which requires external tools).
+  This helps students understand that literate programming tools must adapt to
+  different language ecosystems.
+}%
+
+Unlike C++, Java doesn't support [[#line]] preprocessor directives.
+So how do we get error messages that point to the correct line in our
+[[.nw]] file?
+
+\begin{frame}[fragile]
+Let's introduce an error to see how this works.
+We'll create a version with a missing method:
+<<DocumentFactory2.java>>=
+public class DocumentFactory2 {
+  public Document createDocument(String type) {
+    return new PDFDocument();
+  }
+
+  public void brokenMethod() {
+    undefinedMethod();
+  }
+}
+@
+\end{frame}
+
+\subsection{Without Line Directives}
+
+\begin{frame}[fragile]
+First, let's tangle without the [[-L]] flag:
+\begin{pycode}
+didactic_shell("notangle -RDocumentFactory2.java factory.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+
+If we compile this, we get:
+\begin{frame}[fragile]
+\begin{pycode}
+didactic_shell("javac DocumentFactory2.java 2>&1",
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+\ltnote{%
+  The error points to [[DocumentFactory2.java]] line 7. But we want it to
+  point to our \noweb{} source! This motivates the need for line number
+  translation.
+}%
+
+\subsection{With Line Directives and noerr}
+
+\begin{frame}[fragile]
+Now let's tangle with line directives:
+\begin{pycode}
+didactic_shell("notangle -L'//line %L \"%F\"%N' -RDocumentFactory2.java factory.nw",
+               shell=True, lang="java")
+\end{pycode}
+\end{frame}
+
+Notice the [[//line]] comments!
+These tell [[noerr]] how to map line numbers back to the source.
+
+\begin{frame}[fragile]
+Now when we compile and filter through [[noerr]]:
+\begin{pycode}
+didactic_shell("""
+notangle -L'//line %L \"%F\"%N' -RDocumentFactory2.java factory.nw > DocumentFactory3.java;
+javac DocumentFactory3.java 2>&1 | noerr -L'//line %L \"%F\"%N'
+               """,
+               shell=True, minted_opts="numbers=none")
+\end{pycode}
+\end{frame}
+
+\ltnote{%
+  Now the error correctly points to [[factory.nw]]! This is the payoff:
+  students can work with the literate source and still get meaningful error
+  messages. The contrast between with/without [[noerr]] helps them discern
+  why this tooling is essential.
+}%
+
+\begin{frame}
+\begin{activity}\label{TestErrors}
+  Try introducing your own errors in the code and observe how the error
+  messages change with and without the line directives.
+  This will help you understand the workflow.
+\end{activity}
+\end{frame}
+
+\section{Testing with JUnit}
+
+\ltnote{%
+  We add testing to show best practices in literate programming: tests should
+  be included in the literate source, close to the code they test. This makes
+  the connection between code and correctness explicit.
+}%
+
+Good code includes tests.
+Let's write JUnit tests for our factory:
+
+\begin{frame}[fragile]
+<<DocumentFactoryTest.java>>=
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class DocumentFactoryTest {
+  <<test factory creates correct types>>
+  <<test factory throws exception for unknown type>>
+}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<test factory creates correct types>>=
+@Test
+public void testCreatePDF() {
+  DocumentFactory factory = new DocumentFactory();
+  Document doc = factory.createDocument("PDF");
+  assertTrue(doc instanceof PDFDocument);
+}
+
+@Test
+public void testCreateWord() {
+  DocumentFactory factory = new DocumentFactory();
+  Document doc = factory.createDocument("WORD");
+  assertTrue(doc instanceof WordDocument);
+}
+
+@Test
+public void testCreateText() {
+  DocumentFactory factory = new DocumentFactory();
+  Document doc = factory.createDocument("TEXT");
+  assertTrue(doc instanceof TextDocument);
+}
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<test factory throws exception for unknown type>>=
+@Test(expected = IllegalArgumentException.class)
+public void testUnknownType() {
+  DocumentFactory factory = new DocumentFactory();
+  factory.createDocument("UNKNOWN");
+}
+@
+\end{frame}
+
+\subsection{Building and Running Tests}
+
+\begin{frame}[fragile]
+<<factory build rules>>=
+DocumentFactoryTest.class: DocumentFactory.class Document.class
+DocumentFactoryTest.class: PDFDocument.class WordDocument.class TextDocument.class
+
+.PHONY: test-factory
+test-factory: DocumentFactoryTest.class
+	java org.junit.runner.JUnitCore DocumentFactoryTest
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<factory targets to build>>=
+all: DocumentFactoryTest.class
+@
+\end{frame}
+
+\begin{frame}
+\begin{activity}\label{RunTests}
+  Build and run the tests with [[make test-factory]].
+  Then try modifying the factory to return the wrong type for one case and
+  see the test fail.
+\end{activity}
+\end{frame}
+
+\ltnote{%
+  This activity helps students understand the value of tests: they provide
+  quick feedback when changes break expected behavior. The try-first approach
+  (break it, see it fail) is more memorable than just seeing tests pass.
+}%
+
+\section{The Complete Makefile}
+
+Here's the complete [[factory.mk]] file that ties everything together:
+
+\begin{frame}[fragile]
+\inputminted{make}{factory.mk}
+\end{frame}
+
+\section{Extending the Pattern}
+
+\ltnote{%
+  We end with generalization: showing how the same pattern applies to other
+  contexts. This helps students abstract the pattern beyond this specific
+  example.
+}%
+
+\begin{frame}
+\begin{activity}\label{OtherFactories}
+  Think of other situations where the Factory Pattern would be useful.
+  Consider:
+  \begin{itemize}
+  \item Database connections (MySQL, PostgreSQL, SQLite)
+  \item UI components (Button, TextField, Label for different platforms)
+  \item Parsers (JSON, XML, YAML)
+  \end{itemize}
+  What do these situations have in common?
+\end{activity}
+\end{frame}
+
+\ltnote{%
+  This final activity promotes generalization: varying the specific domain
+  while keeping the pattern invariant. Students should discern that the
+  Factory Pattern applies when you need to create objects from a family of
+  related types without coupling to concrete classes.
+}%
+
+\section{Summary}
+
+You've learned:
+\begin{enumerate}
+\item How to write Java programs using literate programming with \noweb{}
+\item How to organize code in psychological order, not compiler order
+\item How to compile Java from \noweb{} sources using Make
+\item How to translate error messages back to the source using [[noerr]]
+\item How the Factory Pattern promotes loose coupling and extensibility
+\item How to include tests in your literate programs
+\end{enumerate}
+
+\begin{frame}
+\begin{activity}\label{NextSteps}
+  Now try writing your own literate Java program implementing a different
+  design pattern, such as Strategy or Observer.
+  Use this tutorial as a template for your build system.
+\end{activity}
+\end{frame}
+
+\mode<presentation>{\endinput}
