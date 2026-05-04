@@ -100,8 +100,8 @@ Insertion Sort.
 <<[[sorted]] docstring>>=
 <<describe [[sorted]] arguments and return values>>
 
-This function uses the Intro Sort algorithm to sort the input list, instead of 
-MergeSort as the built-in `sorted` function.
+This function uses the Intro Sort algorithm to sort the input list,
+instead of TimSort as the built-in `sorted` function.
 @
 \end{frame}
 
@@ -1000,3 +1000,15 @@ endef
 
 All in all, the [[Makefile]] in the [[/tests]] directory looks like this.
 \inputminted{make}{tests_Makefile}
+
+
+\section{Final reflection}
+
+\begin{frame}[fragile]
+  \begin{activity}[Final reflection]
+    Translate the program in this chapter into another language of your choice, 
+    for example Java, C++, or Rust.
+    Try to do it without looking too much at how we did it in this chapter.
+    Compare when you're done.
+  \end{activity}
+\end{frame}
