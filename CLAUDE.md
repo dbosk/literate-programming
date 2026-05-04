@@ -26,7 +26,8 @@ make -C src lpbook.pdf
 make -C src lpbook-teachers.pdf
 make -C src slides.pdf
 
-# Create a release and publish to GitHub
+# Create a release and publish to GitHub.
+# NOTE: this also runs `git push --all -u` and creates a `gh release`.
 make publish
 ```
 
@@ -57,11 +58,26 @@ Literate programming source files that combine documentation and code. Structure
 
 **IMPORTANT**: Do not manually edit `.tex` or `.py` files that are generated from `.nw` files. Always edit the source `.nw` file instead.
 
+The `.nw` examples in `src/` each demonstrate a different facet of literate
+programming:
+- `cppjava.nw` — same `Fraction` example tangled to both C++ and Java
+- `doctest.nw` — Python doctest-style literate tests
+- `fib.nw` — small first example (Fibonacci)
+- `introsort.nw` — only example with extracted `pytest` tests (`test_introsort.py`)
+- `merge.nw` — shell-script tangling
+- `noweb.mk.nw` — literate version of the project's own makefile rules
+- `whatis.nw` — narrative chapter on what literate programming is
+
+A second self-contained example lives in `tutorial-java/Fraction.nw` (with
+JUnit) and is built independently from its own Makefile.
+
 ### .tex Files
 LaTeX document sources. Key files:
 - `src/lpbook.tex`: Main book manuscript
 - `src/lpbook-teachers.tex`: Teacher's edition with additional content
-- `src/slides.tex`: Presentation slides
+- `src/slides-intro.tex`: Presentation slides (renamed from `slides.tex` in
+  commit `06f9ea8`; the `src/Makefile` target `slides.pdf: slides.tex` is
+  currently out of date)
 - `src/preamble.tex`: LaTeX package imports and configuration
 - `src/contents.tex`: Table of contents structure
 
@@ -73,10 +89,12 @@ LaTeX document sources. Key files:
 │   ├── *.tex              # LaTeX document sources
 │   ├── figs/              # Figure assets
 │   └── Makefile           # Build configuration for documents
+├── tutorial-java/         # Self-contained Java/JUnit Noweb example (Fraction.nw)
 ├── makefiles/             # Git submodule with custom build system makefiles
 ├── didactic/              # Git submodule: LaTeX package for typesetting educational material
 ├── weblogin/              # Git submodule: Python package written using literate programming (used as example)
-└── python/                # Python virtual environment (ignored in git)
+├── requirements.txt       # Python deps (weblogin, Pygments, lxml, requests, …)
+└── python/                # Python virtual environment populated from requirements.txt (ignored in git)
 ```
 
 ## Noweb Workflow
@@ -158,97 +176,51 @@ The makefiles provide standard targets:
 
 ## Adding New Content
 
-### Adding a New Noweb Example
-1. Create `src/example.nw` with literate documentation and code
-2. Update `src/Makefile` to add dependencies:
-   ```makefile
-   SRC+=  example.tex example.py
-   example.py: example.nw
-       ${NOTANGLE}
-   ```
-3. Test compilation: `make -C src example.py`
-4. If adding tests, update the `test` target
+To add a new Noweb example, declare it in `src/Makefile` next to the
+existing entries — see the `${NOTANGLE}` and `${NOTANGLE.cxx}` rules
+(e.g. how `Fraction2.java` and `fracexample2.cpp` are derived from
+`cppjava.nw`, and how `test_introsort.py` is extracted from `introsort.nw`)
+for the canonical pattern.
 
-### Adding LaTeX Content
-1. Create or modify `.tex` files in `src/`
-2. Use `\input{filename}` to include in main documents (without .tex extension)
-3. Update main document files (lpbook.tex, slides.tex) to reference new content
-4. Test: `make -C src lpbook.pdf`
-
-### Adding Figures
-1. Place source files in `src/figs/`
-2. Update `src/figs/Makefile` if figure needs processing
-3. Reference with `\includegraphics{figs/filename}`
-4. Use vector formats (PDF, SVG) when possible
-
-### Adding Citations
-1. Add BibTeX entry to `src/bibliography.bib`
-2. Use `\cite{key}` or `\textcite{key}` in LaTeX sources
-3. Include DOI and URL when available
+Figures live in `src/figs/` and are built by `src/figs/Makefile`; reference
+them via `\includegraphics{figs/filename}`. Bibliography entries go in
+`src/bibliography.bib` and are cited with `\cite{}` / `\textcite{}`.
 
 ## Code Conventions
 
 ### LaTeX Conventions
-- Break lines at 80 columns
 - Use `\input{}` for modular organization (not `\include{}`)
 - Use semantic markup over presentational
-- Maintain consistent bibliography style (author-year)
+- Bibliography style: author-year
 
 ### Noweb Conventions
-- Document all code chunks with clear explanations
+- Document all code chunks with clear explanations — explain the *why*
 - Use meaningful chunk names that describe functionality
-- Explain the "why" in documentation, not just the "what"
-- Keep documentation and code synchronized
 - Even simple chunks should be explained
-
-### File Organization
-- All LaTeX sections should be broken into separate files and included via `\input{}`
-- Keep source files in `src/` directory
-- Figures and assets in appropriate subdirectories
-- Use descriptive filenames
 
 ## Dependencies
 
 Required tools:
 - LaTeX distribution (TeXLive recommended)
-- Noweb tools (`apt-get install noweb` on Debian/Ubuntu)
+- Noweb tools (`apt-get install noweb` on Debian/Ubuntu) — provides
+  `notangle`, `noweave`, and `cpif`
 - GNU Make
-- Python 3.x with pytest and black
+- Python 3.x with `pytest` and `black`; install Python deps with
+  `pip install -r requirements.txt`
 - Git with submodule support
-- `cpif` utility (comes with Noweb)
 
 ### Submodules
-Initialize submodules after cloning:
+Initialize submodules after cloning (or if `makefiles/`, `didactic/`, or
+`weblogin/` appear empty):
 ```bash
 git submodule update --init --recursive
 ```
 
-## Common Issues
+## Project-specific gotchas
 
-### LaTeX Errors
-- **Shell escape errors**: Ensure `-shell-escape` flag is used (already configured in Makefiles)
-- **Citation undefined**: Run LaTeX twice, or check `bibliography.bib`
-- **File not found**: Check file paths and Makefile dependencies
-
-### Noweb Errors
-- **Chunk not defined**: Ensure all referenced chunks (e.g., `<<chunk name>>`) are defined somewhere
-- **Tangling errors**: Check chunk syntax: `<<chunk name>>=` starts a definition, `@` ends it
-
-### Git Submodule Issues
-If makefiles or didactic directories are empty:
-```bash
-git submodule update --init --recursive
-```
-
-## Academic Context
-
-This is an educational/research project focused on:
-- Literature survey on literate programming
-- Demonstrating literate programming techniques using Noweb
-- Teaching software development methodologies
-- Academic paper and book preparation
-
-### Citation and Attribution
-- Always cite sources properly using BibTeX
-- Include version numbers and dates for software tools
-- Test all code examples to ensure they work as documented
+- **Chunk not defined / tangling errors**: every `<<name>>` reference must
+  have a matching `<<name>>=` definition; chunks end with a lone `@` on its
+  own line.
+- **`slides.pdf` target is currently broken**: `src/Makefile` references
+  `slides.tex`, but the source has been renamed to `slides-intro.tex`
+  (see issue #40).
