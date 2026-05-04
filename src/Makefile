@@ -1,5 +1,5 @@
 .PHONY: all
-all: lpbook.pdf lpbook-teachers.pdf slides.pdf
+all: lpbook.pdf lpbook-teachers.pdf slides-intro.pdf slides-tutorial-java.pdf
 
 LATEXFLAGS+=	-shell-escape
 
@@ -14,6 +14,7 @@ SRC+=		test_introsort.py
 SRC+=		tests_Makefile
 SRC+=		cppjava.tex noweb.tex
 SRC+=		gdb.tex
+SRC+=		factory.tex
 
 FIGS+=		figs/pbr.png figs/pbrcover.jpg
 FIGS+=		figs/jupyter-lab.png figs/jupyter-notebook.png
@@ -25,6 +26,9 @@ SRC+=		fracexample2.cpp
 
 DEPENDS+=	FracExample.class
 SRC+=		Fraction2.java
+
+DEPENDS+=	DocumentExample.class DocumentFactoryTest.class
+SRC+=		DocumentFactory2.java
 
 SRC+=		weblogin.tex
 SRC+=		../weblogin/doc/contents.tex
@@ -38,14 +42,20 @@ fracexample2.cpp: cppjava.nw
 Fraction2.java: cppjava.nw
 	${NOTANGLE}
 
+DocumentFactory2.java: factory.nw
+	${NOTANGLE}
+
 lpbook.pdf: lpbook.tex didactic.sty
 lpbook.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 lpbook-teachers.pdf: lpbook-teachers.tex didactic.sty
 lpbook-teachers.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
-slides.pdf: slides.tex didactic.sty
-slides.pdf: ${SRC} ${FIGS} ${DEPENDS}
+slides-intro.pdf: slides-intro.tex didactic.sty
+slides-intro.pdf: ${SRC} ${FIGS} ${DEPENDS}
+
+slides-tutorial-java.pdf: slides-tutorial-java.tex didactic.sty
+slides-tutorial-java.pdf: ${SRC} ${FIGS} ${DEPENDS}
 
 ${FIGS}::
 	${MAKE} -C $(dir $@) $(notdir $@)
@@ -66,7 +76,7 @@ test_introsort.py: introsort.nw
 
 .PHONY: clean
 clean:
-	${RM} lpbook.pdf lpbook-teachers.pdf slides.pdf
+	${RM} lpbook.pdf lpbook-teachers.pdf slides-intro.pdf slides-tutorial-java.pdf
 	${RM} merge.tex merge.sh
 	${RM} merge.aux merge.fdb_latexmk merge.fls merge.log
 	${RM} introsort.py introsort.tex
@@ -82,7 +92,11 @@ clean:
 frac.mk: cppjava.nw
 	${NOTANGLE.mk}
 
+factory.mk: factory.nw
+	${NOTANGLE.mk}
+
 include frac.mk
+include factory.mk
 
 INCLUDE_MAKEFILES=../makefiles
 include ${INCLUDE_MAKEFILES}/tex.mk
