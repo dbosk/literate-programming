@@ -1,0 +1,248 @@
+\title{En klass för bråk i Java}
+\author{%
+  Daniel Bosk\thanks{%
+    Med viktiga bidrag från GitHub Copilot.
+    Denna fil är licensierad under MIT-licensen, se slutet.
+  } och prutt25-studenterna
+}
+
+\maketitle
+\tableofcontents
+
+\section{Introduktion}
+
+Vi vill kunna använda bråk precis som vi har heltal i Java.
+För att göra detta skapar vi en klass som heter \texttt{Fraction}.
+Denna klass kommer att representera ett bråk med en täljare och en nämnare.
+Vi kommer också att implementera metoder för att utföra grundläggande 
+operationer med bråk, såsom addition, subtraktion, multiplikation och division.
+
+\subsection{Bygga och kompilera}
+
+Vi vill skriva en byggfil för att använda med GNU Make.
+Vi har en huvudfil [[Makefile]] och vi vill inkludera en fil specifik för 
+klassen som heter [[Fraction.mk]].
+
+Själva Java-filen tanglas från [[Fraction.nw]].
+När vi tanglar Java-koden från den litterära källkoden, så vill vi översätta 
+radnummer så att vi kan använda [[noerr.pl]] för att visa felmeddelanden med 
+korrekta radnummer.
+<<Fraction.mk>>=
+Fraction.java: Fraction.nw
+  notangle -L'//line %L "%F"%N' -RFraction.java Fraction.nw > Fraction.java
+@
+
+Eftersom att klassen ska heta [[Fraction]], så behöver vi kompilera 
+[[Fraction.class]] från [[Fraction.java]].
+Eftersom vi har förberett för [[noerr.pl]], så vill vi även använda detta för 
+att visa felmeddelanden med korrekta radnummer.
+Det vi behöver tänka på är att [[javac]] skriver felmeddelanden till stderr 
+(som sig bör), så vi behöver omdirigera detta till stdout för att kunna använda 
+[[noerr.pl]].
+<<Fraction.mk>>=
+Fraction.class: Fraction.java
+  javac Fraction.java 2>&1 | noerr.pl -L'//line %L "%F"%N'
+@
+
+Vi vill även lägga till [[Fraction.class]] som en beroende till [[all]], så att 
+den alltid byggs när vi kör [[make all]].
+<<Fraction.mk>>=
+all: Fraction.class
+@
+
+Vi vill även städa upp genom att ta bort de kompilerade klassfilerna
+och allt annat som genererats.
+<<Fraction.mk>>=
+clean: clean-Fraction
+clean-Fraction:
+  rm -f Fraction.tex Fraction.aux Fraction.class Fraction.java Fraction.log
+  rm -f Fraction.mk Fraction.pdf Fraction.toc
+@
+
+
+\section{Tester}
+
+Vi vill testa klassen [[Fraction]] med JUnit.
+Vi skapar en fil som heter [[FractionTest.java]].
+<<Fraction.mk>>=
+all: FractionTest.class
+
+FractionTest.java: Fraction.nw
+  notangle -L'//line %L "%F"%N' -RFractionTest.java Fraction.nw > FractionTest.java
+
+clean: clean-FractionTest
+clean-FractionTest:
+  rm -f FractionTest.class FractionTest.java
+@
+
+Denna fil kommer att innehålla tester för alla metoder i klassen [[Fraction]].
+Alla tester läggs till som metoder i klassen \texttt{FractionTest}.
+<<FractionTest.java>>=
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class FractionTest {
+  <<FractionTest tests>>
+}
+@
+
+Vi lägger även till mål i byggfilen för att kompilera testerna.
+För detta behöver vi [[junit-4.12.jar]] i klassvägen (class path, [[-cp]]).
+Den å sin sida behöver [[hamcrest-core-1.3.jar]].
+<<Fraction.mk>>=
+FractionTest.class: FractionTest.java Fraction.class
+  javac -cp .:junit-4.12.jar:hamcrest-core-1.3.jar FractionTest.java 2>&1 \
+    | noerr.pl -L'//line %L "%F"%N'
+@ Vi har [[-cp .:junit-4.12.jar:hamcrest-core-1.3.jar]] för att inkludera 
+JUnit-biblioteket vid kompilering.
+Detta kräver att du har JAR-filerna för JUnit i samma katalog som din byggfil.
+Vi kan lägga till ytterligare ett mål för att ladda hem den:
+<<Fraction.mk>>=
+junit-4.12.jar:
+  wget https://search.maven.org/remotecontent?filepath=junit/junit/4.12/junit-4.12.jar \
+    -O junit-4.12.jar
+
+hamcrest-core-1.3.jar:
+  wget https://search.maven.org/remotecontent?filepath=org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar \
+    -O hamcrest-core-1.3.jar
+@ Sedan kan vi lägga till dem som beroenden för kompilering:
+<<Fraction.mk>>=
+FractionTest.class: junit-4.12.jar hamcrest-core-1.3.jar
+@
+
+Vi vill även städa bort dessa.
+Men då vi laddar hem dem är det snällare mot servrarna om vi inte städar bort 
+dem i onödan varje gång.
+Så vi skapar ett separat mål för att städa bort dem, som vi explicit måste 
+köra.
+<<Fraction.mk>>=
+clean-jars:
+  rm -f junit-4.12.jar hamcrest-core-1.3.jar
+@
+
+Vi lägger även till ett mål för att köra testerna.
+<<Fraction.mk>>=
+test: FractionTest.class junit-4.12.jar hamcrest-core-1.3.jar
+  java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar \
+    org.junit.runner.JUnitCore FractionTest
+@ Detta mål kör JUnit-testklassen och rapporterar resultaten i terminalen.
+
+
+\section{Klassen Fraction}
+
+Filen [[Fraction.java]] innehåller definitionen av klassen \texttt{Fraction}.
+Översiktligt ser den ut så här:
+<<Fraction.java>>=
+public class Fraction {
+  <<Fraction attributes>>
+  <<Fraction methods>>
+}
+@
+
+Vi vill testa först och implementera sedan.
+I sann testdriven anda.
+
+
+\section{Konstruktor}
+
+Vi skapar en konstruktor för klassen \texttt{Fraction} som initierar alla 
+attribut.
+Vi vill kunna skapa ett bråk genom att ange täljare och nämnare.
+Vi vill även kunna skapa ett bråk från en sträng som representerar bråket.
+
+Vi vill att klassen \texttt{Fraction} ska ha två attribut: \texttt{numerator} 
+och \texttt{denominator}.
+Dessa attribut ska vara privata för att skydda dem från direkt åtkomst
+utanför klassen.
+Vi skapar också en konstruktor för att initiera dessa attribut.
+<<Fraction attributes>>=
+private int numerator;
+private int denominator;
+@
+
+Testerna först, vi vill kunna skapa objekt på följande sätt:
+<<FractionTest tests>>=
+@@Test
+public void testConstructorWithIntegers() {
+    Fraction frac = new Fraction(3, 4);
+}
+
+@@Test
+public void testConstructorWithString() {
+    Fraction frac = new Fraction("5/6");
+}
+@
+
+Konstruktorerna sätter bara attributen:
+<<Fraction methods>>=
+public Fraction(int numerator, int denominator) {
+    this.numerator = numerator;
+    this.denominator = denominator;
+}
+
+public Fraction(String fraction) {
+    String[] parts = fraction.split("/");
+    this.numerator = Integer.parseInt(parts[0]);
+    this.denominator = Integer.parseInt(parts[1]);
+}
+@
+
+
+\section{Getters för attributen}
+
+Vi vill ha getters för attributen.
+Vi vill däremot inte ha några setters, eftersom att bråk är oföränderliga 
+objekt.
+Vill vi ha en annan täljare, då skapar vi ett nytt bråk.
+<<FractionTest tests>>=
+@@Test
+public void testGetNumerator() {
+    Fraction frac = new Fraction(3, 4);
+    assertEquals(3, frac.getNumerator());
+}
+
+@@Test
+public void testGetDenominator() {
+    Fraction frac = new Fraction(3, 4);
+    assertEquals(4, frac.getDenominator());
+}
+@
+
+Vi kan implementera våra getters genom att bara returnera attributen.
+Vi behöver inte skapa någon kopia då attributen är av primitiv typ (int).
+<<Fraction methods>>=
+public int getNumerator() {
+    return this.numerator;
+}
+
+public int getDenominator() {
+    return this.denominator;
+}
+@
+
+
+\section*{Licens}
+
+Denna fil är licensierad under MIT-licensen:
+\begin{quote}
+MIT License
+
+Copyright (c) 2025 Daniel Bosk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+\end{quote}

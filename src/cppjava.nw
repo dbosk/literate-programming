@@ -884,13 +884,21 @@ NOTANGLE.java=notangle -L'//line %L "%F"%N' -R$@ $< \
 
 \begin{frame}[fragile]
 Now let's turn to the [[COMPILE.java]] variable.
-As with other such variables, we'll use [[JAVAC]] and [[JAVACFLAGS]] to specify 
+As with other such variables, we'll use [[JAVAC]] and [[JAVACFLAGS]] to specify
 the compiler and its flags.
 We add the corresponding [[-L]] flag to [[noerr.pl]] in [[JAVACEXTRAS]].
+
+However, there is one important detail we must consider:
+[[javac]] writes error messages to stderr (as it should), but [[noerr.pl]] reads
+from stdin via the pipe.
+Since the pipe operator [[|]] only redirects stdout by default, we need to use
+[[2>&1]] to redirect stderr to stdout.
+This ensures that error messages flow through the pipe to [[noerr.pl]] for
+proper line number translation.
 <<frac variable definitions>>=
 JAVAC=        javac
 JAVACFLAGS=
-JAVACEXTRAS=  | noerr.pl -L'//line %L \"%F\"%N'
+JAVACEXTRAS=  2>&1 | noerr.pl -L'//line %L \"%F\"%N'
 COMPILE.java= ${JAVAC} ${JAVACFLAGS} $< ${JAVACEXTRAS}
 @
 \end{frame}
