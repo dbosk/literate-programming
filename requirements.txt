@@ -5,5 +5,5 @@ lxml==6.1.0
 Pygments==2.19.2
 PySnooper==1.2.3
 requests==2.33.0
-urllib3==2.6.3
+urllib3==2.7.0
 weblogin==1.11
