@@ -42,24 +42,6 @@ Let's start off with some thinking.
 \end{frame}
 
 Now that you have heard the term, you must learn what it means.
-We'll see afterwards how you feel about it.
-As Knuth says:
-\begin{frame}
-\ltnote{%
-  While this quote doesn't contribute to learning in a variation theoretic 
-  sense, it adds a sense of humor to the presentation.
-  That might help in keeping the students engaged.
-}%
-\blockcquote{Knuth1984}{%
-  I must confess that there may also be a bit of malice in my choice of a 
-  title. During the 1970s I was coerced like everybody else into adopting the 
-  ideas of structured programming, because I couldn’t bear to be found guilty 
-  of writing unstructured programs. Now I have a chance to get even. By coining 
-  the phrase \enquote{literate programming,} I am imposing a moral commitment 
-  on everyone who hears the term; surely nobody wants to admit writing an 
-  illiterate program.%
-}
-\end{frame}
 
 \section{Motivation}
 
@@ -110,14 +92,12 @@ So we can summarize the goals of literate programming as follows:
 
 There are some more fun and interesting quotes in Knuth's paper.
 The following are also worth mentioning:
-\begin{frame}
 \blockcquote{Knuth1984}{%
   I’ve stumbled across a method of composing programs that excites me
   very much. In fact, my enthusiasm is so great that I must warn the reader to 
   discount much of what I shall say as the ravings of a fanatic who thinks he 
   has just seen a great light.%
 }
-\end{frame}
 
 But Knuth is convinced that this works well:
 \blockcquote{Knuth1984}{%
@@ -200,13 +180,13 @@ computer.
   \input{fib.tex}
 \end{onlyenv}
 \ltnote{%
-  \Cref{ReadFooBar} serves two purposes.
+  \Cref{ReadFib} serves two purposes.
   First, it will let the students try to figure out of the \noweb{} (and 
   \web-based languages) syntax works.
   Second, we'll get data on how well people can read the literate programming 
   syntax without being taught how it works.
 }%
-\begin{activity}\label{ReadFooBar}
+\begin{activity}\label{ReadFib}
   What you expect this program ([[fib.py]]) to output?
   Is it correct?
 \end{activity}
@@ -635,6 +615,33 @@ Knuth's \cweb (what you see in \cref{web}), but not for \noweb.
   GNU Make
 \end{center}
 \end{frame}
+
+
+\subsection{Why the name?}
+
+\ltnote{%
+  While this quote doesn't contribute to learning in a variation theoretic 
+  sense, it adds a sense of humor to the presentation.
+  That might help in keeping the students engaged.
+}%
+Considering the goals, the name literate programming is quite fitting.
+Literature is written for humans to read, as is code in this paradigm.
+But it also has historical reasons, as Knuth said:
+\blockcquote{Knuth1984}{%
+  I must confess that there may also be a bit of malice in my choice of a 
+  title. During the 1970s I was coerced like everybody else into adopting the 
+  ideas of structured programming, because I couldn’t bear to be found guilty 
+  of writing unstructured programs. Now I have a chance to get even. By coining 
+  the phrase \enquote{literate programming,} I am imposing a moral commitment 
+  on everyone who hears the term; surely nobody wants to admit writing an 
+  illiterate program.%
+}
+
+Now that you've heard the term, you're, of course, morally obliged to not write 
+illiterate programs any more.
+(However, it turns out that literate programs are good for agentic development 
+using AI agents as well.)
+
 
 
 \section{Famous literate programs}
