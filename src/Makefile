@@ -3,6 +3,32 @@ all: lpbook.pdf lpbook-teachers.pdf slides-intro.pdf slides-tutorial-java.pdf
 
 LATEXFLAGS+=	-shell-escape
 
+TEX_PYTHONTEX=	yes
+
+# The makefiles submodule is pinned for its PythonTeX fix (dbosk/makefiles#92),
+# which is only on the tominted-default-weave branch.  The rest of that branch
+# does not apply here.  Its weave needs features that are not in upstream noweb
+# (tominted, -autolang), so we keep the classic flags.  Its tangling looks for
+# roots named <<[[fib.py]]>>, whereas our roots are <<fib.py>>; those names are
+# what the text teaches (notangle -Rfib.py), so we keep them.  Move the pin to
+# master and remove these overrides as far as possible once the fix has landed.
+NOWEAVEFLAGS.tex=	${NOWEAVEFLAGS} -x -n -delay -t2
+NOWEAVEFLAGS.pdf=	${NOWEAVEFLAGS} -x -t2
+
+NOTANGLE=	notangle ${NOTANGLEFLAGS} -R$(notdir $@) $(filter %.nw,$^) | \
+		  ${CPIF} $@ && noroots $(filter %.nw,$^)
+# Only for our own makefiles: make also remakes the submodule's included
+# tex.mk and noweb.mk with NOTANGLE.mk, and their roots do use the new names.
+frac.mk factory.mk: NOTANGLE.mk=notangle ${NOTANGLEFLAGS.mk} -R$(notdir $@) \
+		  $(filter %.nw,$^) > $@ && noroots $(filter %.nw,$^)
+
+define plain_root_tangling
+NOTANGLE$(1)=	notangle $${NOTANGLEFLAGS$(1)} -R$$(notdir $$@) \
+		  $$(filter %.nw,$$^) | $${CPIF} $$@ && noroots $$(filter %.nw,$$^)
+endef
+$(foreach suffix,.c .cc .cpp .cxx .h .hh .hpp .hxx .hs .py .sty .cls .sh .go,\
+	$(eval $(call plain_root_tangling,${suffix})))
+
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
 SRC+=		whatis.tex related.tex
