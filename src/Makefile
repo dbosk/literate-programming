@@ -3,7 +3,39 @@ all: lpbook.pdf lpbook-teachers.pdf slides-intro.pdf slides-tutorial-java.pdf
 
 LATEXFLAGS+=	-shell-escape
 
+# The polls in whatis.nw and related.tex run in PythonTeX, which must import
+# mentipy from the deck's own venv (made here, never by hand).  The other
+# PythonTeX blocks run in the same interpreter and import weblogin and
+# PySnooper, so the venv gets those too, at the versions of requirements.txt.
+# We can't install from that file: weblogin 1.11 asks for lxml<6, which has no
+# wheel for current Python and doesn't compile, so we install it without its
+# dependencies on top of the lxml 6 that the file pins.
 TEX_PYTHONTEX=	yes
+MENTIPY_VENV=	$(CURDIR)/.venv
+PYTHONTEXFLAGS=	--interpreter python:${MENTIPY_VENV}/bin/python3 --rerun=always
+
+${MENTIPY_VENV}/bin/python3:
+	mentipy init --venv ${MENTIPY_VENV}
+
+MENTIPY_VERSION=	0.17
+MENTIPY_STAMP=	${MENTIPY_VENV}/mentipy-${MENTIPY_VERSION}
+
+# Order-only: the venv must exist, but its timestamp must not trigger an
+# upgrade.  The PythonTeX output goes with the upgrade, since latexmk reruns
+# PythonTeX only when the code changed.
+${MENTIPY_STAMP}: | ${MENTIPY_VENV}/bin/python3
+	${MENTIPY_VENV}/bin/python3 -m pip install \
+		'mentipy>=${MENTIPY_VERSION}' PySnooper==1.2.3 \
+		lxml==6.1.0 requests==2.33.0
+	${MENTIPY_VENV}/bin/python3 -m pip install --no-deps weblogin==1.11
+	${RM} ${TEX_OUTDIR}/*.pytxmcr
+	touch $@
+
+lpbook.pdf lpbook-teachers.pdf: ${MENTIPY_STAMP}
+slides-intro.pdf slides-tutorial-java.pdf: ${MENTIPY_STAMP}
+# mentipy serve rewrites the QR sidecars; the PDFs with polls must follow them.
+lpbook.pdf lpbook-teachers.pdf slides-intro.pdf: \
+	$(wildcard mentipy-obj/Q-*.pdf_tex)
 
 # The makefiles submodule is pinned for its PythonTeX fix (dbosk/makefiles#92),
 # which is only on the tominted-default-weave branch.  The rest of that branch
@@ -113,6 +145,7 @@ clean:
 	${RM} didactic_output_*
 	${RM} didactic_code_*
 	${RM} cppfrac.mk
+	${RM} -R mentipy-obj
 	${MAKE} -C ../weblogin/doc/ clean
 
 frac.mk: cppjava.nw
@@ -129,3 +162,13 @@ include ${INCLUDE_MAKEFILES}/tex.mk
 include ${INCLUDE_MAKEFILES}/noweb.mk
 INCLUDE_DIDACTIC=../didactic
 include ${INCLUDE_DIDACTIC}/didactic.mk
+
+# All jobs share PythonTeX's output (py_default_*) in ltxobj, but latexmk reruns
+# PythonTeX only when the job's own code changed.  Without this, a rebuild typesets
+# the output of whichever job ran last.  With the .pytxmcr gone, latexmk reruns it.
+PYTHONTEX_JOBS=	lpbook.pdf lpbook-teachers.pdf
+PYTHONTEX_JOBS+=	slides-intro.pdf slides-tutorial-java.pdf
+${PYTHONTEX_JOBS}: %.pdf: %.tex ${TEX_DOC_PREREQS}
+	${RM} ${TEX_OUTDIR}/$*.pytxmcr
+	${COMPILE.tex}
+	-${LN} ${TEX_OUTDIR}/$@ $@
