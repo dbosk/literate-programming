@@ -163,12 +163,21 @@ include ${INCLUDE_MAKEFILES}/noweb.mk
 INCLUDE_DIDACTIC=../didactic
 include ${INCLUDE_DIDACTIC}/didactic.mk
 
-# All jobs share PythonTeX's output (py_default_*) in ltxobj, but latexmk reruns
-# PythonTeX only when the job's own code changed.  Without this, a rebuild typesets
-# the output of whichever job ran last.  With the .pytxmcr gone, latexmk reruns it.
+# All jobs share PythonTeX's output files in ltxobj, but latexmk reruns PythonTeX
+# only when the job's own code changed.  Without this, a rebuild typesets the
+# output of whichever job ran last.  So each job keeps its own copy, and puts it
+# back before it builds.  We can't force a rerun instead, because that regenerates
+# the QR codes from mentipy.base_url and so undoes the address that mentipy present
+# just wrote to them.  A job without a copy has no output to trust, so it reruns.
 PYTHONTEX_JOBS=	lpbook.pdf lpbook-teachers.pdf
 PYTHONTEX_JOBS+=	slides-intro.pdf slides-tutorial-java.pdf
+PYTHONTEX_OUTPUT=	${TEX_OUTDIR}/py_default_* ${TEX_OUTDIR}/pythontex_data.pkl
 ${PYTHONTEX_JOBS}: %.pdf: %.tex ${TEX_DOC_PREREQS}
-	${RM} ${TEX_OUTDIR}/$*.pytxmcr
+	${RM} ${PYTHONTEX_OUTPUT}
+	cp -p ${TEX_OUTDIR}/pythontex-$*/* ${TEX_OUTDIR}/ 2>/dev/null || \
+		${RM} ${TEX_OUTDIR}/$*.pytxmcr
 	${COMPILE.tex}
+	${RM} -R ${TEX_OUTDIR}/pythontex-$*
+	mkdir ${TEX_OUTDIR}/pythontex-$*
+	cp -p ${PYTHONTEX_OUTPUT} ${TEX_OUTDIR}/pythontex-$*/
 	-${LN} ${TEX_OUTDIR}/$@ $@

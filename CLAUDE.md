@@ -207,7 +207,7 @@ Required tools:
 - GNU Make
 - Python 3.x with `pytest` and `black`; install Python deps with
   `pip install -r requirements.txt`
-- `mentipy` on `PATH` (`pipx install mentipy`); see "Live polls"
+- `mentipy` on `PATH` (`pipx install 'mentipy[public]'`); see "Live polls"
 - Git with submodule support
 
 ### Submodules
@@ -224,7 +224,7 @@ The activities in `src/whatis.nw` and `src/related.tex` are live
 plain prompts in the books.
 
 - `make -C src` creates the venv `src/.venv` by itself and needs `mentipy` on
-  `PATH` (`pipx install mentipy`). Raise `MENTIPY_VERSION` in `src/Makefile` to
+  `PATH` (`pipx install 'mentipy[public]'`). Raise `MENTIPY_VERSION` in `src/Makefile` to
   upgrade it.
 - `src/mentipy.json` holds the questions and answers and **is tracked**, in a
   public repo. Answers have no identity attached, but a student could type a
@@ -236,16 +236,21 @@ plain prompts in the books.
   `lpbook-teachers`). They share the store, so rebuilding must leave
   `mentipy.json` byte-identical.
 
-Running a lecture, from `src/`:
+Running a lecture, from `src/`, with `mentipy.base_url` on `auto`. Start the
+server first, then recompile in another terminal:
 
-- **Campus** (all IPs are public): `make slides-intro.pdf`, then
-  `mentipy present`.
-- **Home** (UPnP):
-  `mentipy config mentipy.base_url --set http://<public-ip>:8080`, then
-  `make slides-intro.pdf`, then `mentipy present --public`. Afterwards,
-  `mentipy config mentipy.base_url --set auto`.
+- **Campus** (all IPs are public): `mentipy present`, then
+  `make slides-intro.pdf`.
+- **Home** (UPnP): `mentipy present --public upnp`, then
+  `make slides-intro.pdf`.
 - Check the address the PDF will carry:
   `grep -ho 'http[^}]*' mentipy-obj/*.pdf_tex | sort -u`.
+
+`mentipy present` writes its address into the QR files, and `make` rebuilds
+because they are newer. PythonTeX regenerates them from `mentipy.base_url`
+whenever it runs, which is on a job's first build and when its code changes
+(mentipy#67). So after editing a poll: `make slides-intro.pdf`, restart
+`mentipy present`, then `make slides-intro.pdf` again.
 
 ## Project-specific gotchas
 
@@ -255,9 +260,12 @@ Running a lecture, from `src/`:
   not in upstream noweb, and plain `-R<file>` tangling, because our roots are
   `<<fib.py>>`, not `<<[[fib.py]]>>`. Move the pin to `master` when the fix
   lands there.
-- **Jobs share PythonTeX's output in `src/ltxobj/`.** `src/Makefile` removes a
-  job's `.pytxmcr` before each build to force a rerun; without that, a rebuild
-  typesets the output of whichever job ran last.
+- **Jobs share PythonTeX's output in `src/ltxobj/`.** `src/Makefile` keeps a
+  copy per job in `ltxobj/pythontex-<job>/` and restores it before each build;
+  without that, a rebuild typesets the output of whichever job ran last. Don't
+  force a rerun instead, since that resets the QR codes (see "Live polls").
+  PythonTeX reruns only when a job's code changes, so after editing a file that
+  a poll reads, such as `fib.nw`, run `rm ltxobj/*.pytxmcr`.
 - **`make -n -B` is not a dry run here:** it still remakes included makefiles,
   and overwrites `makefiles/tex.mk`.
 
