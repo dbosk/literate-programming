@@ -20,17 +20,26 @@ goals.%
   Compare with the Japanese classrooms discussed in Chapter 6 of 
   \cite{NecessaryConditionsOfLearning}.
 
-  However, we don't ask them to write anything at this point.
+  However, we only ask them for names at this point, as a word cloud, not for
+  any analysis in writing.
   To name them, they still have to think about this.
+  Each name is one entry, so that \enquote{Jupyter notebook} stays together in
+  the cloud.
   Then we'll go through a few in detail.
   Then we can ask them for remaining ones.
 }%
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}\label{NameOtherRelated}
-Do you know of any tools/systems/languages that lets you do something like 
-this?
-Name them.
+\begin{pycode}
+poll(
+    word_cloud,
+    "Do you know of any tools, systems or languages that let you do something "
+    "like this? Name them.",
+    split_words=False,
+    context=LP_GOALS,
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -57,10 +66,14 @@ Probably the first that comes to mind is the Jupyter notebook.
 As you can see in \cref{fig:jupyter}, a notebook consists of text interspersed 
 by code that can be executed (usually to generate graphics).
 
-\begin{frame}<presentation>
+\begin{frame}<presentation>[fragile]
 \begin{activity}\label{AnalyseNotebooks}
-How well do you know the concept of notebooks?
-(Be it Jupyter, Google Colab, or any other similar system.)
+\begin{pycode}
+knowledge_poll(
+    "How well do you know the concept of notebooks? "
+    "(Be it Jupyter, Google Colab, or any other similar system.)"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -107,21 +120,27 @@ global variables).
 \end{remark}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \ltnote{%
-  \Cref{NotebooksFullfilGoals} allows the students to compare notebooks to the 
+  \Cref{NotebooksFullfilGoals} allows the students to compare notebooks to the
   goals of literate programming.
   This is the start of a generalization pattern:
   we keep the goals invariant and vary the systems/tool/approach.
   (We did get the contrast above, in \cref{WhatDoesLPMean}.)
+  The polls use the same scale for every system, so the measure also stays
+  invariant and the results can be compared across systems.
 
-  However, to do this, we'd better explain briefly what the technology or 
+  However, to do this, we'd better explain briefly what the technology or
   system actually is.
   The reader might not know, or have only limited knowledge of it.
 }%
 \only<presentation>{\LPgoals}
 \begin{activity}\label{NotebooksFullfilGoals}
-How well do you think notebooks fulfil the goals of literate programming?
+\begin{pycode}
+goals_poll(
+    "How well do you think notebooks fulfil the goals of literate programming?"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -172,10 +191,14 @@ def sorted(iterable, /, *, key=None, reverse=False):
 \end{minted}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}
-How well do you think docstrings fulfil the goals of literate programming?
+\begin{pycode}
+goals_poll(
+    "How well do you think docstrings fulfil the goals of literate programming?"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -212,9 +235,11 @@ In summary:
 
 Another related concept is rubber duck debugging.
 
-\begin{frame}<presentation>
+\begin{frame}<presentation>[fragile]
 \begin{activity}
-How well do you know rubber duck debugging?
+\begin{pycode}
+knowledge_poll("How well do you know rubber duck debugging?")
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -232,11 +257,15 @@ to find the bug more easily.
 \end{block}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}
-How well do you think rubber duck debugging fulfils the goals of literate 
-programming?
+\begin{pycode}
+goals_poll(
+    "How well do you think rubber duck debugging fulfils the goals of "
+    "literate programming?"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -329,11 +358,15 @@ So it's again lost to others, including the programmers' future selves.
 We can also document meaning in the version management system, as commit 
 messages and notes in issues and pull requests.
 
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}
-How well do you think documentation in version management systems fulfil the 
-goals of literate programming?
+\begin{pycode}
+goals_poll(
+    "How well do you think documentation in version management systems "
+    "fulfils the goals of literate programming?"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -372,10 +405,15 @@ than humans.
 
 The last one that we'll cover is pseudocode.
 
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}
-How well do you think pseudocode fulfils the goals of literate programming?
+\begin{pycode}
+goals_poll(
+    "How well do you think pseudocode fulfils the goals of literate "
+    "programming?"
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -432,12 +470,19 @@ This covered only some of the related concepts.
   Now we give them the chance to provide us with the complemented analyses from 
   before, for the systems that we didn't cover.
 }%
-\begin{frame}
+\begin{frame}[fragile]
 \only<presentation>{\LPgoals}
 \begin{activity}
-Do you know of any other tools/systems/languages/techniques that let you do 
-something like this?
-Name them and discuss how well they fulfil the goals.
+\begin{pycode}
+poll(
+    open_text,
+    "Do you know of any other tools, systems, languages or techniques that "
+    "let you do something like this? Name them and discuss how well they "
+    "fulfil the goals.",
+    context=LP_GOALS,
+    next=False,
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 

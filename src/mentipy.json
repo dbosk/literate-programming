@@ -1,0 +1,353 @@
+{
+  "questions": {
+    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": {
+      "kind": "mc",
+      "text": "Have you ever heard of or do you know literate programming?",
+      "options": [
+        "I have never heard of it",
+        "I have heard of it",
+        "I know it"
+      ],
+      "multi": false,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "63fd",
+      "registration_serial": 1,
+      "registered_after": null,
+      "qr_paths": [
+        "mentipy-obj/Q-63fd.png"
+      ],
+      "locale": "en"
+    },
+    "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e": {
+      "kind": "open",
+      "text": "What do you think literate programming means?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": false,
+      "context": [],
+      "url_prefix": "e4ba",
+      "registration_serial": 2,
+      "registered_after": "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772",
+      "qr_paths": [
+        "mentipy-obj/Q-e4ba.png"
+      ],
+      "locale": "en"
+    },
+    "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd": {
+      "kind": "open",
+      "text": "What do you expect this program (`fib.py`) to output? Is it correct?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "% small noweb example\nThis is a small literate program to illustrate how literate programming differs \nfrom \\enquote{illiterate} programming.\n<<module docstring>>=\nThis is a module for computing Fibonacci sequences.\n@\n\nIts computer-readable source is named [[fib.py]] and has the standard Python \nformat.\n<<fib.py>>=\n\"\"\"\n<<module docstring>>\n\"\"\"\n\n<<module functions>>\n\ndef tests():\n  \"\"\"\n  Run some tests to verify that the Fibonacci function works.\n  \"\"\"\n  <<test code>>\n\nif __name__ == \"__main__\":\n  tests()\n@\n\nWe only provide one function in this simple example.\n<<module functions>>=\ndef fib(n):\n  \"\"\"\n  Compute the Fibonacci number of n.\n  \"\"\"\n  <<check [[n]] for the base case>>\n  return fib(n-1) + fib(n-2)\n@\n\nWe see that for \\(n\\) we must have already computed the Fibonacci numbers for \n\\(n-1\\) and \\(n-2\\).\nThis gives our base case:\n<<check [[n]] for the base case>>=\nif n < 0:\n  raise ValueError(\"n must be non-negative\")\nelif n == 0:\n  return 0\nelif n == 1:\n  return 1\n@\n\nNow we can test run the function to see that it works properly.\n<<test code>>=\nfor i in range(5):\n  print(f\"{fib(i)=}\")\n",
+          "language": "text",
+          "label": "fib.nw",
+          "html": null
+        }
+      ],
+      "url_prefix": "4a28",
+      "registration_serial": 3,
+      "registered_after": "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e",
+      "qr_paths": [
+        "mentipy-obj/Q-4a28.png"
+      ],
+      "locale": "en"
+    },
+    "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9": {
+      "kind": "open",
+      "text": "Why does literate programming fulfil these goals?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "77e3",
+      "registration_serial": 4,
+      "registered_after": "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd",
+      "qr_paths": [
+        "mentipy-obj/Q-77e3.png"
+      ],
+      "locale": "en"
+    },
+    "9d7488db75131275a0e2bc0844f7d44ad68493a42b5b23a54211fef1a0d69c68": {
+      "kind": "open",
+      "text": "How would you summarize literate programming for someone who doesn't know what it is?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "9d74",
+      "registration_serial": 5,
+      "registered_after": "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9",
+      "qr_paths": [
+        "mentipy-obj/Q-9d74.png"
+      ],
+      "locale": "en"
+    },
+    "e5d8a9feb8531ca432295cabdb62f6a9c8d9356009d298601be810fdc5d6cc0c": {
+      "kind": "wordcloud",
+      "text": "Do you know of any tools, systems or languages that let you do something like this? Name them.",
+      "max_chars": 280,
+      "split_words": false,
+      "separators": null,
+      "min_word_length": 3,
+      "extra_stop_words": [],
+      "use_default_stopwords": true,
+      "render": "svg",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "e5d8",
+      "registration_serial": 6,
+      "registered_after": "9d7488db75131275a0e2bc0844f7d44ad68493a42b5b23a54211fef1a0d69c68",
+      "qr_paths": [
+        "mentipy-obj/Q-e5d8.png"
+      ],
+      "locale": "en"
+    },
+    "9ddd6756c46b7a33307d0e03e11734b08f10f9235b82ae1448f989e1b56bcbf0": {
+      "kind": "scale",
+      "text": "How well do you know the concept of notebooks? (Be it Jupyter, Google Colab, or any other similar system.)",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Very well",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "9ddd",
+      "registration_serial": 7,
+      "registered_after": "e5d8a9feb8531ca432295cabdb62f6a9c8d9356009d298601be810fdc5d6cc0c",
+      "qr_paths": [
+        "mentipy-obj/Q-9ddd.png"
+      ],
+      "locale": "en"
+    },
+    "c8abdabb5595d91bc1533d4bbab52f3ac239b2fb602d7ffdc2c96b6d6f7efeda": {
+      "kind": "scale",
+      "text": "How well do you think notebooks fulfil the goals of literate programming?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Completely",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "c8ab",
+      "registration_serial": 8,
+      "registered_after": "9ddd6756c46b7a33307d0e03e11734b08f10f9235b82ae1448f989e1b56bcbf0",
+      "qr_paths": [
+        "mentipy-obj/Q-c8ab.png"
+      ],
+      "locale": "en"
+    },
+    "0fa8529d43ca26fbef717206aa5d0f256bea27ee48ddd45f43a68c4ce38de4bd": {
+      "kind": "scale",
+      "text": "How well do you think docstrings fulfil the goals of literate programming?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Completely",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "0fa8",
+      "registration_serial": 9,
+      "registered_after": "c8abdabb5595d91bc1533d4bbab52f3ac239b2fb602d7ffdc2c96b6d6f7efeda",
+      "qr_paths": [
+        "mentipy-obj/Q-0fa8.png"
+      ],
+      "locale": "en"
+    },
+    "0c1a284108257b015676a20e610be6b410c0a7971073ce3bb2134e80052e6ed5": {
+      "kind": "scale",
+      "text": "How well do you know rubber duck debugging?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Very well",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "0c1a",
+      "registration_serial": 10,
+      "registered_after": "0fa8529d43ca26fbef717206aa5d0f256bea27ee48ddd45f43a68c4ce38de4bd",
+      "qr_paths": [
+        "mentipy-obj/Q-0c1a.png"
+      ],
+      "locale": "en"
+    },
+    "8d09d641d465bc6f22fbd7eaaa515cb3263f765fe16bd471b3b3f31b86413def": {
+      "kind": "scale",
+      "text": "How well do you think rubber duck debugging fulfils the goals of literate programming?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Completely",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "8d09",
+      "registration_serial": 11,
+      "registered_after": "0c1a284108257b015676a20e610be6b410c0a7971073ce3bb2134e80052e6ed5",
+      "qr_paths": [
+        "mentipy-obj/Q-8d09.png"
+      ],
+      "locale": "en"
+    },
+    "5865109c860ee0f8aa52c2d0417f7245164731438ebe9c4726abbbe7a50ea550": {
+      "kind": "scale",
+      "text": "How well do you think documentation in version management systems fulfils the goals of literate programming?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Completely",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "5865",
+      "registration_serial": 12,
+      "registered_after": "8d09d641d465bc6f22fbd7eaaa515cb3263f765fe16bd471b3b3f31b86413def",
+      "qr_paths": [
+        "mentipy-obj/Q-5865.png"
+      ],
+      "locale": "en"
+    },
+    "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd": {
+      "kind": "scale",
+      "text": "How well do you think pseudocode fulfils the goals of literate programming?",
+      "low": 1,
+      "high": 5,
+      "low_label": "Not at all",
+      "high_label": "Completely",
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "c83a",
+      "registration_serial": 13,
+      "registered_after": "5865109c860ee0f8aa52c2d0417f7245164731438ebe9c4726abbbe7a50ea550",
+      "qr_paths": [
+        "mentipy-obj/Q-c83a.png"
+      ],
+      "locale": "en"
+    },
+    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": {
+      "kind": "open",
+      "text": "Do you know of any other tools, systems, languages or techniques that let you do something like this? Name them and discuss how well they fulfil the goals.",
+      "max_chars": 280,
+      "fence": null,
+      "next": false,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "aa2a",
+      "registration_serial": 14,
+      "registered_after": "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd",
+      "qr_paths": [
+        "mentipy-obj/Q-aa2a.png"
+      ],
+      "locale": "en"
+    }
+  },
+  "answers": {
+    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": [],
+    "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e": [],
+    "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd": [],
+    "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9": [],
+    "9d7488db75131275a0e2bc0844f7d44ad68493a42b5b23a54211fef1a0d69c68": [],
+    "e5d8a9feb8531ca432295cabdb62f6a9c8d9356009d298601be810fdc5d6cc0c": [],
+    "9ddd6756c46b7a33307d0e03e11734b08f10f9235b82ae1448f989e1b56bcbf0": [],
+    "c8abdabb5595d91bc1533d4bbab52f3ac239b2fb602d7ffdc2c96b6d6f7efeda": [],
+    "0fa8529d43ca26fbef717206aa5d0f256bea27ee48ddd45f43a68c4ce38de4bd": [],
+    "0c1a284108257b015676a20e610be6b410c0a7971073ce3bb2134e80052e6ed5": [],
+    "8d09d641d465bc6f22fbd7eaaa515cb3263f765fe16bd471b3b3f31b86413def": [],
+    "5865109c860ee0f8aa52c2d0417f7245164731438ebe9c4726abbbe7a50ea550": [],
+    "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd": [],
+    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": []
+  }
+}
