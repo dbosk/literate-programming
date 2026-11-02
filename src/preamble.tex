@@ -35,7 +35,10 @@
 \let\email\texttt
 
 %\usepackage[outputdir=ltxobj]{minted}
-\usepackage{minted}
+% Not the default cache name: weblogin.tex \subimport's ../weblogin/doc, so
+% minted would otherwise find weblogin's own ltxobj/_minted first, and reading
+% that cache overflows TeX's stack.
+\usepackage[cachedir=_minted-lp]{minted}
 \setminted{autogobble,linenos}
 \newminted{haskell}{linenos=false}
 
