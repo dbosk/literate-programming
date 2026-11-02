@@ -37,6 +37,7 @@ poll(
     "Do you know of any tools, systems or languages that let you do something "
     "like this? Name them.",
     split_words=False,
+    min_word_length=1,
     context=LP_GOALS,
 )
 \end{pycode}
@@ -127,8 +128,8 @@ global variables).
   This is the start of a generalization pattern:
   we keep the goals invariant and vary the systems/tool/approach.
   (We did get the contrast above, in \cref{WhatDoesLPMean}.)
-  The polls use the same scale for every system, so the measure also stays
-  invariant and the results can be compared across systems.
+  The polls use the same scale for every system we poll, so the measure also
+  stays invariant and the results can be compared across those systems.
 
   However, to do this, we'd better explain briefly what the technology or
   system actually is.
