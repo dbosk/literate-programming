@@ -1,43 +1,5 @@
 {
   "questions": {
-    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": {
-      "kind": "mc",
-      "text": "Have you ever heard of or do you know literate programming?",
-      "options": [
-        "I have never heard of it",
-        "I have heard of it",
-        "I know it"
-      ],
-      "multi": false,
-      "next": true,
-      "results": null,
-      "lock": true,
-      "context": [],
-      "url_prefix": "63fd",
-      "registration_serial": 1,
-      "registered_after": null,
-      "qr_paths": [
-        "mentipy-obj/Q-63fd.png"
-      ],
-      "locale": "en"
-    },
-    "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e": {
-      "kind": "open",
-      "text": "What do you think literate programming means?",
-      "max_chars": 280,
-      "fence": null,
-      "next": true,
-      "results": null,
-      "lock": false,
-      "context": [],
-      "url_prefix": "e4ba",
-      "registration_serial": 2,
-      "registered_after": "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772",
-      "qr_paths": [
-        "mentipy-obj/Q-e4ba.png"
-      ],
-      "locale": "en"
-    },
     "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd": {
       "kind": "open",
       "text": "What do you expect this program (`fib.py`) to output? Is it correct?",
@@ -63,6 +25,48 @@
       ],
       "locale": "en"
     },
+    "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e": {
+      "kind": "open",
+      "text": "What do you think literate programming means?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": false,
+      "context": [],
+      "url_prefix": "e4ba",
+      "registration_serial": 2,
+      "registered_after": "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772",
+      "qr_paths": [
+        "mentipy-obj/Q-e4ba.png"
+      ],
+      "locale": "en"
+    },
+    "1bb07c8d5e41b14a6fddc28dd0cb8d08b6a0ed921e450859f43aabb96c1b61ef": {
+      "kind": "open",
+      "text": "How do you expect this program (`fib.py`) to run?",
+      "max_chars": 280,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "% small noweb example\nThis is a small literate program to illustrate how literate programming differs \nfrom \\enquote{illiterate} programming.\n<<module docstring>>=\nThis is a module for computing Fibonacci sequences.\n@\n\nIts computer-readable source is named [[fib.py]] and has the standard Python \nformat.\n<<fib.py>>=\n\"\"\"\n<<module docstring>>\n\"\"\"\n\n<<module functions>>\n\ndef tests():\n  \"\"\"\n  Run some tests to verify that the Fibonacci function works.\n  \"\"\"\n  <<test code>>\n\nif __name__ == \"__main__\":\n  tests()\n@\n\nWe only provide one function in this simple example.\n<<module functions>>=\ndef fib(n):\n  \"\"\"\n  Compute the Fibonacci number of n.\n  \"\"\"\n  <<check [[n]] for the base case>>\n  return fib(n-1) + fib(n-2)\n@\n\nWe see that for \\(n\\) we must have already computed the Fibonacci numbers for \n\\(n-1\\) and \\(n-2\\).\nThis gives our base case:\n<<check [[n]] for the base case>>=\nif n < 0:\n  raise ValueError(\"n must be non-negative\")\nelif n == 0:\n  return 0\nelif n == 1:\n  return 1\n@\n\nNow we can test run the function to see that it works properly.\n<<test code>>=\nfor i in range(5):\n  print(f\"{fib(i)=}\")\n",
+          "language": "text",
+          "label": "fib.nw",
+          "html": null
+        }
+      ],
+      "url_prefix": "1bb0",
+      "registration_serial": 3,
+      "registered_after": "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e",
+      "qr_paths": [
+        "mentipy-obj/Q-1bb0.png"
+      ],
+      "locale": "en"
+    },
     "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9": {
       "kind": "open",
       "text": "Why does literate programming fulfil these goals?",
@@ -82,7 +86,7 @@
       ],
       "url_prefix": "77e3",
       "registration_serial": 4,
-      "registered_after": "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd",
+      "registered_after": "1bb07c8d5e41b14a6fddc28dd0cb8d08b6a0ed921e450859f43aabb96c1b61ef",
       "qr_paths": [
         "mentipy-obj/Q-77e3.png"
       ],
@@ -102,6 +106,136 @@
       "registered_after": "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9",
       "qr_paths": [
         "mentipy-obj/Q-9d74.png"
+      ],
+      "locale": "en"
+    },
+    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": {
+      "kind": "open",
+      "text": "Do you know of any other tools, systems, languages or techniques that let you do something like this? Name them and discuss how well they fulfil the goals.",
+      "max_chars": 280,
+      "fence": null,
+      "next": false,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "aa2a",
+      "registration_serial": 14,
+      "registered_after": "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd",
+      "qr_paths": [
+        "mentipy-obj/Q-aa2a.png"
+      ],
+      "locale": "en"
+    },
+    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": {
+      "kind": "mc",
+      "text": "Have you ever heard of or do you know literate programming?",
+      "options": [
+        "I have never heard of it",
+        "I have heard of it",
+        "I know it"
+      ],
+      "multi": false,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "63fd",
+      "registration_serial": 1,
+      "registered_after": null,
+      "qr_paths": [
+        "mentipy-obj/Q-63fd.png"
+      ],
+      "locale": "en"
+    },
+    "a8aceb0bccf6e4325c2d024b4bc5b318b82f86cb3bb90a7193be8aa0c7bf1925": {
+      "kind": "open",
+      "text": "What do you think literate programming means?",
+      "max_chars": 500,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": false,
+      "context": [],
+      "url_prefix": "a8ac",
+      "registration_serial": 2,
+      "registered_after": "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772",
+      "qr_paths": [
+        "mentipy-obj/Q-a8ac.png"
+      ],
+      "locale": "en"
+    },
+    "883d1be1a2ed14b5ae4b6c4feedbe80c7508609e7e1db34559d83b54ef467b5d": {
+      "kind": "open",
+      "text": "How do you expect this program (`fib.py`) to run?",
+      "max_chars": 500,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "% small noweb example\nThis is a small literate program to illustrate how literate programming differs \nfrom \\enquote{illiterate} programming.\n<<module docstring>>=\nThis is a module for computing Fibonacci sequences.\n@\n\nIts computer-readable source is named [[fib.py]] and has the standard Python \nformat.\n<<fib.py>>=\n\"\"\"\n<<module docstring>>\n\"\"\"\n\n<<module functions>>\n\ndef tests():\n  \"\"\"\n  Run some tests to verify that the Fibonacci function works.\n  \"\"\"\n  <<test code>>\n\nif __name__ == \"__main__\":\n  tests()\n@\n\nWe only provide one function in this simple example.\n<<module functions>>=\ndef fib(n):\n  \"\"\"\n  Compute the Fibonacci number of n.\n  \"\"\"\n  <<check [[n]] for the base case>>\n  return fib(n-1) + fib(n-2)\n@\n\nWe see that for \\(n\\) we must have already computed the Fibonacci numbers for \n\\(n-1\\) and \\(n-2\\).\nThis gives our base case:\n<<check [[n]] for the base case>>=\nif n < 0:\n  raise ValueError(\"n must be non-negative\")\nelif n == 0:\n  return 0\nelif n == 1:\n  return 1\n@\n\nNow we can test run the function to see that it works properly.\n<<test code>>=\nfor i in range(5):\n  print(f\"{fib(i)=}\")\n",
+          "language": "text",
+          "label": "fib.nw",
+          "html": null
+        }
+      ],
+      "url_prefix": "883d",
+      "registration_serial": 3,
+      "registered_after": "a8aceb0bccf6e4325c2d024b4bc5b318b82f86cb3bb90a7193be8aa0c7bf1925",
+      "qr_paths": [
+        "mentipy-obj/Q-883d.png"
+      ],
+      "locale": "en"
+    },
+    "22f2cb903d4139d8248cd75f6b30372fb22020ff8b59f95417df11b64da11486": {
+      "kind": "open",
+      "text": "Why does literate programming fulfil these goals?",
+      "max_chars": 500,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [
+        {
+          "type": "text",
+          "text": "The two goals of literate programming: explaining to human beings what we want a computer to do, and striving for a program that is comprehensible because its concepts have been introduced in an order that is best for human understanding.",
+          "language": null,
+          "label": null,
+          "html": null
+        }
+      ],
+      "url_prefix": "22f2",
+      "registration_serial": 4,
+      "registered_after": "883d1be1a2ed14b5ae4b6c4feedbe80c7508609e7e1db34559d83b54ef467b5d",
+      "qr_paths": [
+        "mentipy-obj/Q-22f2.png"
+      ],
+      "locale": "en"
+    },
+    "2c06f01c3b2850a4d4f199c1ea252b8a19a9ba7bc7d3d761355bd871f0e167f6": {
+      "kind": "open",
+      "text": "How would you summarize literate programming for someone who doesn't know what it is?",
+      "max_chars": 500,
+      "fence": null,
+      "next": true,
+      "results": null,
+      "lock": true,
+      "context": [],
+      "url_prefix": "2c06",
+      "registration_serial": 5,
+      "registered_after": "22f2cb903d4139d8248cd75f6b30372fb22020ff8b59f95417df11b64da11486",
+      "qr_paths": [
+        "mentipy-obj/Q-2c06.png"
       ],
       "locale": "en"
     },
@@ -129,7 +263,7 @@
       ],
       "url_prefix": "e5d8",
       "registration_serial": 6,
-      "registered_after": "9d7488db75131275a0e2bc0844f7d44ad68493a42b5b23a54211fef1a0d69c68",
+      "registered_after": "2c06f01c3b2850a4d4f199c1ea252b8a19a9ba7bc7d3d761355bd871f0e167f6",
       "qr_paths": [
         "mentipy-obj/Q-e5d8.png"
       ],
@@ -308,10 +442,10 @@
       ],
       "locale": "en"
     },
-    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": {
+    "a5ddaf0f31299af4d7c95d4235831eb206dedc87df031c14257cc0f78ebd0dcc": {
       "kind": "open",
       "text": "Do you know of any other tools, systems, languages or techniques that let you do something like this? Name them and discuss how well they fulfil the goals.",
-      "max_chars": 280,
+      "max_chars": 500,
       "fence": null,
       "next": false,
       "results": null,
@@ -325,29 +459,228 @@
           "html": null
         }
       ],
-      "url_prefix": "aa2a",
+      "url_prefix": "a5dd",
       "registration_serial": 14,
       "registered_after": "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd",
       "qr_paths": [
-        "mentipy-obj/Q-aa2a.png"
+        "mentipy-obj/Q-a5dd.png"
       ],
       "locale": "en"
     }
   },
   "answers": {
-    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": [],
+    "63fd185d259e538d61fc19baf33eef4fc425c08ceb65283ce98b82e4f2a2b772": [
+      {
+        "ts": "2026-11-02T14:30:17.564226Z",
+        "value": 0
+      },
+      {
+        "ts": "2026-11-02T14:30:19.412257Z",
+        "value": 1
+      },
+      {
+        "ts": "2026-11-02T14:30:29.509096Z",
+        "value": 0
+      },
+      {
+        "ts": "2026-11-02T14:30:48.417869Z",
+        "value": 0
+      },
+      {
+        "ts": "2026-11-02T14:30:49.410974Z",
+        "value": 0
+      },
+      {
+        "ts": "2026-11-02T14:31:17.332843Z",
+        "value": 0
+      },
+      {
+        "ts": "2026-11-02T14:31:17.450297Z",
+        "value": 0
+      }
+    ],
     "e4baf25963367a6d9ad29c3ddf5a9e29d465cdecfe40921133a77facacfac39e": [],
     "4a282749d1d456bfa78684762676eefb34501d706a0d9de0e4a2e7b57e2dddbd": [],
     "77e3f971b0be620a719416c5eaa4838cc1e80f6b97a0437ac7e58eae34d5dfe9": [],
     "9d7488db75131275a0e2bc0844f7d44ad68493a42b5b23a54211fef1a0d69c68": [],
     "e5d8a9feb8531ca432295cabdb62f6a9c8d9356009d298601be810fdc5d6cc0c": [],
-    "9ddd6756c46b7a33307d0e03e11734b08f10f9235b82ae1448f989e1b56bcbf0": [],
-    "c8abdabb5595d91bc1533d4bbab52f3ac239b2fb602d7ffdc2c96b6d6f7efeda": [],
-    "0fa8529d43ca26fbef717206aa5d0f256bea27ee48ddd45f43a68c4ce38de4bd": [],
-    "0c1a284108257b015676a20e610be6b410c0a7971073ce3bb2134e80052e6ed5": [],
-    "8d09d641d465bc6f22fbd7eaaa515cb3263f765fe16bd471b3b3f31b86413def": [],
-    "5865109c860ee0f8aa52c2d0417f7245164731438ebe9c4726abbbe7a50ea550": [],
-    "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd": [],
-    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": []
-  }
+    "9ddd6756c46b7a33307d0e03e11734b08f10f9235b82ae1448f989e1b56bcbf0": [
+      {
+        "ts": "2026-11-02T15:50:27.996398Z",
+        "value": 3
+      },
+      {
+        "ts": "2026-11-02T15:50:32.501391Z",
+        "value": 3
+      },
+      {
+        "ts": "2026-11-02T15:50:34.864312Z",
+        "value": 4
+      },
+      {
+        "ts": "2026-11-02T15:50:39.416267Z",
+        "value": 3
+      }
+    ],
+    "c8abdabb5595d91bc1533d4bbab52f3ac239b2fb602d7ffdc2c96b6d6f7efeda": [
+      {
+        "ts": "2026-11-02T15:51:50.242125Z",
+        "value": 3
+      },
+      {
+        "ts": "2026-11-02T15:51:54.455935Z",
+        "value": 2
+      },
+      {
+        "ts": "2026-11-02T15:52:16.688739Z",
+        "value": 4
+      },
+      {
+        "ts": "2026-11-02T15:52:38.575941Z",
+        "value": 3
+      }
+    ],
+    "0fa8529d43ca26fbef717206aa5d0f256bea27ee48ddd45f43a68c4ce38de4bd": [
+      {
+        "ts": "2026-11-02T15:56:02.705147Z",
+        "value": 2
+      },
+      {
+        "ts": "2026-11-02T15:56:36.818443Z",
+        "value": 2
+      },
+      {
+        "ts": "2026-11-02T15:56:43.121182Z",
+        "value": 2
+      }
+    ],
+    "0c1a284108257b015676a20e610be6b410c0a7971073ce3bb2134e80052e6ed5": [
+      {
+        "ts": "2026-11-02T15:58:05.899854Z",
+        "value": 1
+      },
+      {
+        "ts": "2026-11-02T15:58:10.420710Z",
+        "value": 1
+      },
+      {
+        "ts": "2026-11-02T15:58:23.976224Z",
+        "value": 1
+      }
+    ],
+    "8d09d641d465bc6f22fbd7eaaa515cb3263f765fe16bd471b3b3f31b86413def": [
+      {
+        "ts": "2026-11-02T15:59:39.762990Z",
+        "value": 1
+      },
+      {
+        "ts": "2026-11-02T15:59:58.579034Z",
+        "value": 2
+      },
+      {
+        "ts": "2026-11-02T16:00:00.738286Z",
+        "value": 2
+      }
+    ],
+    "5865109c860ee0f8aa52c2d0417f7245164731438ebe9c4726abbbe7a50ea550": [
+      {
+        "ts": "2026-11-02T16:03:36.162068Z",
+        "value": 2
+      },
+      {
+        "ts": "2026-11-02T16:04:11.229643Z",
+        "value": 2
+      }
+    ],
+    "c83a90aed46a608623aabe4480495ba6e70ba29b0e863ab51cc235c413b2bccd": [
+      {
+        "ts": "2026-11-02T16:06:37.178706Z",
+        "value": 3
+      },
+      {
+        "ts": "2026-11-02T16:06:59.263184Z",
+        "value": 3
+      }
+    ],
+    "aa2adc06747755f9eafdb1698a2cc4b7ace591eede84774c86757b4f351c26b6": [],
+    "1bb07c8d5e41b14a6fddc28dd0cb8d08b6a0ed921e450859f43aabb96c1b61ef": [],
+    "a8aceb0bccf6e4325c2d024b4bc5b318b82f86cb3bb90a7193be8aa0c7bf1925": [
+      {
+        "ts": "2026-11-02T14:32:03.425062Z",
+        "value": "Writing easily legible and understandable code"
+      },
+      {
+        "ts": "2026-11-02T14:32:05.050928Z",
+        "value": "explain what everything does"
+      },
+      {
+        "ts": "2026-11-02T14:32:42.124086Z",
+        "value": "Förklara kod"
+      },
+      {
+        "ts": "2026-11-02T14:32:47.456550Z",
+        "value": "Programming that is user friendly"
+      },
+      {
+        "ts": "2026-11-02T14:32:55.691215Z",
+        "value": "Making code easily readable for humans."
+      },
+      {
+        "ts": "2026-11-02T14:33:35.604663Z",
+        "value": "Man skriver en förklaring samtidigt som programmet "
+      },
+      {
+        "ts": "2026-11-02T14:34:01.956630Z",
+        "value": "Intuitive program descriptions before coding"
+      },
+      {
+        "ts": "2026-11-02T14:44:26.348908Z",
+        "value": ""
+      }
+    ],
+    "883d1be1a2ed14b5ae4b6c4feedbe80c7508609e7e1db34559d83b54ef467b5d": [
+      {
+        "ts": "2026-11-02T14:44:46.302935Z",
+        "value": "Med noweb på nåt sätt?"
+      },
+      {
+        "ts": "2026-11-02T14:45:16.876915Z",
+        "value": "Måste nog kompilera innan"
+      },
+      {
+        "ts": "2026-11-02T14:46:23.819304Z",
+        "value": "You need to tangle the code to compile it. Then you can execute it. Then it will return the fibonaci values for values up to 5."
+      },
+      {
+        "ts": "2026-11-02T14:46:53.419798Z",
+        "value": ""
+      },
+      {
+        "ts": "2026-11-02T14:47:14.821016Z",
+        "value": ""
+      }
+    ],
+    "22f2cb903d4139d8248cd75f6b30372fb22020ff8b59f95417df11b64da11486": [
+      {
+        "ts": "2026-11-02T14:51:34.328132Z",
+        "value": "You can compile the code in two different ways. The tangle gives you an executable. The weave compiles to a pdf that explains the code (if properly coded)"
+      },
+      {
+        "ts": "2026-11-02T14:52:10.678896Z",
+        "value": ""
+      },
+      {
+        "ts": "2026-11-02T14:52:48.821708Z",
+        "value": "Man kan strukturera koden så att den följer förklaringens ordning så att den blir lite mer pedagogiskt "
+      }
+    ],
+    "2c06f01c3b2850a4d4f199c1ea252b8a19a9ba7bc7d3d761355bd871f0e167f6": [
+      {
+        "ts": "2026-11-02T15:37:33.122710Z",
+        "value": "It allows code to be written in a way that is easier for us humans to understand"
+      }
+    ],
+    "a5ddaf0f31299af4d7c95d4235831eb206dedc87df031c14257cc0f78ebd0dcc": []
+  },
+  "server_started": "2026-11-02T14:26:17.235818Z"
 }

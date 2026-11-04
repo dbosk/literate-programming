@@ -1,8 +1,11 @@
 \chapter{What is literate programming?}
 \mode<all>
 \begin{pycode}
+from functools import partial
 from mentipy.latex import file_snippet, mc, open_text, scale, word_cloud
 from mentipy.store import Store
+
+open_text = partial(open_text, max_chars=500)
 
 POLL_DEFAULTS = {
     "store": Store("mentipy.json"),
@@ -245,7 +248,7 @@ computer.
 \begin{pycode}
 poll(
     open_text,
-    "What do you expect this program (`fib.py`) to output? Is it correct?",
+    "How do you expect this program (`fib.py`) to run?",
     context=file_snippet("fib.nw", language="text"),
 )
 \end{pycode}
