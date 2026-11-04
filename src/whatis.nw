@@ -1,43 +1,99 @@
 \chapter{What is literate programming?}
+\mode<all>
+\begin{pycode}
+from functools import partial
+from mentipy.latex import file_snippet, mc, open_text, scale, word_cloud
+from mentipy.store import Store
+
+open_text = partial(open_text, max_chars=500)
+
+POLL_DEFAULTS = {
+    "store": Store("mentipy.json"),
+    "qr_dir": "mentipy-obj",
+    "qr_format": "png",
+    "environment": "",
+    "show_url": False,
+    "layout": "auto",
+    "locale": "en",
+}
+LP_GOALS = (
+    "The two goals of literate programming: "
+    "explaining to human beings what we want a computer to do, and "
+    "striving for a program that is comprehensible because its concepts "
+    "have been introduced in an order that is best for human understanding."
+)
+
+def poll(helper, *args, **kwargs):
+    print(helper(*args, **{**POLL_DEFAULTS, **kwargs}))
+
+def knowledge_poll(prompt):
+    poll(scale, prompt, low_label="Not at all", high_label="Very well")
+
+def goals_poll(prompt):
+    poll(
+        scale,
+        prompt,
+        low_label="Not at all",
+        high_label="Completely",
+        context=LP_GOALS,
+    )
+\end{pycode}
 \mode*
 @ \only<presentation>{\section{Introduction}}%
 %
 Let's start off with some thinking.
 
 \ltnote{%
-  We want to investigate how many know of or have heard of literate 
+  We want to investigate how many know of or have heard of literate
   programming.
   Or, think they know.
   This will simply give us some statistics.
 }%
-\begin{frame}
-\begin{activity}\label{HeardOfLP}
-  Have you ever heard of or do you know literate programming?
-\end{activity}
-\end{frame}
-
 \ltnote{%
   We want to investigate what people think literate programming is.
-  This will help us understand the correctness of the answers of 
+  This will help us understand the correctness of the answers of
   \cref{HeardOfLP}.
 
-  Also consider the results by Székely discussed in Chapter 6 of 
+  Also consider the results by Székely discussed in Chapter 6 of
   \cite{NecessaryConditionsOfLearning}.
-  If they get to think a bit about what they think it is, they'll be more 
+  If they get to think a bit about what they think it is, they'll be more
   likely to learn better.
 
-  This also gives us the contrast pattern for the goals of literate 
+  This also gives us the contrast pattern for the goals of literate
   programming.
-  They think of what it might mean, whereas when we give the quote and goals 
+  They think of what it might mean, whereas when we give the quote and goals
   below, we introduce contrast to their thoughts.
   Then they know what is focused.
 
-  Finally, this will also help us understand how to improve this material in 
+  Finally, this will also help us understand how to improve this material in
   the future.
 }%
-\begin{frame}
+\ltnote{%
+  \Cref{HeardOfLP,WhatDoesLPMean} share a slide and the second question is not
+  locked, so it opens together with the first.
+  Students go straight on with Next and only need the first QR code.
+  The two answers belong together, since the second is what tells us how to
+  read the first.
+}%
+\begin{frame}[fragile]
+\begin{activity}\label{HeardOfLP}
+\begin{pycode}
+poll(
+    mc,
+    "Have you ever heard of or do you know literate programming?",
+    ["I have never heard of it", "I have heard of it", "I know it"],
+)
+\end{pycode}
+\end{activity}
 \begin{activity}\label{WhatDoesLPMean}
-  What do you think it means?
+\begin{pycode}
+poll(
+    open_text,
+    "What do you think literate programming means?",
+    lock=False,
+    layout="article",
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
@@ -183,23 +239,34 @@ computer.
   \Cref{ReadFib} serves two purposes.
   First, it will let the students try to figure out of the \noweb{} (and 
   \web-based languages) syntax works.
-  Second, we'll get data on how well people can read the literate programming 
+  Second, we'll get data on how well people can read the literate programming
   syntax without being taught how it works.
+  That's why the phone shows the literate source and not the tangled [[fib.py]],
+  which would let them skip the reading we want to measure.
 }%
 \begin{activity}\label{ReadFib}
-  What you expect this program ([[fib.py]]) to output?
-  Is it correct?
+\begin{pycode}
+poll(
+    open_text,
+    "How do you expect this program (`fib.py`) to run?",
+    context=file_snippet("fib.nw", language="text"),
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 
 \begin{onlyenv}<presentation>
 \begin{frame}[fragile]
-  \begin{block}{The goals}
-    \LPgoals
-  \end{block}
+  \LPgoals
 
   \begin{activity}
-    Why does literate programming fulfil these goals?
+\begin{pycode}
+poll(
+    open_text,
+    "Why does literate programming fulfil these goals?",
+    context=LP_GOALS,
+)
+\end{pycode}
   \end{activity}
 \end{frame}
 \end{onlyenv}
@@ -543,10 +610,15 @@ All in all, the script [[merge.sh]] looks like this after we've tangled it:
   Second, trying to summarize what you've learned helps reflection and 
   retention.
 }%
-\begin{frame}
+\begin{frame}[fragile]
 \begin{activity}
-  How would you summarize literate programming for someone who don't know what 
-  it is?
+\begin{pycode}
+poll(
+    open_text,
+    "How would you summarize literate programming for someone who doesn't "
+    "know what it is?",
+)
+\end{pycode}
 \end{activity}
 \end{frame}
 

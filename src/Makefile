@@ -3,6 +3,64 @@ all: lpbook.pdf lpbook-teachers.pdf slides-intro.pdf slides-tutorial-java.pdf
 
 LATEXFLAGS+=	-shell-escape
 
+# The polls in whatis.nw and related.tex run in PythonTeX, which must import
+# mentipy from the deck's own venv (made here, never by hand).  The other
+# PythonTeX blocks run in the same interpreter and import weblogin and
+# PySnooper, so the venv gets those too, at the versions of requirements.txt.
+# We can't install from that file: weblogin 1.11 asks for lxml<6, which has no
+# wheel for current Python and doesn't compile, so we install it without its
+# dependencies on top of the lxml 6 that the file pins.
+TEX_PYTHONTEX=	yes
+MENTIPY_VENV=	$(CURDIR)/.venv
+PYTHONTEXFLAGS=	--interpreter python:${MENTIPY_VENV}/bin/python3 --rerun=always
+
+${MENTIPY_VENV}/bin/python3:
+	mentipy init --venv ${MENTIPY_VENV}
+
+MENTIPY_VERSION=	0.17
+MENTIPY_STAMP=	${MENTIPY_VENV}/mentipy-${MENTIPY_VERSION}
+
+# Order-only: the venv must exist, but its timestamp must not trigger an
+# upgrade.  The PythonTeX output goes with the upgrade, since latexmk reruns
+# PythonTeX only when the code changed.
+${MENTIPY_STAMP}: | ${MENTIPY_VENV}/bin/python3
+	${MENTIPY_VENV}/bin/python3 -m pip install \
+		'mentipy>=${MENTIPY_VERSION}' PySnooper==1.2.3 \
+		lxml==6.1.0 requests==2.33.0
+	${MENTIPY_VENV}/bin/python3 -m pip install --no-deps weblogin==1.11
+	${RM} ${TEX_OUTDIR}/*.pytxmcr
+	touch $@
+
+lpbook.pdf lpbook-teachers.pdf: ${MENTIPY_STAMP}
+slides-intro.pdf slides-tutorial-java.pdf: ${MENTIPY_STAMP}
+# mentipy serve rewrites the QR sidecars; the PDFs with polls must follow them.
+lpbook.pdf lpbook-teachers.pdf slides-intro.pdf: \
+	$(wildcard mentipy-obj/Q-*.pdf_tex)
+
+# The makefiles submodule is pinned for its PythonTeX fix (dbosk/makefiles#92),
+# which is only on the tominted-default-weave branch.  The rest of that branch
+# does not apply here.  Its weave needs features that are not in upstream noweb
+# (tominted, -autolang), so we keep the classic flags.  Its tangling looks for
+# roots named <<[[fib.py]]>>, whereas our roots are <<fib.py>>; those names are
+# what the text teaches (notangle -Rfib.py), so we keep them.  Move the pin to
+# master and remove these overrides as far as possible once the fix has landed.
+NOWEAVEFLAGS.tex=	${NOWEAVEFLAGS} -x -n -delay -t2
+NOWEAVEFLAGS.pdf=	${NOWEAVEFLAGS} -x -t2
+
+NOTANGLE=	notangle ${NOTANGLEFLAGS} -R$(notdir $@) $(filter %.nw,$^) | \
+		  ${CPIF} $@ && noroots $(filter %.nw,$^)
+# Only for our own makefiles: make also remakes the submodule's included
+# tex.mk and noweb.mk with NOTANGLE.mk, and their roots do use the new names.
+frac.mk factory.mk: NOTANGLE.mk=notangle ${NOTANGLEFLAGS.mk} -R$(notdir $@) \
+		  $(filter %.nw,$^) > $@ && noroots $(filter %.nw,$^)
+
+define plain_root_tangling
+NOTANGLE$(1)=	notangle $${NOTANGLEFLAGS$(1)} -R$$(notdir $$@) \
+		  $$(filter %.nw,$$^) | $${CPIF} $$@ && noroots $$(filter %.nw,$$^)
+endef
+$(foreach suffix,.c .cc .cpp .cxx .h .hh .hpp .hxx .hs .py .sty .cls .sh .go,\
+	$(eval $(call plain_root_tangling,${suffix})))
+
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
 SRC+=		whatis.tex related.tex
@@ -87,6 +145,7 @@ clean:
 	${RM} didactic_output_*
 	${RM} didactic_code_*
 	${RM} cppfrac.mk
+	${RM} -R mentipy-obj
 	${MAKE} -C ../weblogin/doc/ clean
 
 frac.mk: cppjava.nw
@@ -103,3 +162,22 @@ include ${INCLUDE_MAKEFILES}/tex.mk
 include ${INCLUDE_MAKEFILES}/noweb.mk
 INCLUDE_DIDACTIC=../didactic
 include ${INCLUDE_DIDACTIC}/didactic.mk
+
+# All jobs share PythonTeX's output files in ltxobj, but latexmk reruns PythonTeX
+# only when the job's own code changed.  Without this, a rebuild typesets the
+# output of whichever job ran last.  So each job keeps its own copy, and puts it
+# back before it builds.  We can't force a rerun instead, because that regenerates
+# the QR codes from mentipy.base_url and so undoes the address that mentipy present
+# just wrote to them.  A job without a copy has no output to trust, so it reruns.
+PYTHONTEX_JOBS=	lpbook.pdf lpbook-teachers.pdf
+PYTHONTEX_JOBS+=	slides-intro.pdf slides-tutorial-java.pdf
+PYTHONTEX_OUTPUT=	${TEX_OUTDIR}/py_default_* ${TEX_OUTDIR}/pythontex_data.pkl
+${PYTHONTEX_JOBS}: %.pdf: %.tex ${TEX_DOC_PREREQS}
+	${RM} ${PYTHONTEX_OUTPUT}
+	cp -p ${TEX_OUTDIR}/pythontex-$*/* ${TEX_OUTDIR}/ 2>/dev/null || \
+		${RM} ${TEX_OUTDIR}/$*.pytxmcr
+	${COMPILE.tex}
+	${RM} -R ${TEX_OUTDIR}/pythontex-$*
+	mkdir ${TEX_OUTDIR}/pythontex-$*
+	cp -p ${PYTHONTEX_OUTPUT} ${TEX_OUTDIR}/pythontex-$*/
+	-${LN} ${TEX_OUTDIR}/$@ $@

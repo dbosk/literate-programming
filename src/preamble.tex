@@ -35,7 +35,10 @@
 \let\email\texttt
 
 %\usepackage[outputdir=ltxobj]{minted}
-\usepackage{minted}
+% Not the default cache name: weblogin.tex \subimport's ../weblogin/doc, so
+% minted would otherwise find weblogin's own ltxobj/_minted first, and reading
+% that cache overflows TeX's stack.
+\usepackage[cachedir=_minted-lp]{minted}
 \setminted{autogobble,linenos}
 \newminted{haskell}{linenos=false}
 
@@ -54,6 +57,15 @@
 \usepackage[binary-units]{siunitx}
 
 \usepackage[marginparmargin=outer]{didactic}
+% The address under a poll's QR code must fit the narrow QR column.
+\newcommand{\mentipyqrcaption}[1]{{\tiny\url{#1}}}
+% A poll's labels (Type, Limit, ...) are description items, which take the local
+% structure colour: yellow on pale yellow in didactic's activity block.
+\makeatletter
+\@ifclassloaded{beamer}
+  {\AtBeginEnvironment{activity}{\setbeamercolor{description item}{fg=black}}}
+  {\relax}
+\makeatother
 \ProvideSemanticEnv{lo}{Learning Objective}
   [style=definition,numbered=yes]
   {LO}{LO}
