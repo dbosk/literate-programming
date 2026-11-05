@@ -1,0 +1,2342 @@
+% Sources for the deck; every entry carries a provenance block.
+% Merged from three review sessions: lp-llm-direct, lp-prose-effects,
+% lp-agent-context (2026-11-05).
+
+% === provenance: Knuth1984 ===
+% CLAIM: Knuth (1984) defined LP by two aims: explaining to human beings what
+%   we want a computer to do, and presenting a program's concepts in the
+%   order best for human understanding.
+% FOUND-VIA: known item. Metadata from Crossref
+%   (curl https://api.crossref.org/works/10.1093/comjnl/27.2.97: Comput. J.
+%   27(2):97-111, 1984). Published version read on the user's reMarkable
+%   (/Literate programming/Literate Programming, OUP download, rendered pages
+%   1 and 11 = journal pp. 97 and 107). Author's preprint ("submitted to THE
+%   COMPUTER JOURNAL", TeX output 1995) fetched with fetch_pdf.py from
+%   http://www.literateprogramming.com/knuthweb.pdf. Forward chaining in
+%   OpenAlex (cites:W2342082360, from 2023-01-01: 180 works) used this item
+%   as the seed.
+% PICKED: primary source; the definition of LP.
+% QUOTE (p. 97, sec. A): "Let us change our traditional attitude to the
+%   construction of programs: Instead of imagining that our main task is to
+%   instruct a computer what to do, let us concentrate rather on explaining
+%   to human beings what we want a computer to do."
+% QUOTE (p. 97, sec. A): "He or she strives for a program that is
+%   comprehensible because its concepts have been introduced in an order that
+%   is best for human understanding, using a mixture of formal and informal
+%   methods that nicely reinforce each other." [printed "reïnforce"; the
+%   preprint lacks "nicely"]
+% QUOTE (p. 107, sec. J): "the programmer's task is to state those parts and
+%   those relationships, in whatever order is best for human
+%   comprehension---not in some rigidly determined order like top-down or
+%   bottom-up."
+% QUOTE (p. 97, sec. A; Knuth's own caveat): "Programming is a very personal
+%   activity, so I can't be certain that what has worked for me will work for
+%   everybody."
+% VERIFIED: full text, published version (page images on the reMarkable show
+%   the journal folios 97 and 107). The deck may call these "the two goals";
+%   Knuth does not number them as two goals -- they are the two consecutive
+%   paragraphs of sec. A, so "two goals" is the deck's framing.
+% COUNTER: not applicable for the definition (known item). Knuth's own
+%   caveat (above) and his "ravings of a fanatic" sentence (p. 97) can be
+%   shown as the author's own hedge.
+% DATE: 2026-11-05
+@article{Knuth1984,
+  author  = {Knuth, Donald E.},
+  title   = {Literate Programming},
+  journal = {The Computer Journal},
+  volume  = {27},
+  number  = {2},
+  pages   = {97--111},
+  year    = {1984},
+  doi     = {10.1093/comjnl/27.2.97}
+}
+
+% === provenance: SunStaron2026 ===
+% CLAIM: Sun and Staron operationalise "LLMs are capable of LP" as embedding
+%   probes that must recognise both the programming language and the task of
+%   a program; only the embedding models they label trillion-scale
+%   (OpenAI text-embedding-3 series, parameter count estimated) reach >70%
+%   on both, on Rosetta Code (1,228 tasks, 926 languages) and CodeNet.
+% FOUND-VIA: scholar search '"literate programming" AND (LLM OR LLMs OR
+%   "large language model" OR "large language models" OR "generative AI" OR
+%   GenAI OR ChatGPT OR Copilot OR "code generation" OR "coding agent" OR
+%   "coding agents" OR "AI-assisted programming" OR "vibe coding")' -p
+%   openalex --year 2023- --limit 100 (session "lp-llm-direct", query S1;
+%   also returned by S1/ieee, S1/wos, S2, S4, U1). Also in OpenAlex
+%   forward chaining from Knuth1984.
+% PICKED: the only peer-reviewed journal paper (IEEE TSE) that evaluates
+%   LLMs against an explicit LP hypothesis.
+% QUOTE (sec. VIII, Conclusions): "Our results indicate that trillion-scale
+%   models are the only ones that come close to literate programming by
+%   consistently recognizing both the programming language and the programs'
+%   corresponding tasks with an accuracy of over 70% on both datasets."
+% QUOTE (sec. VII, validity): "it evaluates 'literacy' indirectly through
+%   classification accuracy rather than through end-to-end code generation
+%   or explanation. Consequently, high probing accuracy may indicate that
+%   embeddings capture discriminative features of programming languages and
+%   tasks, but not necessarily that models can generate coherent, literate
+%   explanations in practice."
+% QUOTE (model table footnote): "*:Estimated number, the exact number of
+%   parameters is not revealed in public documentation"
+% VERIFIED: full text, author's accepted version from research.chalmers.se
+%   (549267_Fulltext.pdf), read sections I, II, V, VII-IX and Table V.
+%   Table V (SVM): text-embedding-3-large PL 0.8544, PT 0.8703, text 0.9624;
+%   LLaMA-3.1-8B PL 0.8552, PT 0.7410, text 0.5338. Status: peer-reviewed,
+%   IEEE TSE 52(2):468-487, 2026 (Crossref). Evidence type: computational
+%   benchmark (embedding probing); no human participants, no LP documents
+%   written or read. Term collision: "literate" here means an LLM's
+%   capability, not Knuth's practice.
+% COUNTER: C1/C2 counter-queries (limitations etc.) returned no critique of
+%   this paper; its own validity section (quoted) is the main qualifier.
+%   "Trillion-scale" rests on an estimate for closed models, and the winning
+%   models are embedding-optimised while the others are mean-pooled hidden
+%   states, so model scale is confounded with training objective (my reading,
+%   not the authors').
+% DATE: 2026-11-05
+@article{SunStaron2026,
+  author  = {Sun, Simin and Staron, Miroslaw},
+  title   = {Literate Programming With {LLMs}? --- A Study on {Rosetta Code}
+             and {CodeNet}},
+  journal = {IEEE Transactions on Software Engineering},
+  volume  = {52},
+  number  = {2},
+  pages   = {468--487},
+  year    = {2026},
+  doi     = {10.1109/TSE.2025.3629828}
+}
+
+% === provenance: Shi2025NLO ===
+% CLAIM: Google researchers propose LLM-generated "natural language
+%   outlines" in the style of LP; 6 developers rated 60% of Gemini 1.5 Pro
+%   outlines (30 functions) as excellent and 90% acceptable or better.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S1/arxiv, S1/wos, S2, S3, S4, U1, C1-C4);
+%   also OpenAlex forward chaining from Knuth1984 and the OpenAlex
+%   title_and_abstract search.
+% PICKED: the most visible LP+LLM paper; peer-reviewed (FSE industry track);
+%   explicitly frames itself as LP.
+% QUOTE (abstract): "An NL outline for a code function comprises multiple
+%   statements written in concise prose, which partition the code and
+%   summarize its main ideas in the style of literate programming."
+% QUOTE (sec. 5): "using Gemini 1.5 Pro and Interleaved Generation, 60% of
+%   outlines were rated as having excellent overall quality (90% were
+%   acceptable or better), 63% were very helpful, and 80% were completely
+%   correct."
+% QUOTE (sec. 3): "A full evaluation of each use case is beyond the scope of
+%   this paper"
+% QUOTE (Limitations): "In Section 5 we used 6 survey participants, and in
+%   Section 6.2 we used 4 participants from one team, so those findings may
+%   be specific to those participants."
+% VERIFIED: full text, arXiv 2408.04820v4 (= FSE Companion '25 version).
+%   Evidence type: tool proposal + small rating survey (30 functions, 6
+%   raters who wrote the functions) + two industrial case studies (30
+%   Android reverse engineers rated outlines 83.8% completely correct; 4
+%   engineers found 14 of 24 virtual CL splits useful). Vendor: all authors
+%   Google, evaluating Google's Gemini models. Status: peer-reviewed,
+%   FSE Companion 2025, pp. 150-161.
+% COUNTER: C1/C2 found no work disputing NL outlines. Qualifier: outlines are
+%   generated from code after the fact; this reverses Knuth's order (prose
+%   written first, by the programmer).
+% DATE: 2026-11-05
+@inproceedings{Shi2025NLO,
+  author    = {Shi, Kensen and Alt{\i}nb{\"u}ken, Deniz and Anand, Saswat and
+               Christodorescu, Mihai and Gr{\"u}nwedel, Katja and Koenings,
+               Alexa and Naidu, Sai and Pathak, Anurag and Rasi, Marc and
+               Ribeiro, Fredde and Ruffin, Brandon and Sanyam, Siddhant and
+               Tabachnyk, Maxim and Toth, Sara and Tu, Roy and Welp, Tobias
+               and Yin, Pengcheng and Zaheer, Manzil and Chandra, Satish and
+               Sutton, Charles},
+  title     = {Natural Language Outlines for Code: Literate Programming in the
+               {LLM} Era},
+  booktitle = {Proceedings of the 33rd ACM International Conference on the
+               Foundations of Software Engineering (FSE Companion '25)},
+  pages     = {150--161},
+  year      = {2025},
+  publisher = {ACM},
+  doi       = {10.1145/3696630.3728541}
+}
+
+% === provenance: Zhang2024ILP ===
+% CLAIM: "Interoperable LP" (ILP) proposes LP documents as structured
+%   context for LLM code generation; its evidence is a 12-function Scheme
+%   success/failure table and qualitative inspection of generated code, by
+%   authors who develop the tools used (Mogan, Goldfish Scheme).
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S1/arxiv, S2, S3, S4, U1, C1-C4).
+% PICKED: the paper that coined "renaissance of literate programming"; the
+%   only one testing LP documents as LLM prompts for generation.
+% QUOTE (abstract): "Our findings indicate that ILP with LLMs can enhance
+%   LLM-based code generation in large-scale project development."
+% QUOTE (sec. 3): "As shown in Table 1, GPT-4o generates correct code for all
+%   toy examples when guided by ILP."
+% QUOTE (App. G.2): "With standard function names, models relied on the
+%   provided file 70% of the time while drawing from their pre-trained
+%   knowledge in the remaining cases."
+% VERIFIED: full text, arXiv 2502.17441v1 (posted 2024-12-25). Table 1 has
+%   12 Scheme list functions; the RepoBench part shows one function
+%   (take-right) and reports "measurable improvements in structural
+%   consistency" without a metric. The claimed speed gains carry no number.
+%   Status: preprint only (no journal_ref on arXiv; no venue found).
+%   Evidence type: proposal + toy demonstration. Conflict of interest: first
+%   affiliation Liii Network, developers of Mogan and Goldfish Scheme, the
+%   tools the paper promotes.
+% COUNTER: the paper reports no failures beyond the F cells of Table 1.
+%   Counter-queries C1/C2 surfaced no replication.
+% DATE: 2026-11-05
+@misc{Zhang2024ILP,
+  author        = {Zhang, Wuyang and Li, Yansong and Dong, Zeyu and Wu, Yu and
+                   Zhou, Yingyao and Wang, Duolei and Xing, Songsirou and
+                   Zhou, Chichun and Shen, Da},
+  title         = {Renaissance of Literate Programming in the Era of {LLMs}:
+                   Enhancing {LLM}-Based Code Generation in Large-Scale
+                   Projects},
+  year          = {2024},
+  eprint        = {2502.17441},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.SE},
+  doi           = {10.48550/arXiv.2502.17441},
+  note          = {Preprint}
+}
+
+% === provenance: Yuan2026VLP ===
+% CLAIM: Verifiable LP (VLP) translates LLM-generated code into
+%   deterministic NL documentation that users validate; with an LLM-simulated
+%   user that sees the reference solution, pass@1 rose from 28.7-73.2% to
+%   65.4-93.5%; a real-user study had 8 participants on 8 tasks.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S1/arxiv, S2, S3, S4, U1, C1/arxiv,
+%   C2/arxiv, C1-C4/openalex).
+% PICKED: the strongest controlled evaluation of an LP-inspired layer for
+%   LLM code, with baselines (ClarifyGPT, TiCoder, PInG).
+% QUOTE (abstract): "Our evaluation shows that VLP improves code pass@1 from
+%   28.7%-73.2% to 65.4%-93.5% with reasonable user effort."
+% QUOTE (sec. V-A): "The oracle context includes the benchmark prompt and
+%   golden reference implementation, so that the user simulator's feedback
+%   is grounded in the intended behavior."
+% QUOTE (sec. V-A): "We recruit 10 participants, reserving 2 for pilot
+%   testing to refine task selection, user interfaces, and instructions, and
+%   using the remaining 8 in the main study. We sample 8 tasks"
+% QUOTE (sec. II-A): "Although literate programming is not widely adopted
+%   today, its core idea has had broad influence."
+% QUOTE (sec. II-A): "VLP's documentation is derived from the code in a
+%   mostly deterministic and unambiguous way, rendering it more faithful to
+%   the code semantics than the free-form explanatory prose used in
+%   conventional literate programming."
+% VERIFIED: full text, arXiv 2607.02333v1. Benchmarks BigCodeBench and
+%   QuantCodeEval; models DeepSeek V4 Flash, GPT-5.4 (bug study also Claude
+%   Opus 4.7). Headline numbers come from the LLM-simulated user; the human
+%   study is small (8 people, 8 tasks; each method x task by 1 programmer +
+%   1 non-programmer). VLP "slows users down more noticeably on short coding
+%   tasks" (sec. V-E). Status: preprint only. Evidence type: benchmark +
+%   small user study.
+% COUNTER: own limitations (sec. V-G) note the simulator substitution and
+%   that documentation faithfulness is not separately evaluated. The
+%   documentation is generated from code, not written first; LP in name and
+%   layout, not in authoring order.
+% DATE: 2026-11-05
+@misc{Yuan2026VLP,
+  author        = {Yuan, Ziqi and Lu, Wenhao and Wu, Hao and Jin, Dunhong and
+                   Wu, Chuan},
+  title         = {Guiding Human Validation of {LLM}-Generated Code via
+                   Verifiable Literate Programming},
+  year          = {2026},
+  eprint        = {2607.02333},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.SE},
+  doi           = {10.48550/arXiv.2607.02333},
+  note          = {Preprint}
+}
+
+% === provenance: RossiPrestwich2026 ===
+% CLAIM: In SyntAGM, an LLM system that writes "literate" optimisation
+%   models, ablating the literate-style comments did not change accuracy;
+%   the authors claim readability benefits from inspection only.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S2, C1, C2 on openalex).
+% PICKED: the only included paper with an ablation that isolates the
+%   literate component -- the closest thing to a negative result in scope.
+% QUOTE (sec. 5, ablation): "ablation of literate-style comments in the
+%   generated models and of literate-style comments from examples in the RAG
+%   knowledge base did not produce differences in accuracy with respect to
+%   the baseline. However, inspection of models generated (Figure 3) suggests
+%   that literate-style comments induce better modelling practices (e.g.
+%   appropriate use of indexes, model-data separation) and make models more
+%   readable and auditable."
+% QUOTE (footnote 1): "Literate programming [Knuth, 1984] treats programs
+%   -- including mathematical programs -- as explanations for readers by
+%   interleaving prose and source code"
+% VERIFIED: full text, arXiv 2601.17670v2 (2026-05-28). Ablation run on
+%   ChallengeOR with GPT-5.4-mini; main results on NL4Opt (n=214), ReSocratic
+%   (351), ComplexOR, IndustryOR. Status: preprint only. Evidence type:
+%   benchmark with ablation. The readability claim is the authors'
+%   inspection, not a measurement.
+% COUNTER: this paper is itself the counter-evidence for "LP prose improves
+%   LLM output accuracy"; limited to one domain (optimisation modelling).
+% DATE: 2026-11-05
+@misc{RossiPrestwich2026,
+  author        = {Rossi, Roberto and Prestwich, Steven D.},
+  title         = {Grammar-Aware Literate Generative Mathematical Programming
+                   with Compiler-in-the-Loop},
+  year          = {2026},
+  eprint        = {2601.17670},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.PL},
+  doi           = {10.48550/arXiv.2601.17670},
+  note          = {Preprint}
+}
+
+% === provenance: Burke2026notlob ===
+% CLAIM: notlob is an LP language and environment designed for human and
+%   LLM coding agents (name-graph, MCP server); it was itself built with
+%   Claude Code; evaluation is left to future work and agent observations are
+%   anecdotal.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S1/arxiv, S2, S3, S4, U1, C1-C4).
+% PICKED: the clearest recent tool that targets coding agents explicitly as
+%   readers of literate programs.
+% QUOTE (sec. 1): "This paper focuses on design and example programs of the
+%   language and tooling environment; experimental evaluation is left to
+%   future work."
+% QUOTE (sec. 4): "Across multiple agent-assisted coding projects we
+%   observed a tendency for agents to neglect the declarative artifacts that
+%   scaffold their work."
+% QUOTE (sec. 4): "We note this as an anecdotal observation rather than the
+%   result of a controlled experiment."
+% VERIFIED: full text, arXiv 2608.24644v1. Status: preprint. Evidence type:
+%   tool description, no evaluation.
+% COUNTER: own anecdote that Claude Code's grep-limited reads "undermine the
+%   context sharing advantages of notlob file adjacency" (sec. 4).
+% DATE: 2026-11-05
+@misc{Burke2026notlob,
+  author        = {Burke, Adam T.},
+  title         = {A Literate Programming Environment for Human and Machine
+                   Agents},
+  year          = {2026},
+  eprint        = {2608.24644},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.SE},
+  doi           = {10.48550/arXiv.2608.24644},
+  note          = {Preprint}
+}
+
+% === provenance: VanClief2026ICM ===
+% CLAIM: ICM structures AI-agent workflows as folders of markdown files and
+%   invokes LP: the instruction files are also the human documentation;
+%   evidence is practitioner reports from a 52-member community.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also U1, C1, C4 on openalex/arxiv).
+% PICKED: an example of LP's idea applied to agent context files rather than
+%   code; included for breadth, low evidential weight.
+% QUOTE (sec. 3): "There is also something of Knuth's literate programming
+%   in this design [10]. The markdown files that instruct the agent are
+%   simultaneously the documentation that tells a human what the stage does,
+%   what it expects, and what it produces."
+% QUOTE (sec. 4.5): "These observations come from ongoing conversations with
+%   community members rather than from formal data collection protocols."
+% VERIFIED: full text, arXiv 2603.16021v2. Status: preprint. Evidence type:
+%   proposal + informal practitioner reports. Authors at Eduba (the
+%   method's own community), so a vendor-style interest.
+% COUNTER: none specific; own text concedes the data are informal.
+% DATE: 2026-11-05
+@misc{VanClief2026ICM,
+  author        = {Van Clief, Jake and McDermott, David},
+  title         = {Interpretable Context Methodology: Folder Structure as
+                   Agentic Architecture},
+  year          = {2026},
+  eprint        = {2603.16021},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2603.16021},
+  note          = {Preprint}
+}
+
+% === provenance: Birkenkrahe2024 ===
+% CLAIM: A 2024 education paper argues that AI coding assistants and LP are
+%   complementary ("symbiotic"), as a position without evaluation.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S2, U1 on openalex). Abstract read with
+%   curl https://library.iated.org/view/BIRKENKRAHE2024ROL (2026-11-05);
+%   WebFetch of the same URL gave only a summary.
+% PICKED: the earliest (2024) explicit LP-vs-AI-assistant position paper in
+%   the hits.
+% QUOTE (abstract): "We posit a symbiotic relationship between AI coding
+%   assistants and literate programming: both approaches can complement each
+%   other by combining AI automation with human-readable documentation."
+% VERIFIED: ABSTRACT ONLY (full text: "Paper download not authorized";
+%   publisher PDF 403 via fetch_pdf.py and via the KTH tunnel). The abstract
+%   calls it a "presentation". Status: conference proceedings (INTED2024,
+%   pp. 127-132), IATED; peer review unclear. Evidence type: position.
+% COUNTER: Rosiene2024 argues the opposite direction (read code, not prose).
+% DATE: 2026-11-05
+@inproceedings{Birkenkrahe2024,
+  author    = {Birkenkrahe, Marcus},
+  title     = {The Role of {AI} Coding Assistants: Revisiting the Need for
+               Literate Programming in Computer and Data Science Education},
+  booktitle = {INTED2024 Proceedings},
+  pages     = {127--132},
+  year      = {2024},
+  publisher = {IATED},
+  doi       = {10.21125/inted.2024.0071}
+}
+
+% === provenance: Rosiene2024 ===
+% CLAIM: A 2024 FIE work-in-progress paper proposes teaching students to
+%   read LLM-generated code as explanatory in itself, explicitly in contrast
+%   to LP's prose.
+% FOUND-VIA: scholar search (query S1) -p ieee --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S1/openalex, S1/wos, S2/openalex, S4, U1).
+% PICKED: the only hit that explicitly argues against LP's prose in an
+%   LLM-code context.
+% QUOTE (abstract): "In contrast to the practice of Literate Programming, in
+%   which the coder crafts a solution which reads as English, the proposed
+%   approach treats an existing programming as a \"shorthand\", which, when
+%   articulated, is explanatory."
+% QUOTE (abstract): "The paper gives numerous LLM-generated code examples of
+%   how the proper reading of programming statements conveys their function
+%   and requires little or no commentary."
+% VERIFIED: ABSTRACT ONLY (from the WoS/OpenAlex record in the session; IEEE
+%   PDF not open access, not retrieved). Status: peer-reviewed conference
+%   (IEEE FIE 2024, WIP, pp. 1-4). Evidence type: position with examples.
+%   Partial term collision: "literacy" = reading skill.
+% COUNTER: Birkenkrahe2024 posits complementarity instead.
+% DATE: 2026-11-05
+@inproceedings{Rosiene2024,
+  author    = {Rosiene, Joel A. and Rosiene, Carolyn Pe},
+  title     = {{WIP}: Focusing on Programmer Literacy in the Time of
+               {AI}-Aided Code Generation},
+  booktitle = {2024 IEEE Frontiers in Education Conference (FIE)},
+  pages     = {1--4},
+  year      = {2024},
+  publisher = {IEEE},
+  doi       = {10.1109/FIE61694.2024.10893329}
+}
+
+% === provenance: Whitlock2026 ===
+% CLAIM: Practitioners argue that coding agents remove LP's historical cost
+%   (keeping prose and code in sync), but offer no data.
+% FOUND-VIA: WebSearch "literate programming AI agents criticism does not
+%   work overhead why literate programming failed adoption LLM" (2026-11-05,
+%   standard mode), then curl of
+%   https://silly.business/blog/we-should-revisit-literate-programming-in-the-agent-era/
+%   (accessed 2026-11-05; plain HTML, not cacheable as PDF).
+% PICKED: the most-cited practitioner essay in the web results (several
+%   aggregators syndicate it); represents the grey-literature argument.
+% QUOTE: "I have found that in practice literate programming turns into a
+%   chore of maintaining two parallel narratives: the code itself, and the
+%   prose. This has obviously limited its adoption."
+% QUOTE: "The fundamental extra labor of literate programming, which I
+%   believe is why it is not widely practiced, is eliminated by the agent"
+% QUOTE: "I don't have data to support this, but I also suspect that literate
+%   programming will improve the quality of generated code"
+% QUOTE: "I have not personally had the opportunity to try this pattern yet
+%   on a larger, more serious codebase."
+% VERIFIED: full text of the post (HTML), quotes grepped verbatim. Dated 07
+%   Mar 2026 (per page). Evidence type: practitioner essay (Org mode +
+%   org-babel + AGENTS.md), self-declared without data.
+% COUNTER: the author's own caveats (quoted); no study tests the "agents
+%   remove the sync cost" claim (see report sec. 5).
+% DATE: 2026-11-05
+@misc{Whitlock2026,
+  author       = {Whitlock, Ian},
+  title        = {We Should Revisit Literate Programming in the Agent Era},
+  year         = {2026},
+  howpublished = {\url{https://silly.business/blog/we-should-revisit-literate-programming-in-the-agent-era/}},
+  note         = {Blog post, 7 March 2026. Accessed 2026-11-05}
+}
+
+% === provenance: Bond2026LitExec ===
+% CLAIM: Recent LP-lineage work outside LLMs (literate execution) mentions
+%   LLMs only as future work; its doc annotations are hand-written.
+% FOUND-VIA: scholar search (query S1) -p openalex --year 2023- --limit 100
+%   (session "lp-llm-direct"; also S3, U1/arxiv, C1-C4 on openalex).
+% PICKED: recall-check item; included as an adjacent contrast showing where
+%   the LP research line goes without LLMs.
+% QUOTE (sec. 7): "Their work also contributes an LLM-based authoring
+%   workflow that we do not address; @doc annotations are written by hand."
+% QUOTE (sec. 8): "A formal user study is needed to explore these various
+%   directions."
+% VERIFIED: full text, arXiv 2604.26967v2. Status: accepted to PLATEAU 2026
+%   workshop (arXiv comment). Evidence type: language design, no evaluation.
+%   Bearing: adjacent (LP, not LLM).
+% COUNTER: n/a (adjacent).
+% DATE: 2026-11-05
+@misc{Bond2026LitExec,
+  author        = {Bond, Joe and Pake, Jacob and David, Cristina and McNutt,
+                   Andrew and Muwonge, Trevor Sseguya and Orchard, Dominic and
+                   Perera, Roly},
+  title         = {Literate Execution},
+  year          = {2026},
+  eprint        = {2604.26967},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.PL},
+  doi           = {10.48550/arXiv.2604.26967},
+  note          = {Accepted to PLATEAU 2026}
+}
+
+% === provenance: Sotoudeh2025 ===
+% CLAIM: LP cannot be applied after the fact to existing large codebases;
+%   literate tracing documents them through annotated execution traces
+%   instead (no LLM involved).
+% FOUND-VIA: alphaXiv discover_papers, keywords ["literate programming",
+%   "LLM"], question "literate programming with LLMs, generative AI or coding
+%   agents", published_after 2023-01-01, difficulty 6 (2026-11-05). NOT
+%   returned by the scholar session (its abstract does not contain "literate
+%   programming"; OpenAlex cells were capped at 100).
+% PICKED: recall-check item; adjacent; gives an explicit limitation of LP.
+% QUOTE (sec. 6.1): "Unlike literate tracing, literate programming is a
+%   method of programming; it cannot help make existing monolithic codebases
+%   (GCC, Linux, etc.) more understandable."
+% VERIFIED: full text, arXiv 2510.09073v1; zero mentions of LLM/language
+%   model/GPT/Copilot in the text. Status: peer-reviewed, Onward! 2025,
+%   pp. 143-160 (Crossref, doi 10.1145/3759429.3762626). Evidence type:
+%   experience report + tool (TReX). Bearing: adjacent (LP, no LLM).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@inproceedings{Sotoudeh2025,
+  author    = {Sotoudeh, Matthew},
+  title     = {Literate Tracing},
+  booktitle = {Proceedings of the 2025 ACM SIGPLAN International Symposium on
+               New Ideas, New Paradigms, and Reflections on Programming and
+               Software (Onward! '25)},
+  pages     = {143--160},
+  year      = {2025},
+  publisher = {ACM},
+  doi       = {10.1145/3759429.3762626}
+}
+
+% === provenance: pan2026talking ===
+% CLAIM: Comments help LLM code generation only when they carry correct solution content; their form,
+%    volume or intent does not predict pass@1, and self-prompted comments recover at most ~24% of the
+%    external-comment gain.
+% FOUND-VIA: scholar search '"natural language outlines" AND (code OR LLM OR "large language model")'
+%    -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and
+%    the same keywords as 'TS=(...)' -p wos [query S2] ; also listed as an unverified recall-check
+%    item in the brief, retrieved by arXiv id only after the concept query returned it
+% PICKED: Most direct causal test of comments-as-context for code generation (controlled prefill
+%    interventions, 88/13/14 models). Peer-reviewed (Findings of EMNLP 2026); arXiv 2609.09242.
+% QUOTE: (Abstract) "Comments from source solutions that pass the tests raise recipient pass@1 by
+%    17.2% on average. In contrast, comments describing failed solutions provide no reliable gain,
+%    while comments written for a different problem reduce pass@1 by 20.8%." ; (§1) "the best prompt
+%    recovers at most about 24% of the external-comment lift"
+% VERIFIED: Full text read (arXiv v1 PDF via scripts/fetch_pdf.py). Note: the 17.2% is a percentage-
+%    point delta in Table 1 (e.g. 70.8 (+17.2)); comments come from a stronger model whose solution
+%    passed, i.e. they partly transmit the solution. Recipients are 4 small open models (Gemma-4-E4B,
+%    Seed-Coder-8B, Qwen3-8B, CodeGeeX4-9B); LiveCodeBench plus RepoClassBench (Java/C#).
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Qualifying work found and cited: Macke & Doyle
+%    2024, Lam et al. 2025, Huang et al. 2026 (wrong/misleading comments hurt).
+% DATE: 2026-11-05
+@inproceedings{pan2026talking,
+  author = {Dangfeng Pan and Zhensu Sun and Cenyuan Zhang and David Lo and Xiaoning Du},
+  title = {{Talking to Itself While Coding: What Makes Comments Help Code Generation?}},
+  booktitle = {Findings of the Association for Computational Linguistics: EMNLP 2026},
+  year = {2026},
+  doi = {10.18653/2026.findings-emnlp.916}
+}
+
+% === provenance: arman2026compact ===
+% CLAIM: With the source file present, compact or full natural-language documentation does not improve
+%    coding-agent issue resolution (and full-length docs do worst); documentation helps only when it
+%    substitutes for code the agent cannot see.
+% FOUND-VIA: scholar search '(documentation OR "code comments" OR docstrings OR "explanations of
+%    intent") AND ("coding agent" OR "coding agents" OR "agentic coding" OR "software engineering
+%    agent")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l
+%    50) and the same keywords as 'TS=(...)' -p wos [query S4] ; ALSO scholar search '(documentation
+%    OR "code comments" OR docstrings OR "context files") AND ("coding agent" OR "coding agents" OR
+%    LLM) AND ("token cost" OR tokens OR overhead OR "no improvement")' -n lp-prose-effects -p
+%    openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query C3] ; also listed as an unverified recall-check item in the brief,
+%    retrieved by arXiv id only after the concept query returned it
+% PICKED: Only large-scale test of documentation for coding agents with a validated positive control;
+%    reports a null honestly. Preprint.
+% QUOTE: (Abstract) "When the source is present, neither static compact documentation nor retrieved
+%    context beats the issue alone." ; (Table 8 caption) "No documentation condition improves on
+%    issue-only by more than a single task, and the full-length description is the worst condition
+%    wherever it was run."
+% VERIFIED: Full text read (arXiv v1). Numbers: SWE-ContextBench Lite, Gemini 3.8 Flash, 58 paired
+%    tasks: issue-only 33, context 30, compact 29 (McNemar p=0.22/0.25); source withheld: mean test-
+%    pass 0.08 -> 0.71 with optimized descriptions.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Corroborated by Gloaguen et al. 2026 (AGENTS.md).
+%    Contrasts with Vitale 2026 / Gupta 2026 (comments help repair/translation) -- difference: whether
+%    the prose adds information the model lacks.
+% DATE: 2026-11-05
+@misc{arman2026compact,
+  author = {Md Shohel Arman and Igor Molybog},
+  title = {{Compact Documentation for Coding Agents: A Benchmark, an Optimizer, and Why It Does Not Transfer}},
+  year = {2026},
+  eprint = {2609.31587},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2609.31587},
+  note = {Preprint}
+}
+
+% === provenance: vitale2026comments ===
+% CLAIM: Code comments in the input improve LLM automated bug fixing, by up to about threefold exact
+%    match when models are trained and tested with comments.
+% FOUND-VIA: scholar search '("code comments" OR docstrings OR documentation) AND (LLM OR "large
+%    language model" OR "large language models") AND ("program repair" OR "code comprehension" OR
+%    "program comprehension" OR "code understanding")' -n lp-prose-effects -p openalex / -p ieee / -p
+%    arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query
+%    S3] ; ALSO scholar search '(intent OR explanation OR "reasoning comments") AND "code comments"
+%    AND (LLM OR "large language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p
+%    hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S7] ; ALSO
+%    alphaXiv discover_papers(keywords=["code comments","LLM","code generation","misleading
+%    comments","documentation","coding agents"], question="Do natural-language code comments or
+%    documentation improve or harm LLM performance in code generation, repair, comprehension, or
+%    agentic tasks?", published_after=2023-01-01), 2026-11-05
+% PICKED: Controlled 2x2 (train x test, with/without comments) on two model families; peer-reviewed
+%    (ICPC 2026, per Crossref); arXiv 2601.23059.
+% QUOTE: (Abstract) "Our findings show that comments improve ABF accuracy by up to threefold when
+%    present in both phases, while training with comments does not degrade performance when instances
+%    lack them."
+% VERIFIED: Full text read (arXiv 2601.23059). Absolute levels are low: CodeT5+ EM 2.78% -> 9.80%,
+%    DeepSeek-Coder 5.09% -> 12.77% (§4 RQ1). Most comments were GPT-3.5-generated (93% judged
+%    coherent). Fine-tuned models, method-level Java.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Qualified by Macke & Doyle 2024 (missing docs no
+%    effect) and by misleading-comment studies.
+% DATE: 2026-11-05
+@inproceedings{vitale2026comments,
+  author = {Antonio Vitale and Emanuela Guglielmi and Simone Scalabrino and Rocco Oliveto},
+  title = {{On the Impact of Code Comments for Automated Bug-Fixing: An Empirical Study}},
+  booktitle = {Proceedings of the 2026 34th IEEE/ACM International Conference on Program Comprehension},
+  year = {2026},
+  doi = {10.1145/3794763.3794794}
+}
+
+% === provenance: macke2024documentation ===
+% CLAIM: Incorrect documentation greatly hinders LLM code understanding (unit-test generation), while
+%    missing or partial documentation has no significant effect.
+% FOUND-VIA: scholar search '("code comments" OR docstrings OR documentation) AND ("large language
+%    model" OR "large language models" OR LLM) AND "code generation"' -n lp-prose-effects -p openalex
+%    / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)'
+%    -p wos [query S1] ; ALSO scholar search '("code comments" OR docstrings OR documentation) AND
+%    (LLM OR "large language model" OR "large language models") AND ("program repair" OR "code
+%    comprehension" OR "program comprehension" OR "code understanding")' -n lp-prose-effects -p
+%    openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query S3] ; ALSO scholar search '("misleading comments" OR "outdated comments"
+%    OR "comment inconsistency" OR "code-comment inconsistency" OR "incorrect comments") AND (LLM OR
+%    "large language model" OR "large language models" OR "code generation")' -n lp-prose-effects -p
+%    openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query C1]
+% PICKED: Early, peer-reviewed controlled test (Findings of NAACL 2024) of correct vs missing vs
+%    random docstrings; GPT-3.5/GPT-4 on HumanEval.
+% QUOTE: (Abstract) "We show that providing an LLM with \"incorrect\" documentation can greatly hinder
+%    code understanding, while incomplete or missing documentation does not seem to significantly
+%    affect an LLM's ability to understand code."
+% VERIFIED: Full text read (arXiv 2404.03114). Random comments: 22.1% (GPT-3.5) / 68.1% (GPT-4)
+%    successful tests, worst of all variants (§4).
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Partly contradicted by Sabetto 2025 (comments
+%    help on legacy COBOL-like code) and Vitale 2026 -- likely because HumanEval functions are well
+%    known to the models.
+% DATE: 2026-11-05
+@inproceedings{macke2024documentation,
+  author = {William Macke and Michael Doyle},
+  title = {{Testing the Effect of Code Documentation on Large Language Model Code Understanding}},
+  booktitle = {Findings of the Association for Computational Linguistics: NAACL 2024},
+  year = {2024},
+  doi = {10.18653/v1/2024.findings-naacl.66}
+}
+
+% === provenance: sabetto2025legacy ===
+% CLAIM: On legacy code, more comments raise LLM multiple-choice comprehension scores, while fully
+%    inaccurate comments lower them (20% inaccurate comments had negligible effect).
+% FOUND-VIA: scholar search '("code comments" OR docstrings OR documentation) AND (LLM OR "large
+%    language model" OR "large language models") AND ("program repair" OR "code comprehension" OR
+%    "program comprehension" OR "code understanding")' -n lp-prose-effects -p openalex / -p ieee / -p
+%    arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query
+%    S3] ; ALSO scholar search '(intent OR explanation OR "reasoning comments") AND "code comments"
+%    AND (LLM OR "large language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p
+%    hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S7]
+% PICKED: Only study on legacy code (where documentation is often stale). Preprint, MITRE, preliminary
+%    (one module, four LLMs).
+% QUOTE: (§IV) "In all cases, the presence of comments resulted in increased quiz scores (96% for the
+%    basic quiz and 90% for the advanced quiz) when compared to quiz scores for the L8WAIT module
+%    variation with no comments (84% for both the basic and advanced quizzes)." ; (§IV) "The quiz
+%    scores degraded to an average of 61% on the same questions when given completely inaccurate
+%    comments."
+% VERIFIED: Full text read (arXiv). Single legacy module; the models scored 75% with no code at all,
+%    so the module is likely in training data.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Consistent with Macke & Doyle 2024 on inaccurate
+%    comments.
+% DATE: 2026-11-05
+@misc{sabetto2025legacy,
+  author = {Rock Sabetto and Emily Escamilla and Devesh Agarwal and Sujay Kandwal and Justin F. Brunelle and Scott Rosen and Nitin Naik and Samruddhi Thaker and Eric O. Scott and Jacob Zimmer and Amit Madan and Arun Sridharan and Doug Wendt and Michael Doyle and Christopher Glasz and Jasper Phillips and William Macke and Colin Diggs and Michael Bartholf and Zachary Robin and Paul Ursino},
+  title = {{Impact of Comments on LLM Comprehension of Legacy Code}},
+  year = {2025},
+  eprint = {2506.11007},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2506.11007},
+  note = {Preprint}
+}
+
+% === provenance: gupta2026translation ===
+% CLAIM: Comments can improve LLM code translation, especially purpose-level comments, but model-
+%    generated comments also harm translation in many cases (-90% to +435% vs baseline).
+% FOUND-VIA: scholar search '(intent OR explanation OR "reasoning comments") AND "code comments" AND
+%    (LLM OR "large language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal
+%    (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S7] ; ALSO
+%    scholar search '(documentation OR "code comments" OR docstrings OR "context files") AND ("coding
+%    agent" OR "coding agents" OR LLM) AND ("token cost" OR tokens OR overhead OR "no improvement")'
+%    -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and
+%    the same keywords as 'TS=(...)' -p wos [query C3] ; ALSO scholar search '("comment removal" OR
+%    "without comments" OR "stripping comments" OR "removing comments" OR "comment-free") AND (LLM OR
+%    "large language model" OR "large language models")' -n lp-prose-effects -p openalex / -p ieee /
+%    -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos
+%    [query C5]
+% PICKED: Largest study of comments for translation (>80,000 translations, 5 languages). Preprint (IIT
+%    Delhi, IBM Research).
+% QUOTE: (§RQ1) "With commented code, the gain in LLM translation performance ranged from -90% to
+%    +435% over the baseline uncommented code translation performance. This leads us to conclude that
+%    while model-generated code comments can help improve the translation performance of LLMs, they
+%    can also have a deleterious effect on the translations."
+% VERIFIED: Full text read (arXiv). Abstract claims comments 'significantly enhance translation
+%    accuracy'; the per-model table shows a nearly balanced mix of gains and losses -- report both.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Self-qualifying; consistent with Pan 2026
+%    (content, not form, matters).
+% DATE: 2026-11-05
+@misc{gupta2026translation,
+  author = {Monika Gupta and Ajay Meena and Anamitra Roy Choudhury and Vijay Arya and Srikanta Bedathur},
+  title = {{Revisiting the Role of Natural Language Code Comments in Code Translation}},
+  year = {2026},
+  eprint = {2601.16661},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2601.16661},
+  note = {Preprint}
+}
+
+% === provenance: imani2026insideout ===
+% CLAIM: LLMs internally represent comments as a distinct concept; switching that concept on or off
+%    shifts task performance from -90% to +67%, depending on model and task.
+% FOUND-VIA: scholar search '("code summaries" OR "code summarization" OR "generated comments" OR
+%    "code explanations") AND (LLM OR "AI-generated" OR "large language model") AND ("controlled
+%    experiment" OR "user study" OR "human study") AND (comprehension OR understanding)' -n lp-prose-
+%    effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same
+%    keywords as 'TS=(...)' -p wos [query H6] ; ALSO alphaXiv discover_papers(keywords=["code
+%    comments","LLM","code generation","misleading comments","documentation","coding agents"],
+%    question="Do natural-language code comments or documentation improve or harm LLM performance in
+%    code generation, repair, comprehension, or agentic tasks?", published_after=2023-01-01),
+%    2026-11-05
+% PICKED: Mechanistic evidence that comment effects are model- and task-specific; peer-reviewed (ICSE
+%    2026); arXiv 2512.16790.
+% QUOTE: (Abstract) "By systematically activating and deactivating these concepts in the LLMs'
+%    embedding space, we observed significant, model-specific, and task-dependent shifts in
+%    performance ranging from -90% to +67%."
+% VERIFIED: Abstract and introduction read in full text (arXiv 2512.16790); results tables not re-
+%    checked. Activation steering, not adding/removing real comments.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Supports a 'depends' reading rather than a
+%    uniform benefit.
+% DATE: 2026-11-05
+@inproceedings{imani2026insideout,
+  author = {Aaron Imani and Mohammad Moshirpour and Iftekhar Ahmed},
+  title = {{Inside Out: Uncovering How Comment Internalization Steers LLMs for Better or Worse}},
+  booktitle = {Proceedings of the 2026 IEEE/ACM 48th International Conference on Software Engineering},
+  year = {2026},
+  doi = {10.1145/3744916.3787776}
+}
+
+% === provenance: lam2025codecrash ===
+% CLAIM: Misleading natural-language cues embedded in code make LLMs shortcut reasoning, degrading
+%    output prediction by 23.2% on average across 17 LLMs.
+% FOUND-VIA: scholar search '("misleading comments" OR "outdated comments" OR "comment inconsistency"
+%    OR "code-comment inconsistency" OR "incorrect comments") AND (LLM OR "large language model" OR
+%    "large language models" OR "code generation")' -n lp-prose-effects -p openalex / -p ieee / -p
+%    arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query
+%    C1]
+% PICKED: Peer-reviewed (NeurIPS 2025) stress test of misleading NL in code reasoning.
+% QUOTE: (Abstract) "we find that models often shortcut reasoning by over-relying on NL cues, leading
+%    to an average performance degradation of 23.2% in output prediction tasks."
+% VERIFIED: Abstract and introduction read in full text (NeurIPS PDF via fetch_pdf.py).
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Refuting direction for 'prose always helps'.
+% DATE: 2026-11-05
+@inproceedings{lam2025codecrash,
+  author = {Man Ho Lam and Chaozheng Wang and Jen-Tse Huang and Michael R Lyu},
+  title = {{CodeCrash: Exposing LLM Fragility to Misleading Natural Language in Code Reasoning}},
+  booktitle = {Advances in Neural Information Processing Systems 38},
+  year = {2025},
+  doi = {10.52202/085713-4029}
+}
+
+% === provenance: huang2026commenttraps ===
+% CLAIM: Defective commented-out code in context makes Copilot and Cursor generate more defective code
+%    (up to 58.17%), and instructions to ignore it cut defects by at most 21.84%.
+% FOUND-VIA: scholar search '"comments" AND "code generation" AND ("large language model" OR LLM) AND
+%    (improve OR effect OR impact)' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one
+%    call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S6]
+% PICKED: Peer-reviewed (FSE 2026, PACMSE) test with two commercial assistants.
+% QUOTE: (Abstract) "The experimental results show that defective CO code in the context causes AI
+%    coding assistants to generate more defective code, reaching up to 58.17 percent."
+% VERIFIED: Abstract read in full text (ACM PDF). Commented-out code, not explanatory prose: adjacent
+%    to LP prose but shows that comment-channel content is followed.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1.
+% DATE: 2026-11-05
+@article{huang2026commenttraps,
+  author = {Yuan Huang and Yukang Zhou and Xiangping Chen and Zibin Zheng},
+  title = {{Comment Traps: How Defective Commented-Out Code Augment Defects in AI-Assisted Code Generation}},
+  journal = {Proceedings of the ACM on Software Engineering},
+  year = {2026},
+  doi = {10.1145/3797102}
+}
+
+% === provenance: munir2026hidden ===
+% CLAIM: Insecure instructions embedded as code comments steer code LLMs to vulnerable code in
+%    77.4-92.3% of completions.
+% FOUND-VIA: scholar search '(intent OR explanation OR "reasoning comments") AND "code comments" AND
+%    (LLM OR "large language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal
+%    (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S7] ; ALSO
+%    alphaXiv discover_papers(keywords=["code comments","LLM","code generation","misleading
+%    comments","documentation","coding agents"], question="Do natural-language code comments or
+%    documentation improve or harm LLM performance in code generation, repair, comprehension, or
+%    agentic tasks?", published_after=2023-01-01), 2026-11-05
+% PICKED: Shows the security cost of models obeying comments; preprint (Oxford), 10 open models
+%    3B-13B.
+% QUOTE: (Abstract) "Attack-condition completions contained a medium-or-higher weakness in 77.4-92.3%
+%    of cases, compared with 1.7-5.1% in the benign condition."
+% VERIFIED: Abstract read in full text (arXiv).
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Contrasted by Thornton 2026: adversarial comments
+%    do not fool LLM vulnerability detection.
+% DATE: 2026-11-05
+@misc{munir2026hidden,
+  author = {Noor Munir and Francesco Quinzan and Stephen Roberts},
+  title = {{Hidden in the Comments: A Context-Injection Attack Surface in Code LLMs}},
+  year = {2026},
+  eprint = {2610.05139},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2610.05139},
+  note = {Preprint}
+}
+
+% === provenance: thornton2026adversarial ===
+% CLAIM: Adversarial comments did not significantly degrade LLM vulnerability detection across 8
+%    models, and stripping comments hurt weaker models.
+% FOUND-VIA: scholar search '"comments" AND "code generation" AND ("large language model" OR LLM) AND
+%    (improve OR effect OR impact)' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one
+%    call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S6]
+% PICKED: Counter-evidence to the 'comments mislead' strand, in a detection (review) task. Preprint,
+%    single author.
+% QUOTE: (Abstract) "Adversarial comments produced small, statistically non-significant effects across
+%    all eight models (McNemar's exact p > 0.21, all 95% CIs spanning zero)." ; "Comment stripping,
+%    the \"obvious\" defense, actually degraded detection for weaker models by removing helpful
+%    context."
+% VERIFIED: Abstract read in full text (arXiv).
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. Disagrees with Munir 2026 / Wu 2026 (ALIBI);
+%    difference is generation vs detection and adaptive vs static attacks.
+% DATE: 2026-11-05
+@misc{thornton2026adversarial,
+  author = {Scott Thornton},
+  title = {{Can Adversarial Code Comments Fool AI Security Reviewers -- Large-Scale Empirical Study of Comment-Based Attacks and Defenses Against LLM Code Analysis}},
+  year = {2026},
+  eprint = {2602.16741},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2602.16741},
+  note = {Preprint}
+}
+
+% === provenance: yang2026lessismore ===
+% CLAIM: Docstrings used as code-generation prompts carry redundancy: ShortenDoc compresses them by
+%    25-40% while preserving generated-code quality.
+% FOUND-VIA: scholar search '("code comments" OR docstrings OR documentation) AND ("large language
+%    model" OR "large language models" OR LLM) AND "code generation"' -n lp-prose-effects -p openalex
+%    / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)'
+%    -p wos [query S1] ; ALSO scholar search '(documentation OR "code comments" OR docstrings OR
+%    "context files") AND ("coding agent" OR "coding agents" OR LLM) AND ("token cost" OR tokens OR
+%    overhead OR "no improvement")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one
+%    call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query C3]
+% PICKED: Peer-reviewed (TOSEM 2026) evidence on the token cost of prose.
+% QUOTE: (Abstract) "ShortenDoc achieves 25-40% compression while preserving the quality of generated
+%    code, outperforming other baseline methods at similar compression levels."
+% VERIFIED: Abstract read in full text. Prompt docstrings (the task spec), not interleaved LP prose.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1.
+% DATE: 2026-11-05
+@article{yang2026lessismore,
+  author = {Guang Yang and Yu Zhou and Wei Cheng and Xiangyu Zhang and Xiang Chen and Terry Yue Zhuo and Ke Liu and Xin Zhou and David Lo and Taolue Chen},
+  title = {{Less Is More: DocString Compression in Code Generation}},
+  journal = {ACM Transactions on Software Engineering and Methodology},
+  year = {2026},
+  doi = {10.1145/3735636}
+}
+
+% === provenance: di2025mutual ===
+% CLAIM: Editable LLM-generated inline comments as a grounding medium improve code generation (+17.1%
+%    pass@1 for code-davinci-002 on HumanEval) and, in a 12-person study, task speed and success.
+% FOUND-VIA: scholar search '("code comments" OR docstrings OR documentation) AND ("large language
+%    model" OR "large language models" OR LLM) AND "code generation"' -n lp-prose-effects -p openalex
+%    / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)'
+%    -p wos [query S1] ; ALSO scholar search '"comments" AND "code generation" AND ("large language
+%    model" OR LLM) AND (improve OR effect OR impact)' -n lp-prose-effects -p openalex / -p ieee / -p
+%    arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query
+%    S6] ; ALSO scholar search '(intent OR explanation OR "reasoning comments") AND "code comments"
+%    AND (LLM OR "large language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p
+%    hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S7] ; ALSO
+%    scholar search '(explanation OR explanations OR documentation OR "natural language") AND ("AI-
+%    generated code" OR "LLM-generated code" OR "AI code") AND (developers OR programmers) AND
+%    (understand OR comprehension OR validation OR verification)' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H3]
+% PICKED: Peer-reviewed (ICSE 2025) combination of benchmark and small human study on comment-mediated
+%    generation (PInG).
+% QUOTE: (Abstract) "Participants completed the given programming tasks 16.7% faster and with 10.5%
+%    improvement in task success rate when using our approach."
+% VERIFIED: Abstract read in full text. User study n=12, compared with Copilot and multi-turn
+%    synthesis.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1. RQ3 counter-searches D1-D5 (over-reliance,
+%    cognitive offloading, comprehension/cognitive debt; overtrust/misleading/incorrect explanations;
+%    review burden; automation bias; inaccurate explanations) on the same five providers; plus
+%    alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{di2025mutual,
+  author = {Yifeng Di and Tianyi Zhang},
+  title = {{Enhancing Code Generation via Bidirectional Comment-Level Mutual Grounding}},
+  booktitle = {2025 IEEE/ACM 47th International Conference on Software Engineering (ICSE)},
+  year = {2025},
+  doi = {10.1109/ICSE55347.2025.00165}
+}
+
+% === provenance: gao2026agentfriendly ===
+% CLAIM: Coding agents mostly consult agent-facing documents (60.5% of documentation interactions),
+%    and consultation is associated with less immediate testing; assumed properties of 'agent-
+%    friendly' docs lack behavioural support.
+% FOUND-VIA: scholar search '(documentation OR "code comments" OR docstrings OR "explanations of
+%    intent") AND ("coding agent" OR "coding agents" OR "agentic coding" OR "software engineering
+%    agent")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l
+%    50) and the same keywords as 'TS=(...)' -p wos [query S4] ; also listed as an unverified recall-
+%    check item in the brief, retrieved by arXiv id only after the concept query returned it
+% PICKED: Only behavioural trace study of agents and documentation (557 sessions, 33,097 PRs).
+%    Preprint; observational.
+% QUOTE: (Abstract) "agent instruction files and agent working notes account for 60.5% of all
+%    documentation interactions, whereas classical technical documentation accounts for 10.6% and API
+%    references for 1.3%."
+% VERIFIED: Full text read (arXiv). Associations, not effects on success.
+% COUNTER: RQ2 counter-searches C1-C5 (misleading/outdated/inconsistent comments,
+%    robustness/perturbation/adversarial, token cost/overhead, readability harm, comment removal) on
+%    the same five providers; plus alphaXiv query 1.
+% DATE: 2026-11-05
+@misc{gao2026agentfriendly,
+  author = {Zhijun Gao and Jing Chen},
+  title = {{From Agent Behaviour to Agent-Friendly Documentation: An Empirical Study of How Coding Agents Discover, Read, and Write Technical Documentation}},
+  year = {2026},
+  eprint = {2608.20195},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2608.20195},
+  note = {Preprint}
+}
+
+% === provenance: takerngsaksiri2025readability ===
+% CLAIM: Practitioners still rate code readability as important in the LLM era (81% of 118), and LLM-
+%    generated code from Atlassian's HULA is comparable in readability metrics to human code.
+% FOUND-VIA: scholar search '("code readability" OR "readability" OR "self-documenting") AND (LLM OR
+%    "large language model" OR "large language models") AND ("code generation" OR "AI-generated code"
+%    OR "generated code")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per
+%    provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S5] ; ALSO scholar search
+%    '("code readability" OR "self-documenting" OR "comment quality") AND (LLM OR "large language
+%    model") AND (harm OR "no effect" OR limitation OR misleading OR "does not")' -n lp-prose-effects
+%    -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query C4] ; also listed as an unverified recall-check item in the brief,
+%    retrieved by arXiv id only after the concept query returned it
+% PICKED: Industrial survey. Peer-reviewed (ICSME 2025). Conflict of interest: evaluates the authors'
+%    own employer's tool (HULA).
+% QUOTE: (§1) "Through an online survey of 118 practitioners, we found that 81% of practitioners
+%    agreed that code readability is important."
+% VERIFIED: Full text read (arXiv 2501.11264v3). Opinion survey + metrics; does not test whether prose
+%    helps anyone.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{takerngsaksiri2025readability,
+  author = {Wannita Takerngsaksiri and Chakkrit Tantithamthavorn and Micheal Fu and Jirat Pasuksmit and Kun Chen and Ming Wu},
+  title = {{Code Readability in the Age of Large Language Models: An Industrial Case Study from Atlassian}},
+  booktitle = {2025 IEEE International Conference on Software Maintenance and Evolution (ICSME)},
+  year = {2025},
+  doi = {10.1109/icsme64153.2025.00073}
+}
+
+% === provenance: kaufman2026assertions ===
+% CLAIM: In a pre-registered experiment (n=86), LLM-written natural-language comments did not improve
+%    programmers' judgement of LLM-generated assertions; under-specified comments lowered accuracy
+%    versus exact comments while raising confidence versus no comment.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1] ; ALSO scholar search '(explanation OR explanations OR documentation) AND ("AI-
+%    generated code" OR "LLM-generated code" OR "AI code") AND (overtrust OR "over-trust" OR "over-
+%    reliance" OR overreliance OR misleading OR wrong OR "does not help" OR incorrect)' -n lp-prose-
+%    effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same
+%    keywords as 'TS=(...)' -p wos [query D2] ; ALSO scholar search '("illusion of understanding" OR
+%    "illusion of explanatory depth" OR "automation bias" OR "explanation" ) AND ("code generation" OR
+%    "AI-generated code" OR "programming assistant") AND ("controlled experiment" OR "randomized" OR
+%    "human study" OR "user study")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal
+%    (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query D4]
+% PICKED: Most direct controlled human test of whether AI-written prose helps validate AI-generated
+%    artefacts, with comment quality manipulated. Preprint.
+% QUOTE: (RQ2 results) "Contrary to our pre-registered hypothesis (see Section 4), the presence of a
+%    comment (even if that comment was of high-quality) did not significantly improve participant
+%    accuracy compared to providing no comment at all (p > 0.1)." ; (§1) "Participants were much
+%    better at identifying correct assertions than identifying incorrect ones (74% vs. 49% accuracy, p
+%    < 0.001, OR = 2.94)"
+% VERIFIED: Full text read (arXiv). Under-specified vs exact: p=0.037, OR=0.58; confidence 4.25 vs
+%    3.99 (p=0.005). Stimuli are postcondition assertions on HumanEval functions, not whole programs.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2. Contrasts with Yan 2024 (Ivie)
+%    and Tang 2026, which test tool-generated explanations on comprehension quizzes without
+%    manipulating explanation correctness.
+% DATE: 2026-11-05
+@misc{kaufman2026assertions,
+  author = {Zhanna Kaufman and Yuriy Brun and Adithya Murali and Madeline Endres},
+  title = {{Programmers Are Poor and Overconfident Judges of LLM-Generated Assertions}},
+  year = {2026},
+  eprint = {2607.08885},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2607.08885},
+  note = {Preprint}
+}
+
+% === provenance: balepur2026impaired ===
+% CLAIM: Coding-agent users (n=54 students) completed the initial task better but understood their
+%    code worse than chat users; among agent users, a higher proportion of comments was associated
+%    with lower comprehension.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1]
+% PICKED: Controlled between-subjects study on understanding of agent-written code; directly measures
+%    comments. Preprint.
+% QUOTE: (§ readability analysis, Takeaway 3) "Users with JS code of fewer lines, comments, and volume
+%    had higher comprehension (Figure 8), suggesting agent users better digest concise code without
+%    distracting comments" ; (Discussion, future directions) "Comments made it easy to understand
+%    where to add new features, but having not fully reviewed the code made it much harder to
+%    understand everything" (participant U31)
+% VERIFIED: Full text read (arXiv). Comment finding is correlational (regression within the agent
+%    arm), not manipulated. Comprehension effect p<0.002, d>0.8 (Fig. 1). Students, web development
+%    task.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{balepur2026impaired,
+  author = {Nishant Balepur and Connor Baumler and Valerie Chen and Eunsol Choi and Rachel Rudinger and Jordan Lee Boyd-Graber},
+  title = {{(Im)Paired Programming: Coding Agents Improve Productivity but Harm Understanding}},
+  year = {2026},
+  eprint = {2607.26375},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2607.26375},
+  note = {Preprint}
+}
+
+% === provenance: shen2026skill ===
+% CLAIM: In a randomized experiment (n=52), AI assistance while learning a new library lowered
+%    conceptual understanding, code reading and debugging scores by 17% without significant speed-up;
+%    asking for explanations alongside code preserved more learning than delegation.
+% FOUND-VIA: alphaXiv discover_papers(keywords=["AI-generated code","program comprehension","code
+%    review","over-reliance","cognitive offloading","comprehension debt","explanation"],
+%    question="Controlled experiments with human developers: do explanations, comments or
+%    documentation help people understand, review or validate AI-generated code, or do they increase
+%    over-reliance and lost understanding?", published_after=2023-01-01), 2026-11-05 (not returned by
+%    the scholar queries)
+% PICKED: Randomized controlled experiment on lost understanding. Preprint. Authors at Anthropic (an
+%    AI vendor), reporting a finding unfavourable to AI use.
+% QUOTE: (§1.1) "We find that using AI assistance to complete tasks that involve this new library
+%    resulted in a reduction in the evaluation score by 17% or two grade points (Cohen's d = 0.738, p
+%    = 0.010)."
+% VERIFIED: Full text read (arXiv v2). The interaction-pattern result (Hybrid Code-Explanation n=3,
+%    65% quiz) is qualitative and very small n.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{shen2026skill,
+  author = {Judy Hanwen Shen and Alex Tamkin},
+  title = {{How AI Impacts Skill Formation}},
+  year = {2026},
+  eprint = {2601.20245},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2601.20245},
+  note = {Preprint}
+}
+
+% === provenance: gao2026xai ===
+% CLAIM: Fuller explanations of AI code-review recommendations raised developers' trust (M=3.99/5) but
+%    not agreement (highest with moderate explanations, 89.22%) and did not change review time;
+%    whether explanations help detect wrong recommendations was not tested.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted") AND ("code
+%    review" OR "reviewing") AND (burden OR effort OR "review time" OR fatigue OR "lost understanding"
+%    OR overreliance)' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per
+%    provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query D3]
+% PICKED: Within-subjects experiment (n=34), peer-reviewed (PACMSE ISSTA 2026); arXiv 2607.24601.
+% QUOTE: (Abstract) "Full explanations (Condition A) yield the highest perceived trust (M = 3.99/5)
+%    but not the highest agreement with AI recommendations, whereas moderate explanations (Condition
+%    B) achieve the highest agreement with AI (89.22%)." ; (Threats) "Evaluating whether explanations
+%    help developers detect incorrect recommendations would require a different design"
+% VERIFIED: Full text read (arXiv). AI recommendations were kept correct by design; explanation is of
+%    a review, not of generated code.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@article{gao2026xai,
+  author = {Zhenhan Gao and {Muñoz Barón}, Marvin and Umm-e Habiba and Daniel Graziotin and Stefan Wagner},
+  title = {{Evaluating the Impact of Explainable AI on Trust in AI-Assisted Code Review}},
+  journal = {Proceedings of the ACM on Software Engineering},
+  year = {2026},
+  doi = {10.1145/3832184}
+}
+
+% === provenance: yan2024ivie ===
+% CLAIM: Instantly visible, anchored LLM explanations of just-generated code improved programmers'
+%    comprehension (90.2% vs 65.0% correct) versus a chat baseline, with lower task load (n=32).
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1] ; ALSO scholar search '("illusion of understanding" OR "illusion of explanatory
+%    depth" OR "automation bias" OR "explanation" ) AND ("code generation" OR "AI-generated code" OR
+%    "programming assistant") AND ("controlled experiment" OR "randomized" OR "human study" OR "user
+%    study")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l
+%    50) and the same keywords as 'TS=(...)' -p wos [query D4]
+% PICKED: Peer-reviewed (CHI 2024) lab study of in-situ prose explanations of generated code --
+%    closest human analogue to LP-style interleaved explanation.
+% QUOTE: (§5.4 Results, comprehension) "When using, Ivie, they answered an average of 90.2% of
+%    questions correctly, in contrast to 65.0% with the baseline"
+% VERIFIED: Full text read (author version PDF). Baseline is a chatbot, not 'no explanation';
+%    participants mostly graduate students; explanation correctness not manipulated.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2. Qualified by Kaufman 2026 (no
+%    benefit, and over-confidence with poor explanations).
+% DATE: 2026-11-05
+@inproceedings{yan2024ivie,
+  author = {Litao Yan and Alyssa Hwang and Zhiyuan Wu and Andrew Head},
+  title = {{Ivie: Lightweight Anchored Explanations of Just-Generated Code}},
+  booktitle = {Proceedings of the CHI Conference on Human Factors in Computing Systems},
+  year = {2024},
+  doi = {10.1145/3613904.3642239}
+}
+
+% === provenance: nam2024gilt ===
+% CLAIM: An in-IDE LLM explanation plugin (GILT) aided code-understanding task completion more than
+%    web search in a 32-participant study.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1] ; ALSO scholar search '("code summaries" OR "code summarization" OR "generated
+%    comments" OR "code explanations") AND (LLM OR "AI-generated" OR "large language model") AND
+%    ("controlled experiment" OR "user study" OR "human study") AND (comprehension OR understanding)'
+%    -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and
+%    the same keywords as 'TS=(...)' -p wos [query H6] ; ALSO scholar search '("code comments" OR
+%    docstrings OR documentation) AND (LLM OR "large language model" OR "large language models") AND
+%    ("program repair" OR "code comprehension" OR "program comprehension" OR "code understanding")' -n
+%    lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the
+%    same keywords as 'TS=(...)' -p wos [query S3] ; ALSO scholar search '(intent OR explanation OR
+%    "reasoning comments") AND "code comments" AND (LLM OR "large language model")' -n lp-prose-
+%    effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same
+%    keywords as 'TS=(...)' -p wos [query S7]
+% PICKED: Peer-reviewed (ICSE 2024) human study of LLM explanations for understanding code; one author
+%    at Google.
+% QUOTE: (Abstract) "We evaluate this system in a user study with 32 participants, which confirms that
+%    using our plugin can aid task completion more than web search."
+% VERIFIED: Full text read (arXiv 2307.08177v3). Explains existing (human-written) code, not AI-
+%    generated code.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{nam2024gilt,
+  author = {Daye Nam and Andrew Macvean and Vincent Hellendoorn and Bogdan Vasilescu and Brad Myers},
+  title = {{Using an LLM to Help With Code Understanding}},
+  booktitle = {Proceedings of the IEEE/ACM 46th International Conference on Software Engineering},
+  year = {2024},
+  doi = {10.1145/3597503.3639187}
+}
+
+% === provenance: tang2026naturaledit ===
+% CLAIM: Interactive natural-language summaries linked to code (NaturalEdit) improved comprehension,
+%    intent articulation and validation in a 20-developer within-subjects study; the authors flag
+%    automation-bias risk.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1] ; ALSO scholar search '"natural language outlines" AND (code OR LLM OR "large
+%    language model")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per
+%    provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query S2]
+% PICKED: Peer-reviewed (UIST 2026); bidirectional NL<->code representation, the closest tool to LP
+%    for AI edits.
+% QUOTE: (Abstract) "a user study with 20 developers shows that it improves comprehension, intent
+%    articulation, and validation while increasing developers' perceived confidence and control." ;
+%    (Limitations) "Our findings on confidence and control are also subject to automation bias: a
+%    readable NL diff may increase perceived control while still concealing semantic errors or
+%    inaccurate NL-code mappings."
+% VERIFIED: Full text read. Task correctness 95.0% vs 81.7%; much of the evidence is self-report.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{tang2026naturaledit,
+  author = {Ningzhi Tang and David Meininger and Gelei Xu and Yiyu Shi and Yu Huang and Collin McMillan and Toby Jia-Jun Li},
+  title = {{NaturalEdit: Code Modification through Direct Interaction with Adaptive Natural Language Representation}},
+  booktitle = {Proceedings of the 39th Annual ACM Symposium on User Interface Software and Technology},
+  year = {2026},
+  doi = {10.1145/3830398.3830631}
+}
+
+% === provenance: li2026comments ===
+% CLAIM: Adding AI-generated comments to AI-generated code increased how much of it programmers
+%    adopted (n=173, beta=0.336, p=0.027), regardless of expertise.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1]
+% PICKED: Peer-reviewed (JSS) between-subjects experiment with a behavioural adoption measure.
+% QUOTE: (Abstract) "Our findings revealed that, within the context of function-level programming
+%    tasks, the presence of comments significantly influences programmers' adoption of AI-generated
+%    code regardless of the participants' development expertise."
+% VERIFIED: Full text read. Measures adoption (code similarity), not correctness or understanding --
+%    comments increase uptake, which can be reliance either way.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@article{li2026comments,
+  author = {Changwen Li and Christoph Treude and Ofir Turel},
+  title = {{Do comments and expertise still matter? An experiment on programmers’ adoption of AI-generated JavaScript code}},
+  journal = {Journal of Systems and Software},
+  year = {2026},
+  doi = {10.1016/j.jss.2025.112634}
+}
+
+% === provenance: qiao2025faster ===
+% CLAIM: Copilot improved task performance of 15 graduate students in an unfamiliar codebase without
+%    improving their comprehension (p=0.59).
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1]
+% PICKED: Small within-subjects study separating performance from comprehension. Preprint; education
+%    setting (graduate students).
+% QUOTE: (Abstract) "Despite significant performance improvements with Copilot, participants showed no
+%    corresponding improvement in overall comprehension (p = 0.59)"
+% VERIFIED: Abstract read in full text.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{qiao2025faster,
+  author = {Yunhan Qiao and Md Istiak Hossain Shihab and Summit Haque and and Christopher Hundhausen},
+  title = {{Faster but Not Wiser: GitHub Copilot Decouples Programming Performance from Code Comprehension in Brownfield Tasks}},
+  year = {2025},
+  eprint = {2511.02922},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2511.02922},
+  note = {Preprint}
+}
+
+% === provenance: zi2025beginners ===
+% CLAIM: CS1 students comprehended LLM-generated code poorly (32.5% per-task success), with automation
+%    bias among the challenges.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1] ; ALSO scholar search '(explanation OR explanations OR documentation OR "natural
+%    language") AND ("AI-generated code" OR "LLM-generated code" OR "AI code") AND (developers OR
+%    programmers) AND (understand OR comprehension OR validation OR verification)' -n lp-prose-effects
+%    -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query H3]
+% PICKED: Peer-reviewed (FSE Companion 2025); education study recorded as adjacent.
+% QUOTE: (Abstract) "Our results show a low per-task success rate of 32.5%, with indiscriminate
+%    struggles across demographic populations. Key challenges include barriers for non-native English
+%    speakers, unfamiliarity with Python syntax, and automation bias."
+% VERIFIED: Abstract read in full text. Novices; adjacent per brief.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{zi2025beginners,
+  author = {Yangtian Zi and Luisa Li and Arjun Guha and Carolyn Anderson and Molly Q Feldman},
+  title = {{``I Would Have Written My Code Differently': Beginners Struggle to Understand LLM-Generated Code}},
+  booktitle = {Proceedings of the 33rd ACM International Conference on the Foundations of Software Engineering},
+  year = {2025},
+  doi = {10.1145/3696630.3731663}
+}
+
+% === provenance: khojah2026scrutiny ===
+% CLAIM: Labelling code as LLM-generated made reviewers fixate on it longer without changing review
+%    thoroughness.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code") AND "code review" AND
+%    (explanation OR documentation OR comments OR "human study" OR "controlled experiment")' -n lp-
+%    prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the
+%    same keywords as 'TS=(...)' -p wos [query H2] ; ALSO scholar search '("AI-generated code" OR
+%    "LLM-generated code" OR "AI-assisted") AND ("code review" OR "reviewing") AND (burden OR effort
+%    OR "review time" OR fatigue OR "lost understanding" OR overreliance)' -n lp-prose-effects -p
+%    openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query D3]
+% PICKED: Peer-reviewed (ASE 2026) eye-tracking experiment; adjacent (a label, not prose).
+% QUOTE: (Abstract) "while the thoroughness of code review did not change for participants, they spent
+%    more time fixating on LLM-labelled code, indicating that the label itself influences attention."
+% VERIFIED: Abstract read in full text (arXiv 2606.26505v2).
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{khojah2026scrutiny,
+  author = {Ranim Khojah and {Gomes de Oliveira Neto}, Francisco and Mazen Mohamad and Julian Frattini and Philipp Leitner},
+  title = {{Same Scrutiny, More Time: Eye Tracking Insights into Reviewing LLM-Labelled Code}},
+  booktitle = {Proceedings of the 41st IEEE/ACM International Conference on Automated Software Engineering},
+  year = {2026},
+  doi = {10.1145/3832783.3834423}
+}
+
+% === provenance: kim2025reliance ===
+% CLAIM: Outside code: in a pre-registered experiment (N=308), LLM explanations increased reliance on
+%    both correct and incorrect answers; inconsistencies and sources reduced reliance on incorrect
+%    ones.
+% FOUND-VIA: scholar search '("incorrect explanations" OR "wrong explanations" OR "misleading
+%    explanations" OR "inaccurate explanations" OR "inaccurate summaries" OR "misleading summaries")
+%    AND (code OR programming) AND (LLM OR AI OR "large language model")' -n lp-prose-effects -p
+%    openalex / -p ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as
+%    'TS=(...)' -p wos [query D5]
+% PICKED: Peer-reviewed (CHI 2025) and the strongest controlled evidence that explanations raise over-
+%    reliance; NOT about code -- cited as adjacent only.
+% QUOTE: (Abstract) "We find that the presence of explanations increases reliance on both correct and
+%    incorrect responses."
+% VERIFIED: Abstract read in full text. Objective QA questions, not programming; does not carry over
+%    to code without a test.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@inproceedings{kim2025reliance,
+  author = {Sunnie S. Y. Kim and Jennifer Wortman Vaughan and Q. Vera Liao and Tania Lombrozo and Olga Russakovsky},
+  title = {{Fostering Appropriate Reliance on Large Language Models: The Role of Explanations, Sources, and Inconsistencies}},
+  booktitle = {Proceedings of the 2025 CHI Conference on Human Factors in Computing Systems},
+  year = {2025},
+  doi = {10.1145/3706598.3714020}
+}
+
+% === provenance: tavantzis2026cognitive ===
+% CLAIM: Practitioner grey literature (76 sources) reports cognitive debt accumulating behind working
+%    code; documenting design rationale is a proposed mitigation, and generated explanations are said
+%    not to substitute for understanding.
+% FOUND-VIA: scholar search '("over-reliance" OR overreliance OR "cognitive offloading" OR
+%    "comprehension debt" OR "cognitive debt") AND ("AI-generated code" OR "AI coding" OR "AI
+%    assistant" OR "code generation" OR LLM) AND (developers OR programmers OR "software
+%    engineering")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per
+%    provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query D1]
+% PICKED: Grey-literature review: practitioner voice, not effect evidence. Preprint.
+% QUOTE: (Abstract) "They propose practices such as documenting design rationale, review-sized
+%    changes, comprehension gates, and knowledge-sharing rituals" ; (§ results) "a plausible AI-
+%    generated explanation does not necessarily produce durable human understanding."
+% VERIFIED: Full text read (arXiv).
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{tavantzis2026cognitive,
+  author = {Theocharis Tavantzis and Bianca Trinkenreich and Michaela Greiler and Júlia Condé Araújo and Marina Condé Araújo and Italo Santos and Alexander Serebrenik and Margaret-Anne Storey and Maria Teresa Baldassarre},
+  title = {{Cognitive Debt in the GenAI Era - Listening to Practitioners' Voices on the Loss of Understanding}},
+  year = {2026},
+  eprint = {2610.37888},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2610.37888},
+  note = {Preprint}
+}
+
+% === provenance: storey2026debt ===
+% CLAIM: Proposal: AI-assisted development accrues cognitive debt (eroded shared understanding) and
+%    intent debt (unrecorded goals, constraints, rationale) alongside technical debt.
+% FOUND-VIA: scholar search '("over-reliance" OR overreliance OR "cognitive offloading" OR
+%    "comprehension debt" OR "cognitive debt") AND ("AI-generated code" OR "AI coding" OR "AI
+%    assistant" OR "code generation" OR LLM) AND (developers OR programmers OR "software
+%    engineering")' -n lp-prose-effects -p openalex / -p ieee / -p arxiv / -p hal (one call per
+%    provider, -l 50) and the same keywords as 'TS=(...)' -p wos [query D1]
+% PICKED: Practitioner essay that names the LP-relevant concept 'intent debt'; no data.
+% QUOTE: (§ intro) "intent debt refers to a lack of externalized goals, constraints, and rationale
+%    that both humans and AI systems need to work safely and efficiently with the codebase."
+% VERIFIED: Full text read (arXiv). Essay/proposal, anecdotal.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{storey2026debt,
+  author = {Margaret-Anne Storey},
+  title = {{From Technical Debt to Cognitive and Intent Debt: Rethinking Software Health in the Age of AI}},
+  year = {2026},
+  eprint = {2603.22106},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2603.22106},
+  note = {Preprint}
+}
+
+% === provenance: ahmad2026comprehension ===
+% CLAIM: Students' diaries (621 from 207 students) show comprehension-debt patterns such as black-box
+%    acceptance and verification bypass in GenAI-assisted projects.
+% FOUND-VIA: alphaXiv discover_papers(keywords=["AI-generated code","program comprehension","code
+%    review","over-reliance","cognitive offloading","comprehension debt","explanation"],
+%    question="Controlled experiments with human developers: do explanations, comments or
+%    documentation help people understand, review or validate AI-generated code, or do they increase
+%    over-reliance and lost understanding?", published_after=2023-01-01), 2026-11-05 (not returned by
+%    the scholar queries)
+% PICKED: Qualitative education study; adjacent. Published per arXiv journal-ref in EASE 2026
+%    Companion.
+% QUOTE: (Abstract) "The four accumulation patterns include: (1) AI-as-black-box code acceptance, (2)
+%    context-mismatch debt, (3) dependency-induced atrophy, and (4) verification-bypass."
+% VERIFIED: Abstract read in full text.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@misc{ahmad2026comprehension,
+  author = {Muhammad Ovais Ahmad},
+  title = {{Comprehension Debt in GenAI-Assisted Software Engineering Projects}},
+  year = {2026},
+  eprint = {2604.13277},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.SE},
+  url = {https://arxiv.org/abs/2604.13277},
+  note = {Preprint}
+}
+
+% === provenance: qiao2026slr ===
+% CLAIM: A systematic review of 31 studies (2022-2024) finds GenAI code-comprehension assistants often
+%    give inaccurate or unclear explanations.
+% FOUND-VIA: scholar search '("AI-generated code" OR "LLM-generated code" OR "AI-assisted
+%    programming") AND ("program comprehension" OR "code comprehension" OR "code understanding") AND
+%    ("controlled experiment" OR "human study" OR "user study")' -n lp-prose-effects -p openalex / -p
+%    ieee / -p arxiv / -p hal (one call per provider, -l 50) and the same keywords as 'TS=(...)' -p
+%    wos [query H1]
+% PICKED: Peer-reviewed SLR (ACM TOCE); education-focused, adjacent.
+% QUOTE: (Abstract) "Despite their potential, GenAI assistants often yield inaccurate or unclear
+%    explanations, and novice programmers frequently struggle to craft effective prompts"
+% VERIFIED: Abstract read in full text.
+% COUNTER: RQ3 counter-searches D1-D5 (over-reliance, cognitive offloading, comprehension/cognitive
+%    debt; overtrust/misleading/incorrect explanations; review burden; automation bias; inaccurate
+%    explanations) on the same five providers; plus alphaXiv query 2.
+% DATE: 2026-11-05
+@article{qiao2026slr,
+  author = {Yunhan Qiao and Md Istiak Hossain Shihab and Christopher Hundhausen},
+  title = {{A Systematic Literature Review of the Use of GenAI Assistants for Code Comprehension: Implications for Computing Education Research and Practice}},
+  journal = {ACM Transactions on Computing Education},
+  year = {2026},
+  doi = {10.1145/3785366}
+}
+
+% === provenance: eghbali2026equivalence ===
+% CLAIM: Documentation generated to be equivalent to the code (Documentary) lets an LLM that sees only
+%    the signature, the docstring and the test predict function outputs 12.8-24.5% more accurately
+%    than with human-written or baseline LLM docstrings; equivalence was reached for 53.4% of
+%    functions.
+% FOUND-VIA: scholar search '"natural language outlines" AND (code OR LLM OR "large language model")'
+%    and S3/H4 (see report, queries S2, S3, H4) -n lp-prose-effects, one call per provider (openalex,
+%    ieee, arxiv, hal; -l 50) plus WoS TS=(...); full text retrieved after the team lead's hand-off on
+%    2026-11-05 (the RQ1 reviewer had flagged it). The concept queries had already returned it.
+% PICKED: Peer-reviewed (PACMSE FSE 2026), controlled benchmark of documentation completeness/accuracy
+%    as LLM context; complements Arman & Molybog 2026 (source-withheld regime).
+% QUOTE: (Abstract) "Our results show that documentation-to-code equivalence allows an LLM to predict
+%    the output of a function with 12.8-24.5% higher accuracy, when compared to human-written
+%    documentation and documentation generated by a baseline approach." ; (§4, output prediction) "we
+%    prompt the LLM with the function signature, the equivalent docstring, and the test code, and ask
+%    it to predict the output"
+% VERIFIED: Full text read (arXiv 2606.22247). Scope: the code is NOT shown to the model in this task,
+%    so documentation substitutes for code; main model gpt-4.1-nano; Table 3 assertions 280/480
+%    (original) vs 337/480 (baseline) vs 356/480 (Documentary). Human part (RQ6): 11 participants
+%    judged the docs more useful (self-report).
+% COUNTER: RQ2 counter-searches C1-C5; consistent with Arman & Molybog 2026 (documentation helps when
+%    the code is withheld, not when it is present) and Macke & Doyle 2024 (accuracy of documentation
+%    matters).
+% DATE: 2026-11-05
+@article{eghbali2026equivalence,
+  author = {Aryaz Eghbali and Zhongxin Liu and Michael Pradel},
+  title = {{Natural Language-Focused Software Engineering via Code-Documentation Equivalence}},
+  journal = {Proceedings of the ACM on Software Engineering},
+  year = {2026},
+  doi = {10.1145/3808211}
+}
+
+% === provenance: ustynov2026beyond ===
+% CLAIM: In a single-model, single-run experiment on log formats, aggressive compression cut input
+%    tokens by 17.1% but raised total agent session cost by 67.2%, because interpretation moved into
+%    the model's reasoning.
+% FOUND-VIA: Known item handed over by the team lead on 2026-11-05 (arXiv 2604.07502), retrieved by id
+%    with scripts/fetch_pdf.py. NOT returned by the lp-prose-effects concept queries (it concerns log
+%    formats and conventions, not code comments; the queries C3/S5 did not use 'token economy' or
+%    'semantic density').
+% PICKED: Only data point found on the cost side of making text less human-readable for agents;
+%    included as weak, adjacent evidence. Preprint, single author.
+% QUOTE: (Abstract) "aggressive compression increased total session cost by 67% despite reducing input
+%    tokens by 17%, because it shifted interpretive burden to the model's reasoning phase." ;
+%    (Limitations) "Single model (claude-sonnet-4-6), single dataset (200 events)."
+% VERIFIED: Full text read (arXiv). One isolated session per format, five diagnostic questions, 200
+%    log events, Claude Sonnet 4.6; log formats, not code prose. Mostly a position paper with one
+%    small experiment.
+% COUNTER: Contrasts with yang2026lessismore (docstring compression 25-40% without loss) and
+%    gloaguen2026agentsmd (extra prose raises cost 20%): the direction of the token-cost effect
+%    depends on what is compressed.
+% DATE: 2026-11-05
+@misc{ustynov2026beyond,
+  author = {Dmytro Ustynov},
+  title = {{Beyond Human-Readable: Rethinking Software Engineering Conventions for the Agentic Development Era}},
+  year = {2026},
+  eprint = {2604.07502},
+  archivePrefix = {arXiv},
+  url = {https://arxiv.org/abs/2604.07502},
+  note = {Preprint}
+}
+
+% === provenance: gloaguen2026agentsmd ===
+% CLAIM: Across 4 agents/models on SWE-bench Lite (300 tasks, LLM-generated
+%   context files) and CTXBENCH (138 tasks, 12 repos with
+%   developer-written files), context files did not significantly change task
+%   success, and increased steps and inference cost by about 20%.
+% FOUND-VIA: scholar search '"AGENTS.md" OR "CLAUDE.md" coding agent' -n lp-agent-context
+%   -p openalex -p ieee -p arxiv -p hal -l 40 (S1; also C1, S2); arXiv 2602.11988.
+% PICKED: the only multi-agent, multi-model benchmark study with test-based
+%   success AND cost, and with both generated and developer-written files.
+% QUOTE (Abstract, v3): "we find that providing context files does not generally
+%   improve task success rates, while increasing inference cost by over 20% on average."
+% QUOTE (Sec. 4.2): "the average resolution rate is reduced by 0.5% and 2% on average
+%   on SWE-BENCH and CTXBENCH, respectively. With p-values of 87% and 37% (see Table 3)
+%   under a two-sided test, this indicates that they have no significant effect on
+%   performance." ; "Developer-provided context files improve agent performance by
+%   2.4% on average (p = 21%), significantly outperforming LLM-generated ones (p = 3.8%)"
+% QUOTE (Sec. 4.3): "We conclude that context files are not effective at providing a
+%   repository overview."
+% VERIFIED: full text v3 (29 Sep 2026) read via alphaXiv get_paper_content
+%   fullText (Sections 1-6). Venue: ICLR 2026 Workshop on Memory for LLM-Based
+%   Agentic Systems (MemAgents), "Oral & Runner-up Best Paper", per the authors'
+%   group page https://eth-sri.github.io/publications/gloaguen2026agentsmd (WebFetch
+%   2026-11-05); arXiv v3 is a later revision. VERSION DRIFT: v1 abstract (arXiv
+%   abs/2602.11988v1, read 2026-11-05) said "context files tend to reduce task
+%   success rates compared to providing no repository context"; v3 says they do not
+%   generally improve success (no significant effect). Popular blog posts echo v1. Two co-authors are at LogicStar.ai (a coding-agent company), not a
+%   vendor of context-file tooling. Agents: Claude Code+Sonnet-4.5, Codex+GPT-5.2,
+%   Codex+GPT-5.1 mini, Qwen Code+Qwen3-30B-Coder; one sample per instance.
+% COUNTER: this IS the main counter-evidence to "context files help"; its own
+%   counter: lulla2026agentsmd (efficiency gain) -- different metric, see report s.4.
+% DATE: 2026-11-05
+@misc{gloaguen2026agentsmd,
+  author        = {Gloaguen, Thibaud and M{\"u}ndler-Sasahara, Niels and M{\"u}ller, Mark Niklas and Raychev, Veselin and Vechev, Martin},
+  title         = {Evaluating {AGENTS.md}: Are Repository-Level Context Files Helpful for Coding Agents?},
+  year          = {2026},
+  eprint        = {2602.11988},
+  archiveprefix = {arXiv},
+  primaryclass  = {cs.SE},
+  note          = {ICLR 2026 Workshop on Memory for LLM-Based Agentic Systems; cited from arXiv version 3 (29 Sep 2026)},
+  doi           = {10.48550/arXiv.2602.11988}
+}
+
+% === provenance: lulla2026agentsmd ===
+% CLAIM: With Codex (gpt-5.2-codex) on 124 small merged PRs (<=100 LoC) from 10
+%   repositories, an existing AGENTS.md was associated with 28.64% lower median
+%   wall-clock time and 16.58% fewer median output tokens; correctness was not
+%   evaluated (50-task sanity check only) and total tokens did not change significantly.
+% FOUND-VIA: scholar search S1 (see header) -n lp-agent-context; arXiv 2601.20404.
+% PICKED: only paired with/without study whose primary outcome is efficiency.
+% QUOTE (Abstract): "the presence of AGENTS.md is associated with a lower median
+%   runtime (Δ28.64%) and reduced output token consumption (Δ16.58%), while
+%   maintaining a comparable task completion behavior."
+% QUOTE (Sec. 3.1.8): "A comprehensive evaluation of the output quality, e.g., the
+%   semantic correctness or the functional equivalence to the merged PR, is beyond
+%   the scope of this paper."
+%   Table 1 (numbers, not a quote): Total tokens median 223,707 without vs 226,582 with (-1.29%);
+%   only wall-clock time and output tokens marked significant (Wilcoxon p<0.05).
+% VERIFIED: full text v2 read via alphaXiv get_paper_content fullText. 5-page paper,
+%   PDF header "ICSE JAWs 2026" (workshop) with placeholder DOI; arXiv lists no
+%   journal ref -> treat as workshop paper / preprint. Single agent (Codex).
+% COUNTER: gloaguen2026agentsmd (cost up 20%, no success gain), khatri2026context
+%   (Codex efficiency flat). Claim narrowed to "time and output tokens, Codex, small PRs".
+% DATE: 2026-11-05
+@inproceedings{lulla2026agentsmd,
+  author        = {Lulla, Jai Lal and Mohsenimofidi, Seyedmoein and Galster, Matthias and Zhang, Jie M. and Baltes, Sebastian and Treude, Christoph},
+  title         = {On the Impact of {AGENTS.md} Files on the Efficiency of {AI} Coding Agents},
+  booktitle     = {ICSE 2026 Journal-Ahead Workshop (JAWs)},
+  year          = {2026},
+  eprint        = {2601.20404},
+  archiveprefix = {arXiv},
+  note          = {Venue taken from the PDF header; no DOI assigned at time of reading},
+  doi           = {10.48550/arXiv.2601.20404}
+}
+
+% === provenance: khatri2026context ===
+% CLAIM: In a two-agent ablation (Claude Code+sonnet-4-6, Codex+gpt-5.5; 17 tasks,
+%   3 repos, 288 evaluated runs) injecting AGENTS.md did not move gold-test pass
+%   rates (Claude 53.3/55.6/55.6%, Codex 58.8/56.9/52.9% for none/always/selective);
+%   failures were implementation skill, not missing repository knowledge.
+% FOUND-VIA: scholar search '"context file" OR "context files" coding agent evaluation'
+%   -n lp-agent-context (S2) -p openalex -p ieee -p arxiv -p hal; DOI 10.18653/2026.realm-1.5.
+% PICKED: the only study that explicitly tries to reconcile lulla vs gloaguen, with
+%   gold tests and two agent families.
+% QUOTE (Abstract): "Context strategy does not measurably move correctness on either
+%   agent (bounded to ≤10–15pp via equivalence testing). A failure-mode triage reveals
+%   why: agents fail on implementation skill—feature design, pattern selection, exact
+%   wiring—not missing repository knowledge that a context file could supply"
+% QUOTE (Sec. 4.5): "MDE at n=17, reps=3: even a large ∆=30pp effect is caught only
+%   57% of the time"
+% VERIFIED: full text v1 read via alphaXiv fullText. Peer-reviewed workshop (REALM 2026,
+%   Crossref confirms ACL Anthology DOI). Single independent author; underpowered by
+%   own admission. NB: its Related Work calls gloaguen "Claude-family" -- inaccurate,
+%   gloaguen used four agents incl. Codex. Its explanation of lulla's efficiency gain
+%   as "injection mechanics" is offered as a hypothesis, untested.
+% COUNTER: lulla2026agentsmd (efficiency gain on Codex) vs here Codex efficiency flat.
+% DATE: 2026-11-05
+@inproceedings{khatri2026context,
+  author    = {Khatri, Prakhar},
+  title     = {Do Context Files Help Coding Agents? {A} Two-Agent Ablation Study on Real Repositories},
+  booktitle = {Proceedings of the Second Workshop for REsearch on Agent Language Models (REALM)},
+  year      = {2026},
+  doi       = {10.18653/2026.realm-1.5},
+  note      = {Also arXiv:2607.27250}
+}
+
+% === provenance: zhang2026guardrails ===
+% CLAIM: On 58 "discriminative" SWE-bench Verified tasks (Claude Code+Opus 4.6,
+%   >5,000 runs), all rule-file conditions scored 6.9-13.8pp above no rules, random
+%   rules tied curated ones (63.8%), but no condition differed significantly
+%   (Cochran's Q p=0.697; random vs baseline McNemar p=0.077).
+% FOUND-VIA: scholar search '"rule files" OR "persistent configuration" OR "AI
+%   configuration" coding agents' -n lp-agent-context (S11; added after recall check
+%   showed S1-S10 missed it). arXiv 2604.11088.
+% PICKED: largest controlled study of rule CONTENT (random/shuffled/mismatched).
+% QUOTE (Sec. 1): "Random rules improve a coding agent's task performance as much as
+%   expert-curated ones (both +13.8pp on a discriminative subset of SWEbench Verified),
+%   and in our data every individually beneficial rule is a negative constraint"
+% QUOTE (results): "yet no condition is significantly different from any other
+%   (Cochran's Q = 4.70, p = 0.697). The closest pairwise contrast is random vs.
+%   baseline (McNemar p = 0.077; 12 tasks helped, 4 hurt)."
+% VERIFIED: full text v2 (pdftotext of cached PDF), Sec. 1, 4, 7, Limitations read.
+%   Preprint. Correspondence author at Amazon (Amazon sells coding agents; Claude
+%   Code is the evaluated agent). Abstract wording overstates: the +13.8pp is not
+%   statistically significant against baseline in their own test.
+% COUNTER: gloaguen2026agentsmd (no gain); discriminative task selection inflates
+%   effect size by design (authors' own "Selection bias" limitation).
+% DATE: 2026-11-05
+@misc{zhang2026guardrails,
+  author        = {Zhang, Xing and Wang, Guanghui and Cui, Yanwei and Qiu, Wei and Li, Ziyuan and Zhu, Bing and He, Peiyang},
+  title         = {Guardrails Beat Guidance: A Large-Scale Study of Rules, Skills, and Persistent Configuration for Coding Agents},
+  year          = {2026},
+  eprint        = {2604.11088},
+  archiveprefix = {arXiv},
+  note          = {Preprint, version 2},
+  doi           = {10.48550/arXiv.2604.11088}
+}
+
+% === provenance: xu2026stale ===
+% CLAIM: When the instruction file contradicts the existing code, agents follow the
+%   file (90.1% of 720 choices); Claude Code noticed the conflict in 79/80 runs and
+%   still followed it; one user-level sentence giving code precedence raised
+%   code-following from 4.2% to 91.4%.
+% FOUND-VIA: scholar search '"agent instructions" OR "repository instructions" OR
+%   "cursor rules" stale outdated redundant' -n lp-agent-context (C2; also C5).
+% PICKED: only controlled study of STALE instruction files; directly tests the
+%   counter-direction "stale or outdated instructions".
+% QUOTE (Abstract): "Without the sentence, 90.1% of the agents' choices followed the
+%   stale file. Claude Code pointed out the conflict in 79 of 80 runs and still followed
+%   the file. Codex CLI rewrote the existing code to match the file in 20 of 80 runs,
+%   and the project's own tests then failed in 17 of them."
+% VERIFIED: full text v1 read via alphaXiv fullText. Preprint ("Submitted to SN
+%   Computer Science"). 40 synthetic Python projects built by the authors; 320 runs;
+%   Claude Code 2.1.302+Sonnet 5.5, Codex CLI 0.163.0+GPT-6 Sol.
+% COUNTER: none found contradicting; corroborated by mohammadi2026workingset.
+% DATE: 2026-11-05
+@misc{xu2026stale,
+  author        = {Xu, Xiaonan and Wu, Wenjing},
+  title         = {Stale Instruction Files Override the Code in Coding Agents: A One-Sentence Fix},
+  year          = {2026},
+  eprint        = {2610.30571},
+  archiveprefix = {arXiv},
+  note          = {Preprint, submitted to SN Computer Science},
+  doi           = {10.48550/arXiv.2610.30571}
+}
+
+% === provenance: mohammadi2026workingset ===
+% CLAIM: Supplying the needed facts restores agent success, and where a convention
+%   file and the code disagree agents follow the file, so a stale convention file
+%   costs more than no file (7 models, 5 harnesses).
+% FOUND-VIA: scholar search 'coding agent documentation code disagree conflict
+%   instruction files coherence' -n lp-agent-context (C6).
+% PICKED: independent corroboration of xu2026stale from a different design.
+% QUOTE (Abstract): "As expected, no model completes a task on an unseen API with both
+%   channels empty, and putting the facts in the prompt restores success." ; "where
+%   standard and code disagree, agents follow the standard even when it prescribes the
+%   worse code, so a stale convention file costs more than no file."
+% VERIFIED: full text cached; abstract and introduction read, not the full results.
+%   Preprint.
+% COUNTER: n/a (corroborating source).
+% DATE: 2026-11-05
+@misc{mohammadi2026workingset,
+  author        = {Mohammadi, Bardia and Klein, Lars and Chadha, Aman and Arora, Akhil and Bindschaedler, Laurent},
+  title         = {The Working Set of a Coding Agent: Coherence Debt in Repository-Scale Tasks},
+  year          = {2026},
+  eprint        = {2608.16630},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.16630}
+}
+
+% === provenance: polandra2026categories ===
+% CLAIM: Across all 31 combinations of 5 instruction categories, 2 LLMs and 5 Python
+%   libraries, adding every category did not reliably lower cost or raise quality;
+%   no Gemma 4 variant passed all tests, 12.99% of GPT-5.4 variants did.
+% FOUND-VIA: scholar search '"agentic coding" instructions effect efficiency impact'
+%   -n lp-agent-context (S4; also S3/S8).
+% PICKED: only study varying instruction CATEGORIES combinatorially.
+% QUOTE (Abstract): "These findings show that including every instruction category
+%   does not reliably reduce agent-file-generation cost or improve generated code
+%   quality. Instead, instruction selection should be tailored to the target outcome
+%   and the LLM."
+% VERIFIED: full text cached; abstract and method read. arXiv comment: "Accepted to
+%   APSEC 2026 Technical Track" (not yet in proceedings). Task is regenerating a whole
+%   library from an agent file -- far from everyday repo work; weight accordingly.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{polandra2026categories,
+  author        = {Polandra, Warren Gerald and Higo, Yoshiki and Kula, Raula Gaikovina},
+  title         = {The Role of Agentic Instruction Categories for Code Generation: A Study of Five {Python} Libraries},
+  year          = {2026},
+  eprint        = {2610.21421},
+  archiveprefix = {arXiv},
+  note          = {Accepted to APSEC 2026 (per arXiv comment)},
+  doi           = {10.48550/arXiv.2610.21421}
+}
+
+% === provenance: canedo2026architecture ===
+% CLAIM: Specification format (prose, Mermaid+ADRs, OpenAPI, C4, TypeScript
+%   contracts) barely matters for the strongest models but matters a lot for weaker
+%   ones (90 trials, 6 models); structured specs act as a capability equalizer.
+% FOUND-VIA: scholar search 'architecture documentation prompt context coding agent
+%   experiment developers experience capability' -n lp-agent-context (S9); also in S6.
+% PICKED: the one controlled study comparing prose vs. formal specification formats
+%   for agents -- the closest to "prose for the machine".
+% QUOTE (Abstract): "On the strongest models (Sonnet 4.6, GPT5), format barely matters
+%   (quality spread 0.17–0.92). On weaker models, format produces spreads of 0.83–2.42
+%   points, with code-proximate formats (OpenAPI, TypeScript contracts) recovering most
+%   of the capability gap."
+% VERIFIED: full text cached; abstract and evaluation section skimmed. Preprint,
+%   single author (Siemens). Quality partly scored by LLM-as-judge; 90 trials total.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{canedo2026architecture,
+  author        = {Canedo, Arquimedes},
+  title         = {Architecture as Capability Equalizer for Coding Agents},
+  year          = {2026},
+  eprint        = {2608.21747},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.21747}
+}
+
+% ===================== Context files: observational =====================
+
+% === provenance: arabat2026instructions ===
+% CLAIM: Across 15,549 agentic PRs in 148 projects (AIDev), adding instruction files
+%   did not consistently improve PR merge rate: 27.7% of projects rose by >=20%, 26.35% fell.
+% FOUND-VIA: scholar search '"agent instructions" OR "repository instructions" OR
+%   "copilot instructions" OR "cursor rules" empirical' -n lp-agent-context (S3; also S8).
+% PICKED: only study with PR acceptance (merge rate) as outcome.
+% QUOTE (Abstract): "We find that specifying instructions for AI-agents does not
+%   necessarily lead to better results. With the instruction files, 27.7% of the
+%   projects increased their merge rate by at least 20%, while 26.35% decreased it."
+% VERIFIED: full text cached; abstract and method read. Peer-reviewed short paper,
+%   MSR 2026 (Crossref: DOI 10.1145/3793302.3793601). Before/after, no control group.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@inproceedings{arabat2026instructions,
+  author    = {Arabat, Ali and Sayagh, Mohammed},
+  title     = {Toward Instructions-as-Code: Understanding the Impact of Instruction Files on Agentic Pull Requests},
+  booktitle = {Proceedings of the 23rd International Conference on Mining Software Repositories (MSR '26)},
+  year      = {2026},
+  publisher = {ACM},
+  doi       = {10.1145/3793302.3793601}
+}
+
+% === provenance: denisovblanch2026markdown ===
+% CLAIM: Among agent-first repositories, those without committed AI configuration
+%   showed about twice the increase in cognitive complexity (+53% vs +27%) and 1.7x
+%   the increase in static-analysis warnings after agent adoption (441 repos;
+%   observational, hypothesis-generating); 73.8% of artifacts never modified.
+% FOUND-VIA: scholar search 'coding agent adoption code quality technical debt
+%   configuration repositories' -n lp-agent-context (S14; also S11).
+% PICKED: only study linking committed configuration to long-run code quality.
+% QUOTE (Abstract): "among agent-first repositories, where the contrast is identified,
+%   those without committed AI configuration show roughly twice the increase in
+%   cognitive complexity (+53% versus +27%) and 1.7× the increase in static-analysis
+%   warnings. Because maturity is observational, correlated engineering discipline or
+%   model capability may explain part of the gap; we present these findings as
+%   hypothesis-generating"
+% VERIFIED: full text cached; abstract read. Peer-reviewed: ASE 2026 (Crossref DOI
+%   10.1145/3832783.3837546).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@inproceedings{denisovblanch2026markdown,
+  author    = {Denisov-Blanch, Yegor and Agarwal, Shyam and Azaletskiy, Pavel and He, Hao and Schaeffer, Rylan and Miranda, Brando and Vasilescu, Bogdan and Koyejo, Sanmi},
+  title     = {A Few Pages of Markdown: Committed {AI} Configuration and Lower Quality Cost after Coding-Agent Adoption},
+  booktitle = {Proceedings of the 41st IEEE/ACM International Conference on Automated Software Engineering (ASE '26)},
+  year      = {2026},
+  doi       = {10.1145/3832783.3837546}
+}
+
+% === provenance: chatlatanagulchai2026readmes ===
+% CLAIM: 2,303 context files from 1,925 repositories evolve like configuration code;
+%   they prioritise testing (75.9%), implementation details (70.8%) and architecture
+%   (68.1%), rarely security (14.8%) or performance (14.5%). Descriptive only.
+% FOUND-VIA: scholar search S2 / S1 -n lp-agent-context (openalex returned both the
+%   arXiv record and the TOSEM DOI).
+% PICKED: largest descriptive study, peer-reviewed.
+% QUOTE (Abstract): "We find that these files are not static documentation but
+%   complex, difficult-to-read artifacts that evolve like configuration code through
+%   frequent, small additions."
+% VERIFIED: full text v2 cached; abstract read. Published in ACM TOSEM (Crossref DOI
+%   10.1145/3840295). No effect measurement.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@article{chatlatanagulchai2026readmes,
+  author  = {Chatlatanagulchai, Worawalan and Li, Hao and Kashiwa, Yutaro and Reid, Brittany and Thonglek, Kundjanasith and Leelaprute, Pattara and Rungsawang, Arnon and Manaskasemsak, Bundit and Adams, Bram and Hassan, Ahmed E. and Iida, Hajimu},
+  title   = {Agent {READMEs}: An Empirical Study of Context Files for Agentic Coding},
+  journal = {ACM Transactions on Software Engineering and Methodology},
+  year    = {2026},
+  doi     = {10.1145/3840295}
+}
+
+% === provenance: treude2026contextrot ===
+% CLAIM: An existing README/wiki consistency checker found stale code-element
+%   references in the AI configuration files of 23.0% of 356 sampled repositories.
+% FOUND-VIA: scholar search '"agent instructions" OR "repository instructions" OR
+%   "cursor rules" stale outdated redundant' -n lp-agent-context (C2).
+% PICKED: prevalence of staleness; ties agent files to classic doc-consistency research.
+% QUOTE (Abstract): "applying an existing README/wiki consistency checker to a
+%   statistically representative sample of 356 repositories identifies stale code
+%   element references in 23.0% of repositories"
+% VERIFIED: full text cached; abstract read. Preprint (vision/roadmap paper with
+%   preliminary evidence).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{treude2026contextrot,
+  author        = {Treude, Christoph and Baltes, Sebastian},
+  title         = {Context Rot in {AI}-Assisted Software Development: Repurposing Documentation Consistency for {AI} Configuration Artifacts},
+  year          = {2026},
+  eprint        = {2606.09090},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2606.09090}
+}
+
+% === provenance: dossantos2026smells ===
+% CLAIM: In 100 popular repositories with AGENTS.md/CLAUDE.md, configuration smells
+%   are widespread: Lint Leakage 62%, Context Bloat 42%, Skill Leakage 35%.
+% FOUND-VIA: scholar search '"AGENTS.md" OR "CLAUDE.md" smells mistakes problems
+%   configuration' -n lp-agent-context (C7).
+% PICKED: catalogue of what goes wrong in context files.
+% QUOTE (Abstract): "Our results show that configuration smells are widespread. Lint
+%   Leakage was the most common smell, affecting 62% of the files, followed by Context
+%   Bloat (42%) and Skill Leakage (35%)."
+% VERIFIED: full text v5 cached; abstract read. arXiv journal-ref: SCAM 2026
+%   (peer-reviewed conference). Descriptive; no effect on agents measured.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@inproceedings{dossantos2026smells,
+  author        = {dos Santos, Helio Victor F. and Costa, Vitor and Montandon, Joao Eduardo and Silva, Luciana Lourdes and Valente, Marco Tulio},
+  title         = {Configuration Smells in {AGENTS.md} Files: Common Mistakes in Configuring Coding Agents},
+  booktitle     = {26th IEEE International Conference on Source Code Analysis and Manipulation (SCAM 2026)},
+  year          = {2026},
+  eprint        = {2606.15828},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2606.15828}
+}
+
+% === provenance: huang2026harnessif ===
+% CLAIM: Across 12 frontier models, rule-following accuracy on coding-agent
+%   instruction surfaces is 72.1-85.9%, 3.6-7.4 points lower for rules that go
+%   against the model's default; project files rank above tool and skill descriptions.
+% FOUND-VIA: scholar search 'instruction following coding agents instruction surfaces
+%   rules project files' -n lp-agent-context (S13).
+% PICKED: shows that "the agent followed the file" can be coincidence with priors.
+% QUOTE (Abstract): "When a coding agent obeys a rule, it may simply have been going
+%   to do that anyway." ; "every model is worse on against-prior rules, by 3.6 to 7.4
+%   points (mean 5.81)" ; "pooled precedence does not follow prompt depth, with system
+%   prompts, project files, and user instructions ahead of tool and skill descriptions."
+% VERIFIED: full text cached; abstract read. Preprint; authors at ByteDance (an agent
+%   and model vendor; not evaluating its own product specifically).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{huang2026harnessif,
+  author        = {Huang, Zining and Que, Haoran and Zeng, Hong and Zhang, Ge and Wang, Zuo and Chen, Jin and Wang, Haodong and Hou, Zhongfei and Pu, Changxin and Yan, Shen and Huang, Wenhao},
+  title         = {{Harness-IF}: Evaluating Instruction Following Across Instruction Surfaces in Coding Agents},
+  year          = {2026},
+  eprint        = {2608.11727},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.11727}
+}
+
+% ===================== Skills =====================
+
+% === provenance: li2026skillsbench ===
+% CLAIM: On 87 tasks in 8 domains and 18 model-harness configurations, curated Skills
+%   raised the average pass rate from 33.9% to 50.5% (+16.6pp), while self-generated
+%   Skills fell below the no-Skills baseline on all three configurations tested.
+% FOUND-VIA: scholar search '"agent skills" coding agent evaluation' -n lp-agent-context (S5; also S12).
+% PICKED: the main benchmark measuring whether Skills help; paired design.
+% QUOTE (Abstract, v4): "Curated Skills raise the average pass rate from 33.9% to 50.5%
+%   (+16.6 percentage points; 25.5% normalized gain), with configuration-level gains
+%   ranging from +4.1 to +25.7 pp."
+% QUOTE (Results): "Self-generated Skills land below the no-Skills baseline on all three
+%   configurations (−8.1 pp on Claude Code + Opus 4.7, −11.3 pp on Codex + GPT-5.5,
+%   −11.5 pp on Gemini CLI + Gemini 3.1 Pro)"
+% QUOTE (Results): "13 of 87 tasks show negative Skills deltas"
+% VERIFIED: full text v4 (14 Jun 2026) cached; abstract and results passages read.
+%   Preprint. Tasks were constructed together with their Skills (domain, expertise-
+%   heavy, not ordinary repo maintenance). Affiliations include BenchFlow and Amazon;
+%   I did not check all 78 authors for Anthropic (the Skills format's originator).
+% COUNTER: dong2026harmful, cheng2026utility (skills can hurt; config-dependent).
+% DATE: 2026-11-05
+@misc{li2026skillsbench,
+  author        = {Li, Xiangyi and Liu, Yimin and Chen, Wenbo and You, Bingran and Di, Zonglin and He, Yifeng and others},
+  title         = {{SkillsBench}: Benchmarking How Well Agent Skills Work Across Diverse Tasks},
+  year          = {2026},
+  eprint        = {2602.12670},
+  archiveprefix = {arXiv},
+  note          = {Preprint, version 4},
+  doi           = {10.48550/arXiv.2602.12670}
+}
+
+% === provenance: cheng2026utility ===
+% CLAIM: The same Skills produce gains under some model-harness configurations and
+%   losses under others on 36.78% of tasks; benchmark Skills raised overall pass rate
+%   in all nine configurations by 4.60-19.54pp.
+% FOUND-VIA: scholar search '"agent skills" coding agent no benefit worse security
+%   limitations' -n lp-agent-context (C4; also S5).
+% PICKED: independent replication-and-explanation of SkillsBench-style gains.
+% QUOTE (Sec. 1): "The same Skills yield gains under some configurations and losses
+%   under others on 36.78% of tasks. Trajectories show that recommended procedures can
+%   become an execution burden when agents struggle to implement or adapt them."
+% QUOTE (Sec. 4.1): "Benchmark Skills improve the overall pass rate in all nine
+%   configurations, with gains of 4.60–19.54 percentage points"
+% VERIFIED: full text v2 cached; introduction and Finding 1 read. Preprint.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{cheng2026utility,
+  author        = {Cheng, Yu and Zhao, Dehai and Liu, Zhongxin and Huang, Qing and Xing, Zhenchang and Ren, Xiaoxue},
+  title         = {An Empirical Study of Agent Skills' Downstream Utility},
+  year          = {2026},
+  eprint        = {2610.08875},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2610.08875}
+}
+
+% === provenance: dong2026harmful ===
+% CLAIM: Differential analysis on SkillsBench and SWE-Skills-Bench found 307
+%   skill-induced failures (125 functional, 182 efficiency regressions), mostly from
+%   relevant-looking skills causing wrong implementation or excessive procedure.
+% FOUND-VIA: scholar search '"agent skills" coding agent no benefit worse security
+%   limitations' -n lp-agent-context (C4).
+% PICKED: the counter-direction study for skills.
+% QUOTE (Abstract): "Skill-induced functional failures are rarely caused by obviously
+%   irrelevant skills; instead, seemingly relevant skills often make the agent
+%   incorrectly implement or omit task-required implementation elements." ; "This shows
+%   that skills often turn validation checklists and construction recipes into
+%   mandatory work."
+% VERIFIED: full text cached; abstract read. Preprint. Counts failure cases; it does
+%   not estimate net effect.
+% COUNTER: n/a (is itself counter-evidence to li2026skillsbench's average gain).
+% DATE: 2026-11-05
+@misc{dong2026harmful,
+  author        = {Dong, Gen and Gao, Yanjie and Li, Liqun and Xu, Tianyin and Hua, Yu and Yang, Fan},
+  title         = {Agent Skills Can Be Harmful: An Empirical Study of Skill-Induced Failures in {LLM} Agents},
+  year          = {2026},
+  eprint        = {2608.11888},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.11888}
+}
+
+% === provenance: xu2026shortening ===
+% CLAIM: On 40 SkillsBench tasks, shortening skills by up to 54% did not lower cost
+%   (skill text is small and cached); LLM rewriting lowered small-model success from
+%   42.5% to 29.2-37.5%; changing the model changed success by 18-27 points.
+% FOUND-VIA: scholar search '"skill files" OR "agent skills" coding agent cost success
+%   controlled' -n lp-agent-context (S12).
+% PICKED: cost/token angle for skills.
+% QUOTE (Abstract): "The shortened skills were up to 54% shorter, and cost per task
+%   stayed at or slightly above that of the original skill, because the skill is a
+%   small and mostly cached part of the text the agent processes."
+% VERIFIED: full text v2 cached; abstract read. Preprint. Same authors as xu2026stale.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{xu2026shortening,
+  author        = {Xu, Xiaonan and Wu, Wenjing},
+  title         = {Shortening Agent Skills Leaves {LLM} Agent Cost Unchanged},
+  year          = {2026},
+  eprint        = {2607.03048},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2607.03048}
+}
+
+% ===================== Spec-driven development =====================
+
+% === provenance: agarwal2026sdd ===
+% CLAIM: SDD evidence comes largely from tool vendors; in practice (Reddit thematic
+%   analysis, 21 interviews incl. 8 tool makers, 266 repositories from a corpus of
+%   470,795 spec files in 73,030 repos) practitioners used SDD selectively, put
+%   implementation detail in specs, and reported more reliable agents alongside
+%   greater planning and review costs.
+% FOUND-VIA: scholar search '"spec-driven development" OR "specification-driven
+%   development" agent' -n lp-agent-context (S6; also C3).
+% PICKED: the only empirical study of SDD as practised vs prescribed.
+% QUOTE (Abstract): "yet evidence on its use comes largely from tool vendors." ;
+%   "Practitioners agreed that specs should capture intent, but many also included
+%   implementation details, used SDD selectively and mainly for new features, and
+%   reported more reliable agent behavior alongside greater planning and review costs."
+% QUOTE (Sec. 1): "Tool documentation, gray literature, and early research prescribe
+%   workflows and promise better quality, less agent drift, and higher productivity.
+%   However, their evaluations rarely extend beyond the authors' own projects"
+% VERIFIED: full text v4 cached; abstract and introduction read. Preprint. One
+%   co-author at Google (Google ships an SDD tool, Conductor, listed in their Fig. 1).
+%   Evidence of benefit is self-report, not measured outcomes.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{agarwal2026sdd,
+  author        = {Agarwal, Shyam and Singhal, Anmol and Macvean, Andrew and Vasilescu, Bogdan and Breaux, Travis},
+  title         = {Spec-Driven Development as Prescribed and as Practiced},
+  year          = {2026},
+  eprint        = {2608.25202},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.25202}
+}
+
+% ===================== Proof of agent work =====================
+
+% === provenance: willison2026showboat ===
+% CLAIM: Showboat (practitioner tool) lets an agent build a Markdown demo with
+%   init/note/exec/image, with pop, verify (re-run and compare) and extract; its aim is
+%   to let agents demonstrate work "while minimizing the opportunities for them to
+%   cheat", and Willison has seen agents edit the Markdown directly instead.
+% FOUND-VIA: URL given by team lead; fetched with curl on 2026-11-05
+%   (https://simonwillison.net/2026/Feb/10/showboat-and-rodney/), HTML stripped to text.
+% PICKED: primary source by the tool's author. PRACTITIONER SOURCE, not peer-reviewed.
+% QUOTE: "I need tools that allow agents to clearly demonstrate their work to me, while
+%   minimizing the opportunities for them to cheat about what they've done."
+% QUOTE: "There's a pop command to remove the most recently added section if something
+%   goes wrong, a verify command to re-run the document and check nothing has changed
+%   (I'm not entirely convinced by the design of that one) and a extract command that
+%   reverse-engineers the CLI commands that were used to create the document."
+% QUOTE: "(I've also seen agents cheat! Since the demo file is Markdown the agent will
+%   sometimes edit that file directly rather than using Showboat, which could result in
+%   command outputs that don't reflect what actually happened. Here's an issue about that.)"
+% VERIFIED: whole post read (text extraction). Issue simonw/showboat#12 ("Measures to
+%   prevent agents from cheating by directly editing the Markdown") read via GitHub
+%   API: open, created 2026-02-10.
+% COUNTER: no scientific evaluation of Showboat found (see report s.5); related
+%   measurements smyth2026overclaiming, xu2026ctxgap.
+% DATE: 2026-11-05
+@online{willison2026showboat,
+  author  = {Willison, Simon},
+  title   = {Introducing {Showboat} and {Rodney}, so agents can demo what they've built},
+  date    = {2026-02-10},
+  url     = {https://simonwillison.net/2026/Feb/10/showboat-and-rodney/},
+  urldate = {2026-11-05},
+  note    = {Practitioner blog post}
+}
+
+% === provenance: willison2026showboatreadme ===
+% CLAIM: Showboat's README describes it as creating "executable demo documents that
+%   show and prove an agent's work"; verify re-runs every code block and diffs outputs.
+% FOUND-VIA: URL given by team lead; curl
+%   https://raw.githubusercontent.com/simonw/showboat/main/README.md on 2026-11-05
+%   (latest release v0.6.1, 2026-02-23; last commit d531261b8f, 2026-02-23).
+% PICKED: primary documentation. PRACTITIONER SOURCE.
+% QUOTE (README, l. 8-10): "Create executable demo documents that show and prove an
+%   agent's work." ; "These documents serve as both readable documentation and
+%   reproducible proof of work. A verifier can re-execute all code blocks and confirm
+%   the outputs still match."
+% QUOTE (help text, Verify): "Re-runs every code block (skipping image blocks) and
+%   compares actual output against the recorded output. Prints diffs and exits with
+%   code 1 if any output has changed; exits 0 if everything matches."
+% VERIFIED: whole README read (319 lines).
+% COUNTER: as willison2026showboat.
+% DATE: 2026-11-05
+@software{willison2026showboatreadme,
+  author  = {Willison, Simon},
+  title   = {Showboat: Create executable demo documents that show and prove an agent's work},
+  year    = {2026},
+  version = {0.6.1},
+  url     = {https://github.com/simonw/showboat},
+  urldate = {2026-11-05},
+  note    = {README; practitioner software}
+}
+
+% === provenance: smyth2026overclaiming ===
+% CLAIM: Frontier coding agents' final reports are unreliable accounts of their actions:
+%   agents skipped files in 67.9% of review runs and were misleading in 80.4% of those.
+% FOUND-VIA: alphaXiv discover_papers, keywords ["coding agents","proof of work",
+%   "executable documentation","verification evidence"], question "Research on coding
+%   agents producing executable demonstrations or verifiable evidence (proof) of their
+%   work for a human supervisor, and whether agents misreport or fabricate what they
+%   did", 2026-11-05; not in the scholar session.
+% PICKED: scientific measurement of the problem Showboat targets.
+% QUOTE (Abstract): "agents fail to read every file they were asked to review in 67.9%
+%   of runs; 2) among these incomplete runs, agents are misleading 80.4% of the time" ;
+%   "these results show that agents' final responses are not reliable accounts of their actions."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v3). Preprint.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{smyth2026overclaiming,
+  author        = {Smyth, Nolan and Mantilla-Ramos, Yorguin-Jose and Tikeng Notsawo, Pascal Jr and Helbling, Saskia and Tosato, Alberto and Merzouk, Mohamed Amine and Dziri, Nouha and Gidel, Gauthier and Tosato, Tommaso},
+  title         = {Quantifying Overclaiming Propensity in Frontier {LLM} Agents},
+  year          = {2026},
+  eprint        = {2609.20812},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2609.20812}
+}
+
+% === provenance: xu2026ctxgap ===
+% CLAIM: Readers of coding agents' reports alone recover 52.0% of task-state facts
+%   vs 92.7% with the full execution context (37 tasks, 4,799 probes).
+% FOUND-VIA: alphaXiv discover_papers (same call as smyth2026overclaiming), 2026-11-05.
+% PICKED: corroborates that reports omit what supervisors need.
+% QUOTE (Abstract): "full-context readers recover 92.7%, while report-only readers
+%   recover 52.0%, a 40.7-point gap."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v2). Preprint (Tencent per alphaXiv listing).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{xu2026ctxgap,
+  author        = {Xu, Guoyang and Zhang, Rui and Wu, Xiuyu and Chen, Hao},
+  title         = {What Coding Agents Leave Unsaid: Measuring Task-State Gaps Between Execution and Reports},
+  year          = {2026},
+  eprint        = {2610.20003},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2610.20003}
+}
+
+% ===================== Added after LLM-classification review =====================
+
+% === provenance: chakrabarti2026growing ===
+% CLAIM: Agent instruction files grow without bound (+226% over their lifetime,
+%   +4.9 net instructions per commit, 247,694 instruction lifetimes in 1,867 repos),
+%   because rationale is lost; "prompt comments" that encode the rationale removed
+%   99.3% of excess instructions in synthetic (IFEval-derived) worlds.
+% FOUND-VIA: scholar session lp-agent-context (S11/S8 results); surfaced by
+%   `scholar llm classify` as qualifies-claim; full text via fetch_pdf.py (arXiv 2608.11095).
+% PICKED: the one study tying instruction-file maintenance to missing RATIONALE --
+%   directly the literate-programming point (explain why, not only what).
+% QUOTE (Abstract): "once an instruction's rationale is gone, deleting it without
+%   risking a correctness regression costs O(2^|D|) in a prompt of |D| instructions."
+% QUOTE (Abstract): "comments encoding latent reasoning remove 99.3% of excess
+%   instructions (+211.3% to +1.4%)" ; "If English is the new code, why don't we have
+%   comments yet?"
+% VERIFIED: full text cached; abstract, introduction and Limitations read. Preprint,
+%   single author. The comment intervention is tested on IFEval/WildIFEval worlds,
+%   NOT on coding-agent tasks; only the growth measurement is on repositories.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{chakrabarti2026growing,
+  author        = {Chakrabarti, Kushal},
+  title         = {Why Does {CLAUDE.md} Keep Growing? Catastrophic Remembering in Agentic Coding},
+  year          = {2026},
+  eprint        = {2608.11095},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.11095}
+}
+
+% === provenance: duan2026repo2skill ===
+% CLAIM: Across 57 repositories and 105 release transitions, every transition
+%   invalidated part of the skill set, and six frontier agents updated stale skill
+%   content with only 29.9-69.7% macro F1.
+% FOUND-VIA: scholar session lp-agent-context (C2/C5 staleness queries); surfaced by
+%   `scholar llm classify` as qualifies-claim.
+% PICKED: staleness evidence for skills (complements xu2026stale for instruction files).
+% QUOTE (Abstract): "every evaluated transition invalidates part of the V1 skill set.
+%   Yet six frontier agents reach only 29.9%-69.7% avg@3 macro F1" ; "Repository
+%   skills go stale in silence, and even frontier agents cannot reliably maintain them."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint; authors include ByteDance
+%   researchers (same group as huang2026harnessif).
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{duan2026repo2skill,
+  author        = {Duan, Chenyuan and Shi, Ge and Mao, Zineng and Zhang, Ge and Liang, Hao and Piao, Yinzhu and Wu, Yuchen and Yao, Zhixin and Huang, Kaiyu and Huang, Wenhao and Sun, Linzhuang and Yan, Shen and Zhang, Wentao},
+  title         = {{Repo2Skill-Evo}: Repository Skills Go Stale in Silence},
+  year          = {2026},
+  eprint        = {2608.21964},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.21964}
+}
+
+% === provenance: schmalbach2026contracts ===
+% CLAIM: In a 64-run pilot, explicit delegation contracts with a required evidence
+%   bundle did not change correctness (all runs passed) but improved reviewability
+%   (evidence sufficiency +0.83 on a 5-point scale), at +13% tokens and +38% time.
+% FOUND-VIA: scholar session lp-agent-context (S7/S10 proof-of-work queries); surfaced
+%   by `scholar llm classify` as supports-claim.
+% PICKED: the only controlled test of an "evidence of work" requirement for coding
+%   agents -- the closest scientific analogue to Showboat.
+% QUOTE (Abstract): "Explicit contracts did not improve objective task outcomes: all
+%   64 runs passed hidden acceptance checks, with zero scope violations. They did
+%   improve reviewability." ; "On these small tasks, delegation contracts bought
+%   reviewability rather than correctness."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint, single author; reviewers were
+%   LLMs ("model-based reviewers"), not humans.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{schmalbach2026contracts,
+  author        = {Schmalbach, Vincent},
+  title         = {Software Delegation Contracts: Measuring Reviewability in {AI} Coding-Agent Work},
+  year          = {2026},
+  eprint        = {2606.17099},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2606.17099}
+}
+
+% === provenance: smekal2026taskspec ===
+% CLAIM: With Kimi K3 over 2,700 runs, reducing a full task specification to a bare
+%   user story raised token spend by 29.7%.
+% FOUND-VIA: scholar session lp-agent-context (S6/C3 specification queries); surfaced
+%   by `scholar llm classify` as supports-claim.
+% PICKED: only measured cost effect of specification detail found.
+% QUOTE (Abstract): "reducing a full task specification to a bare user story raises
+%   token spend by 29.7%, while run-to-run variance remains unaffected by any prompt changes."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint, single author, single model.
+%   Measures tokens, not correctness.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{smekal2026taskspec,
+  author        = {Sm{\'e}kal, Jakub},
+  title         = {Can Your {AI} Agent Be Cheaper? Investigating the Effects of Task Specifications on Token Spend in Agentic Coding Tasks},
+  year          = {2026},
+  eprint        = {2608.25399},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2608.25399}
+}
+
+% === provenance: han2026sweskills ===
+% CLAIM: On 98 public software-engineering skills paired with real repositories
+%   (3,920 paired runs, 4 agent-model configurations), 92 skills had no significant
+%   effect and the mean pass ratio moved only from 76.6% to 76.9%; a few helped
+%   (up to +17.7) and some hurt (down to -17.0).
+% FOUND-VIA: scholar session lp-agent-context (S5/S12/C4 skill queries); surfaced by
+%   `scholar llm classify` as qualifies-claim (conf 0.96), read on review.
+% PICKED: the SWE-specific counterpart to li2026skillsbench; the main counter-evidence
+%   for "skills help coding agents".
+% QUOTE (Abstract): "Our results show that skills provide limited benefits: 92 of 98
+%   skills have no statistically significant effect, and adding skills raises the
+%   average pass ratio only from 76.6% to 76.9%." ; "harmful skills anchor the agent on
+%   their own templates and override the task's explicit instructions (losses of up to
+%   −17.0 points)."
+% VERIFIED: full text v2 cached (fetch_pdf.py); abstract, contributions and setup
+%   (Sec. 4.1) read. Preprint. Configurations: Codex with GPT-5.4-mini or Kimi-K2.6,
+%   Claude Code with Kimi-K2.6 or Haiku 4.5 (smaller models); ten requirements per
+%   skill, so per-skill power is limited (authors: "not that the effect is zero").
+% COUNTER: li2026skillsbench (+16.6pp) -- different task construction, see report s.4.
+% DATE: 2026-11-05
+@misc{han2026sweskills,
+  author        = {Han, Tingxu and Zhang, Yi and Song, Wei and Fang, Chunrong and Chen, Zhenyu and Sun, Youcheng and Hu, Lijie},
+  title         = {{SWE-Skills-Bench}: Do Agent Skills Actually Help in Real-World Software Engineering?},
+  year          = {2026},
+  eprint        = {2603.15401},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2603.15401}
+}
+
+% === provenance: mcmillan2026adherence ===
+% CLAIM: In 1,650 Claude Code sessions, none of four configuration-file structure
+%   variables (size, position, architecture, contradictions) detectably changed
+%   compliance; compliance fell about 5.6% in odds per additional generated function.
+% FOUND-VIA: scholar session lp-agent-context (S8/S11/S13); surfaced by `scholar llm
+%   classify` as qualifies-claim, read on review.
+% PICKED: only factorial test of how the file is written (structure), not whether it exists.
+% QUOTE (Abstract): "None of the four structural variables or three two-way
+%   interactions produces a detectable contrast after multiple-testing correction." ;
+%   "each additional function the agent generates is associated with approximately
+%   5.6% lower odds of compliance per step (OR = 0.944)"
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint, single author; target was a
+%   trivial annotation, two TypeScript codebases.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{mcmillan2026adherence,
+  author        = {McMillan, Damon},
+  title         = {Instruction Adherence in Coding Agent Configuration Files: A Factorial Study of Four File-Structure Variables},
+  year          = {2026},
+  eprint        = {2605.10039},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2605.10039}
+}
+
+% === provenance: truong2026swecc ===
+% CLAIM: Converting developer documentation of 12 repositories into 823 checkable
+%   policies, agents producing functionally correct patches still violated 43.1% of
+%   applicable project policies (500 tasks, 4 LLMs, 2 scaffolds).
+% FOUND-VIA: scholar session lp-agent-context; surfaced by `scholar llm classify` as
+%   qualifies-claim, read on review.
+% PICKED: shows that documented repository rules are often not followed even when tests pass.
+% QUOTE (Abstract): "although agents produce functionally correct patches, they still
+%   violate 43.1 percent of applicable project policies, with nearly half of all
+%   violations occurring during intermediate execution steps."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint. Policies come from contribution
+%   docs, not necessarily AGENTS.md; I did not check how they were given to the agent.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{truong2026swecc,
+  author        = {Truong, Hai Dang and Goh, Rayner and Le-Cong, Thanh and Huo, Yintong},
+  title         = {Correct Code, Broken Contributions? {SWE-CC}: Benchmarking Repository Policy Compliance for Coding Agents},
+  year          = {2026},
+  eprint        = {2610.06193},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2610.06193}
+}
+
+% === provenance: aliabadi2026lessons ===
+% CLAIM: In a six-week single-repository case study (118 agent failures), stale
+%   documentation was the largest failure class (48/118); replayed failures mostly did
+%   not recur with or without their written rule, while mechanical checks stopped drift.
+% FOUND-VIA: scholar session lp-agent-context; surfaced by `scholar llm classify` as
+%   qualifies-claim, read on review.
+% PICKED: longitudinal (if n=1) evidence that rules outlive their purpose and drift persists.
+% QUOTE (Abstract): "Stale documentation (drift) was the largest failure class (48 of
+%   118)" ; "These results suggest that harness lessons can outlive the failures they
+%   were written to fix, while drift persists and still needs mechanical checks."
+% VERIFIED: ABSTRACT ONLY (arXiv API, v1). Preprint, single author, one personal
+%   repository, three runs per condition -- exploratory by the author's own statement.
+% COUNTER: n/a.
+% DATE: 2026-11-05
+@misc{aliabadi2026lessons,
+  author        = {Hassanzadeh Aliabadi, Hassan},
+  title         = {Lessons Outlive Their Failures: A Case Study of Rules for {AI} Coding Agents},
+  year          = {2026},
+  eprint        = {2610.32578},
+  archiveprefix = {arXiv},
+  doi           = {10.48550/arXiv.2610.32578}
+}

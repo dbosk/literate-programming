@@ -1,0 +1,2 @@
+# Mentipy 1.0 appends each answer to this log; merge both sides line by line.
+*-answers.jsonl merge=union

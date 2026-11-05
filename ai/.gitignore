@@ -1,0 +1,18 @@
+notes.pdf
+slides.pdf
+contents.tex
+examples/
+ltxobj/
+.venv/
+mentipy-obj/
+didactic.sty
+# PythonTeX (didactic's \runpython) writes these next to the sources
+didactic_output_*.txt
+didactic_code_*.py
+didactic_pair_*.txt
+*.pytxcode
+pythontex-files-*
+__pycache__/
+# tangled from the makefiles submodule's tex.mk.nw by the build
+latexmkrc
+mentipy-images/
