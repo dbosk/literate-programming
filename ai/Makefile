@@ -88,13 +88,21 @@ include ${INCLUDE_DIDACTIC}/didactic.mk
 # copy and puts it back before it builds.  We can't force a rerun instead,
 # because that regenerates the QR codes from mentipy.base_url and so undoes the
 # address that mentipy present just wrote to them.  A job without a copy has no
-# output to trust, so it reruns.
+# output to trust, so it reruns.  Nor has a job whose copy is older than a
+# program the deck runs: \runpython's output would be stale, and its file name
+# changes with the program, so the copy would point at a missing file.
 PYTHONTEX_JOBS=	notes.pdf slides.pdf
 PYTHONTEX_OUTPUT=	${TEX_OUTDIR}/py_default_* ${TEX_OUTDIR}/pythontex_data.pkl
+# The whole demo tree, directories included: a run directory gains or loses an
+# entry without any file in it changing.
+PYTHONTEX_COPY_STALE=	find ${EXAMPLES} demo \
+			  -newer ${TEX_OUTDIR}/pythontex-$*
 ${PYTHONTEX_JOBS}: %.pdf: %.tex ${TEX_DOC_PREREQS}
 	${RM} ${PYTHONTEX_OUTPUT}
-	cp -p ${TEX_OUTDIR}/pythontex-$*/* ${TEX_OUTDIR}/ 2>/dev/null || \
-		${RM} ${TEX_OUTDIR}/$*.pytxmcr
+	if [ -d ${TEX_OUTDIR}/pythontex-$* ] && \
+	   [ -z "$$(${PYTHONTEX_COPY_STALE} 2>/dev/null)" ]; \
+	then cp -p ${TEX_OUTDIR}/pythontex-$*/* ${TEX_OUTDIR}/; \
+	else ${RM} ${TEX_OUTDIR}/$*.pytxmcr; fi
 	${COMPILE.tex}
 	${RM} -R ${TEX_OUTDIR}/pythontex-$*
 	mkdir ${TEX_OUTDIR}/pythontex-$*

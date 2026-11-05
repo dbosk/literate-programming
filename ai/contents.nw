@@ -305,11 +305,12 @@ than its title suggests.
 \begin{frame}
   \begin{block}{What has been measured}
     \begin{description}
-      \item[Outlines] Six developers rated outlines of 30 functions: 60\,\%
-        excellent, 90\,\% acceptable\autocite{Shi2025NLO}.
-      \item[Checkable prose] Large gains, but with a model playing the user
-        and seeing the answer; the study with people had eight
-        participants\autocite{Yuan2026VLP}.
+      \item[Outlines] In the best of ten setups, six raters, five of them
+        the authors, rated outlines of 30 functions: 60\,\% excellent,
+        90\,\% acceptable\autocite{Shi2025NLO}.
+      \item[Checkable prose] Large gains with a model playing the user and
+        seeing the answer; the study with people, eight participants, also
+        found gains\autocite{Yuan2026VLP}.
       \item[Literate comments] Removing them did not change accuracy, in one
         benchmark with one model\autocite{RossiPrestwich2026}.
       \item[\enquote{Literate} models] Whether a model's internal
@@ -406,10 +407,10 @@ LLM's ability to understand code}.
       \item[Correct and new] Helps: comments from passing solutions raised
       small
         models' pass rate by about 17 percentage
-        points\autocite{pan2026talking}, and comments gave
-        up
-        to three times as many exact bug fixes, from about 3 to
-        10\,\%\autocite{vitale2026comments}.
+        points\autocite{pan2026talking}, and comments gave up to three times as
+        many exact bug
+        fixes, from about 3 to 10\,\%, in fine-tuned models and with comments
+        that partly describe the fix\autocite{vitale2026comments}.
       \item[Off-topic] Hurts, more than no prose at
         all\autocite{pan2026talking,macke2024documentation}; a wrong solution
         described in comments gave no gain\autocite{pan2026talking}.
@@ -448,9 +449,9 @@ Here there are studies with people, and they point in different directions.
         instead of 65\,\% of questions right, compared with using a
         chatbot\autocite{yan2024ivie}.
       \item[Comments of varying quality] No better judgement, even with exact
-      comments;
-        vague ones were judged less accurately than exact ones, and with more
-        confidence than no comment at all\autocite{kaufman2026assertions}.
+        comments; with under-specified ones, people judged less accurately
+        than with exact ones, yet more confidently than with no comment at
+        all\autocite{kaufman2026assertions}.
       \item[Comments and adoption] People adopt AI-written code more often when
         it has comments\autocite{li2026comments}.
     \end{description}
@@ -466,8 +467,8 @@ were, in a pre-registered experiment with 86 developers.
 hypothesis \textelp{}, the presence of a comment (even if that comment was of
 high-quality) did not significantly improve participant accuracy compared to
 providing no comment at all}.
-Vague comments were judged less accurately than exact ones, and yet raised
-confidence above having no comment at all.
+With under-specified comments, people judged the AI's output less accurately
+than with exact ones, and yet more confidently than with no comment at all.
 That is a preprint, and a single study, but it is the one that tested the
 situation that matters most: an explanation that might be wrong.
 
@@ -504,7 +505,8 @@ found no test of whether writing literate programs with an agent changes that.
   ask, so we say so when revealing the answer.
 }%
 So far the prose was about the code.
-An instruction file, like the [[AGENTS.md]] we saw, tells the agent what to do
+An instruction file, such as an [[AGENTS.md]] or a [[CLAUDE.md]], tells the
+agent what to do
 instead.
 What happens when it is out of date?
 
@@ -533,6 +535,10 @@ In a controlled experiment, \textcquote[abstract]{xu2026stale}{Without the
 sentence, 90.1\,\% of the agents' choices followed the stale file.
 Claude Code pointed out the conflict in 79 of 80 runs and still followed the
 file.}
+For Claude Code alone, the share in the option: it
+\textcquote[sec.~5.2]{xu2026stale}{named the conflict in its final reply in 79
+of 80
+runs, and in those runs 86.2\,\% of its choices still matched the file}.
 The sentence mentioned there was a single instruction to prefer the code when
 the two disagree, which turned the result around.
 Asking was not possible, since the runs had no user.
@@ -544,7 +550,7 @@ the worse code, so a stale convention file costs more than no file}.
 \begin{frame}
   \begin{block}{What instruction files do}
     \begin{description}
-      \item[Up to date] No significant change in whether four agents solved
+      \item[Context files] No significant change in whether four agents solved
         the task, at about 20\,\% higher cost\autocite{gloaguen2026agentsmd}.
       \item[Out of date] Followed over the code, even when the agent notices
         the conflict\autocite{xu2026stale,mohammadi2026workingset}.
@@ -803,9 +809,9 @@ _LP
 )"
 <<the flags that isolate the agent>>
 case "$1" in
-  plain) "${isolated[@]}" "$task" ;;
-  noweb) "${isolated[@]}" "$task$literately" ;;
-  skill) "${isolated[@]}" "${skill[@]}" "$task$literately" ;;
+  plain) "${isolated[@]}" -- "$task" ;;
+  noweb) "${isolated[@]}" -- "$task$literately" ;;
+  skill) "${isolated[@]}" "${skill[@]}" -- "$task$literately" ;;
 esac
 @
   \end{example}
@@ -819,6 +825,10 @@ The plain runs ran in a directory whose name says nothing about literate
 programming.
 The agent works without asking, and reports what it did, its cost and its time
 as JSON at the end.
+The recorded skill runs got the skill as committed on 28 October 2026; a live
+run gets whatever the file says on the day.
+The [[--]] before the prompt matters: [[--allowedTools]] takes every argument
+after it, and would otherwise take the prompt for a tool name.
 The recorded runs were made with these flags, each in its own empty directory
 and with a time limit, three of each instruction at once.
 
@@ -979,6 +989,8 @@ agent decided what to test, and with what expected results.
 So every program gets one input written independently of them.
 It holds each trap the task names: bookings out of order, an overlap, two that
 touch.
+It also has one booking inside another, which is what a program that merely
+tracks the end of the last booking gets wrong.
 It also has what the task doesn't name, namely bookings reaching outside the
 working day at both ends, so that an agent that only did what it was told would
 get caught.
@@ -989,10 +1001,10 @@ only that none of them failed this particular test.
 
 <<constants>>=
 BOOKINGS = (
-    "13:00-14:00\n09:00-10:30\n10:00-11:00\n"
+    "12:30-14:30\n09:00-10:30\n10:00-11:00\n13:00-13:30\n"
     "11:00-11:30\n07:00-08:30\n16:30-18:00\n"
 )
-EXPECTED = "08:30-09:00\n11:30-13:00\n14:00-16:30\n"
+EXPECTED = "08:30-09:00\n11:30-12:30\n14:30-16:30\n"
 <<functions>>=
 def is_correct(run):
     """Return whether the program in `run` gives the expected free slots."""
@@ -1009,6 +1021,10 @@ def is_correct(run):
 Counting lines is a crude measure, and we use it only for the amount of prose.
 It can't tell a reason from a restatement of the code, which is why we read the
 programs as well.
+A documentation chunk starts with an [[@]] followed by a space or the end of
+the
+line, which is how noweb tells it from code such as a decorator, which also
+starts with [[@]].
 For the plain runs there is no [[.nw]] file, so all their lines count as code,
 with the tests included as in the literate files.
 
@@ -1025,7 +1041,7 @@ def count_lines(run):
     for line in source.read_text().splitlines():
         if re.match(r"@<<.*@>>=\s*$", line):
             in_code = True
-        elif line.startswith("@"):
+        elif re.match(r"@(\s|$)", line):
             in_code = False
         elif line.strip():
             code += in_code
@@ -1158,8 +1174,9 @@ ai_goals_poll(
   \textbf{What stays invariant}: the two goals and the scale.
   \textbf{What varies}: the approach, now ones made for agents.
   Showboat is rated because it adds something none of the earlier approaches
-  had, checking that the recorded outputs are real, and that is exactly what
-  \cref{ex:ai-design} found missing in literate programming with agents.
+  had, checking that the recorded outputs are real.
+  Its limit is the one \cref{ex:ai-design} showed: there every output was
+  correct, and the problem was in the design, which no output check catches.
 }%
 In the first lecture we rated notebooks, docstrings and pseudocode against the
 goals of literate programming.
@@ -1220,12 +1237,13 @@ It doesn't check the prose, though, and Willison himself notes a way around it:
 \textcquote{willison2026showboat}{Since the demo file is Markdown the agent
 will
 sometimes edit that file directly rather than using Showboat, which could
-result
-in command outputs that don't reflect what actually happened.}
+result in command outputs that don't reflect what actually
+happened.}
 We found no scientific evaluation of documents like these; the closest, a small
-pilot with models as reviewers, found that requiring evidence made work easier
-for model reviewers to review,
-while every run was correct either way\autocite{schmalbach2026contracts}.
+pilot with models as reviewers, found that requiring a delegation contract made
+the work rate as more
+reviewable to model reviewers, while every run was correct either
+way\autocite{schmalbach2026contracts}.
 
 \begin{frame}
   \begin{block}{Showboat}
@@ -1251,7 +1269,8 @@ evidence:
 documentation, gray literature, and early research prescribe workflows and
 promise better quality, less agent drift, and higher productivity.
 However, their evaluations rarely extend beyond the authors' own projects},
-and they found that the specifications decay as the code moves on.
+and the practitioners they studied report that the specifications decay as the
+code moves on.
 
 \begin{frame}[fragile]
   \only<presentation>{\LPgoals}
