@@ -33,7 +33,7 @@ notes.pdf slides.pdf: $(wildcard mentipy-obj/Q-*.pdf_tex)
 # root chunks are named <<[[file]]>>.
 SRC+=		preamble.tex
 SRC+=		abstract.tex contents.tex
-SRC+=		sokprotokoll.tex
+SRC+=		sokprotokoll.tex program.tex
 SRC+=		ltnotes.bib
 # The appendices \input the generated hit-list tables, and the frames show
 # files that are tracked as they are.

@@ -1,8 +1,8 @@
 {
   "questions": {
-    "f86a25b7c1b5f8878c8cd388fbb4383a2ba35a7b001e39e918e992cee55ab5b1": {
+    "84d5c22b7bc4f7ead5026fa3fb533bbc6390015073b4103a44939ff93ee3903c": {
       "kind": "mc",
-      "text": "Which AI tools for programming do you have available right now?",
+      "text": "Which AI harnesses for programming do you have available right now?",
       "options": [
         "Claude Code",
         "OpenAI Codex",
@@ -10,7 +10,7 @@
         "OpenCode",
         "Gemini CLI or another command-line agent",
         "Cursor or a similar AI editor",
-        "The llm command-line tool",
+        "The llm command-line program",
         "Local models (Ollama or similar)",
         "Only browser chat",
         "None"
@@ -20,17 +20,17 @@
       "results": null,
       "lock": true,
       "context": [],
-      "url_prefix": "f86a",
+      "url_prefix": "84d5",
       "registration_serial": 1,
       "registered_after": null,
       "qr_paths": [
-        "mentipy-obj/Q-f86a.png"
+        "mentipy-obj/Q-84d5.png"
       ],
       "locale": "en"
     },
-    "311bb2863d1b1a60250dbcbd32326c3b74e86cef7ef120d3754ed2afab885029": {
+    "61f4f400d43a921206f6f7b5c9a1b727ee107687a2dafd468ae60fa31a62a738": {
       "kind": "mc",
-      "text": "How do you reach the models behind those tools?",
+      "text": "How do you reach the models behind those harnesses?",
       "options": [
         "GitHub student benefits (Copilot)",
         "A Claude subscription",
@@ -47,11 +47,11 @@
       "results": null,
       "lock": true,
       "context": [],
-      "url_prefix": "311b",
+      "url_prefix": "61f4",
       "registration_serial": 2,
-      "registered_after": "f86a25b7c1b5f8878c8cd388fbb4383a2ba35a7b001e39e918e992cee55ab5b1",
+      "registered_after": "84d5c22b7bc4f7ead5026fa3fb533bbc6390015073b4103a44939ff93ee3903c",
       "qr_paths": [
-        "mentipy-obj/Q-311b.png"
+        "mentipy-obj/Q-61f4.png"
       ],
       "locale": "en"
     },
@@ -68,7 +68,7 @@
       "context": [],
       "url_prefix": "6aba",
       "registration_serial": 3,
-      "registered_after": "311bb2863d1b1a60250dbcbd32326c3b74e86cef7ef120d3754ed2afab885029",
+      "registered_after": "61f4f400d43a921206f6f7b5c9a1b727ee107687a2dafd468ae60fa31a62a738",
       "qr_paths": [
         "mentipy-obj/Q-6aba.png"
       ],
@@ -99,13 +99,13 @@
       ],
       "locale": "en"
     },
-    "9cf07379e5bc9deef223abd092379461f4e6fcfe92d43378aa77f3533615fa26": {
+    "5801cb9db781a9e029abbe3cc6093b8fad221b0c367e6820871fd7657abd7880": {
       "kind": "mc",
       "text": "Since 2023, how much research has tested literate programming together with language models or coding agents?",
       "options": [
         "Many controlled studies",
         "A few controlled studies",
-        "Mostly proposals and tools, with little evaluation",
+        "Mostly proposals and prototypes, with little evaluation",
         "Nothing at all"
       ],
       "multi": false,
@@ -113,11 +113,11 @@
       "results": null,
       "lock": true,
       "context": [],
-      "url_prefix": "9cf0",
+      "url_prefix": "5801",
       "registration_serial": 5,
       "registered_after": "6fda325075d11eda081faab5698e7f23ce6ddf8719adea39e20c07a7e27e8b6f",
       "qr_paths": [
-        "mentipy-obj/Q-9cf0.png"
+        "mentipy-obj/Q-5801.png"
       ],
       "locale": "en"
     },
@@ -137,7 +137,7 @@
       "context": [],
       "url_prefix": "ef76",
       "registration_serial": 6,
-      "registered_after": "9cf07379e5bc9deef223abd092379461f4e6fcfe92d43378aa77f3533615fa26",
+      "registered_after": "5801cb9db781a9e029abbe3cc6093b8fad221b0c367e6820871fd7657abd7880",
       "qr_paths": [
         "mentipy-obj/Q-ef76.png"
       ],

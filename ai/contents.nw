@@ -1,12 +1,10 @@
 \mode<all>{%
 \ProvideDocumentCommand{\LPexplain}{}{%
   explaining to human beings what we want a computer to do%
-}
-\ProvideDocumentCommand{\LPorder}{}{%
+} \ProvideDocumentCommand{\LPorder}{}{%
   strives for a program that is comprehensible because its concepts have been
   introduced in an order that is best for human understanding%
-}
-\ProvideDocumentCommand{\LPgoals}{}{%
+} \ProvideDocumentCommand{\LPgoals}{}{%
   \begin{itemize}
     \item \textbf{\LPexplain}
     \item \textbf{\LPorder}
@@ -56,12 +54,12 @@ def ai_goals_poll(prompt, **kwargs):
   We ask this first because the rest of the session is pitched by the answer.
   If most of the room has only browser chat, the demonstration shows them
   something they can't yet do, and the exercises must not assume an agent.
-  The options come from the course material on LLM tools and how to reach them,
-  so that the same distinction between tool and access route carries over.
+  The options come from the course material on LLM harnesses and how to reach
+  the models, so that the same distinction between harness and access route
+  carries over.
 }%
 Before we discuss what coding agents do to literate programming, we need to
-know
-what you have to work with.
+know what you have to work with.
 Tick everything you could use today, whether or not you pay for it.
 
 \begin{frame}[fragile]
@@ -69,7 +67,7 @@ Tick everything you could use today, whether or not you pay for it.
 \begin{pycode}
 ai_poll(
     mc,
-    "Which AI tools for programming do you have available right now?",
+    "Which AI harnesses for programming do you have available right now?",
     [
         "Claude Code",
         "OpenAI Codex",
@@ -77,7 +75,7 @@ ai_poll(
         "OpenCode",
         "Gemini CLI or another command-line agent",
         "Cursor or a similar AI editor",
-        "The llm command-line tool",
+        "The llm command-line program",
         "Local models (Ollama or similar)",
         "Only browser chat",
         "None",
@@ -88,24 +86,23 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
-A tool is not the same thing as access to a model.
-The next question is how you reach the models.
+A harness is not the same thing as access to a model, so we also ask how you
+reach the models.
 
 \ltnote{%
-  \Cref{ex:ai-access} touches on who pays for what, so it has a way out, and
-  the
-  options are coarse because the store is in a public repository.
-  \Cref{ex:ai-agent-use} then separates having a tool from using one: a student
-  with a subscription who only chats and one who lets an agent edit a
-  repository
-  will read the demonstration differently.
+  \Cref{ex:ai-access} touches on who pays for what, so it has a
+  \enquote{Prefer not to say} option, and the options are coarse because the
+  store is in a public repository.
+  \Cref{ex:ai-agent-use} then separates having a harness from using one: a
+  student with a subscription who only chats and one who lets an agent edit a
+  repository will read the demonstration differently.
 }%
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-access}
 \begin{pycode}
 ai_poll(
     mc,
-    "How do you reach the models behind those tools?",
+    "How do you reach the models behind those harnesses?",
     [
         "GitHub student benefits (Copilot)",
         "A Claude subscription",
@@ -123,6 +120,8 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
+Having a harness is not the same thing as using one either.
+
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-agent-use}
 \begin{pycode}
@@ -136,21 +135,24 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
-The answers separate three things that are easy to mix up.
+The questions keep apart things that are easy to mix up.
 
 \begin{frame}
-  \begin{definition}[Tool, access route and model]
+  \begin{definition}[Harness, tool, access route and model]
+    Each of these words names a different thing:
     \begin{description}
-      \item[Tool] What you run: \texttt{claude}, \texttt{codex},
-        \texttt{copilot}, \texttt{opencode}, \texttt{llm}.
+      \item[Harness] What you run: \texttt{claude}, \texttt{codex},
+        \texttt{copilot}, \texttt{opencode}.
+      \item[Tool] What the agent uses through the harness: reading and editing
+        files, running commands, searching.
       \item[Access route] How you reach a model: a subscription, student
         benefits, an API key, your own hardware.
-      \item[Model] What does the work behind the tool.
+      \item[Model] What does the work behind the harness.
     \end{description}
   \end{definition}
   \begin{remark}
-    Nothing in this session requires a paid tool.
-    The instructions we look at are plain text, and work with any of them.
+    Nothing you are asked to do here needs a paid harness or a subscription.
+    The instructions we look at are plain text, and work with any harness.
   \end{remark}
 \end{frame}
 
@@ -160,16 +162,15 @@ The answers separate three things that are easy to mix up.
   Relevant learning objectives: \cref{AiLOReader}.
 
   The goals stay invariant through the whole session, as they did for the
-  systems in the lecture on what literate programming is, so that what varies
-  is
-  the reader and the approach.
+  systems in the lecture \emph{What is literate programming?}, so that what
+  varies is the reader and the approach.
   \Cref{ex:ai-matter} comes before we say anything about agents as readers: the
   answers show whether students already separate the human from the agent,
-  which
-  is the critical aspect of \cref{AiLOReader}.
+  which is the critical aspect of \cref{AiLOReader}.
   We don't point it out in the question.
 }%
-You have already met the two goals of literate programming.
+In the lecture \emph{What is literate programming?} you met the two goals of
+literate programming.
 Both are about people.
 
 \begin{frame}[fragile]
@@ -190,15 +191,16 @@ ai_poll(
 
 Look at the reasons in your answers, because they tend to assume different
 readers.
-Someone who answers \enquote{more} often has a person in mind, who must now
-understand code they didn't write.
-Someone who answers \enquote{less} often has in mind that nobody will read the
-code any more.
-A third reader has appeared, too: the agent itself reads the prose when it next
-works on the program.
+An answer of \enquote{more} often has in mind a person who must now understand
+code they didn't write.
+An answer of \enquote{less} often assumes that nobody will read the code any
+more.
+But there is a new reader as well: the agent itself reads the prose when it
+next works on the program.
 
 \begin{frame}
   \begin{block}{Who reads the prose?}
+    Prose in a program has three readers:
     \begin{description}
       \item[The maintainer] A person who has to understand and change the
         program, as Knuth had in mind.
@@ -213,21 +215,20 @@ works on the program.
   \end{remark}
 \end{frame}
 
-\section{What does the research say?}
+\section[Research]{What does the research say?}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOEvidence}.
 
   \Cref{ex:ai-research-amount} asks for a guess before any paper is shown.
   Popular accounts of agents and literate programming are confident, so we
-  expect
-  many to overestimate how much has been tested.
+  expect many to overestimate how much has been tested.
   The gap between the guess and the answer is the point: it makes the kind of
   evidence visible as something to ask about.
 }%
 Since 2023 a number of researchers and practitioners have connected literate
 programming with language models.
-Before we look, guess how much of it has been tested.
+Before we look, guess how much of that work has been tested.
 
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-research-amount}
@@ -239,7 +240,7 @@ ai_poll(
     [
         "Many controlled studies",
         "A few controlled studies",
-        "Mostly proposals and tools, with little evaluation",
+        "Mostly proposals and prototypes, with little evaluation",
         "Nothing at all",
     ],
 )
@@ -247,18 +248,21 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
-To answer it, we have to sort claims by the kind of evidence behind them.
-We searched the literature from 2023 onwards for that purpose, in five
-databases, by following the papers that cite Knuth's, and through the reference
-lists of the papers we found; \cref{app:ai-method} says how, and
-\cref{app:ai-rq1,app:ai-rq23,app:ai-rq4} give each search in full.
-\Cref{def:ai-evidence} gives the three kinds we sort by.
+To answer the question, we have to sort claims by the kind of evidence behind
+them.
+We searched the literature from 2023 onwards in five databases, among the
+papers that cite Knuth's article, and in the reference lists of the papers we
+found.
+\Cref{app:ai-method} says how, and \cref{app:ai-rq1,app:ai-rq23,app:ai-rq4}
+give each search in full.
+\Cref{def:ai-evidence} gives the three kinds of evidence we sort by.
 
 \begin{frame}
   \begin{definition}[Three kinds of evidence]\label{def:ai-evidence}
+    A claim rests on one of three kinds of evidence:
     \begin{description}
-      \item[Proposal] An idea or a tool, perhaps with a demonstration, but no
-        measurement of whether it works.
+      \item[Proposal] An idea or a prototype, perhaps with a demonstration, but
+        no measurement of whether it works.
       \item[Benchmark] A measurement of what a model does on a set of tasks.
         It says nothing directly about people.
       \item[Study with people] A measurement of what people do or understand,
@@ -268,8 +272,8 @@ lists of the papers we found; \cref{app:ai-method} says how, and
 \end{frame}
 
 Most of what we found are proposals.
-Google proposes that a model write a short outline of each function in prose,
-interleaved with the code, as a new way to read and navigate
+Researchers at Google propose that a model write a short outline of each
+function in prose, interleaved with the code, as a new way to read and navigate
 it\autocite{Shi2025NLO}.
 \Textcite{Zhang2024ILP} propose literate documents as the prompts for a model
 working on a large project.
@@ -281,6 +285,7 @@ experimental evaluation is left to future work}.
 
 \begin{frame}
   \begin{block}{What has been proposed}
+    Most of the work proposes rather than measures:
     \begin{description}
       \item[Outlines] A model writes the prose outline of each
         function\autocite{Shi2025NLO}.
@@ -295,63 +300,66 @@ experimental evaluation is left to future work}.
 \end{frame}
 
 \ltnote{%
-  Each item below is placed on \cref{def:ai-evidence}, so that the same three
-  categories are applied to four different results, and the result of
-  \cref{ex:ai-research-amount} gets its answer one study at a time.
+  Each measured work is sorted by \cref{def:ai-evidence}, so that the same
+  three kinds of evidence are applied to four different results, and the
+  answer to \cref{ex:ai-research-amount} is built one study at a time.
 }%
 Only four of the works measure anything, and each measures something narrower
 than its title suggests.
 
 \begin{frame}
   \begin{block}{What has been measured}
+    Only four works measure anything:
     \begin{description}
-      \item[Outlines] In the best of ten setups, six raters, five of them
-        the authors, rated outlines of 30 functions: 60\,\% excellent,
-        90\,\% acceptable\autocite{Shi2025NLO}.
+      \item[Outlines] In the best of ten setups, six raters, five of them the
+        authors, rated outlines of 30 functions: 60\,\% excellent, 90\,\%
+        acceptable\autocite{Shi2025NLO}.
       \item[Checkable prose] Large gains with a model playing the user and
         seeing the answer; the study with people, eight participants, also
         found gains\autocite{Yuan2026VLP}.
       \item[Literate comments] Removing them did not change accuracy, in one
         benchmark with one model\autocite{RossiPrestwich2026}.
       \item[\enquote{Literate} models] Whether a model's internal
-        representations tell languages and tasks apart: another meaning of
-        the word\autocite{SunStaron2026}.
+        representations tell languages and tasks apart: another meaning of the
+        word\autocite{SunStaron2026}.
     \end{description}
   \end{block}
 \end{frame}
 
-So a model can write prose about code that its authors rate as good.
+So a model can write prose about code that the study's own authors rate as
+good.
 In the study of checkable prose, the gains were measured with a simulated user
-who sees the reference solution, since \textcquote[sec.~V-A]{Yuan2026VLP}{The
-oracle context includes the benchmark prompt and golden reference
-implementation}.
-When \textcite{RossiPrestwich2026} took the literate-style comments away from
-their system, the \textcquote[sec.~5]{RossiPrestwich2026}{ablation of
-literate-style comments \textelp{} did not produce differences in accuracy with
-respect to the baseline}.
-The only journal article in the set asks whether a model is
-\enquote{literate}, in the sense that it recognises both the language and the
-task of a program, which is not about writing literate programs at
+who sees the reference solution: \textcquote[sec.~V-A]{Yuan2026VLP}{The oracle
+context includes the benchmark prompt and golden reference implementation}.
+In the one study that took literate-style comments away,
+\textcite{RossiPrestwich2026} report that the
+\textcquote[sec.~5]{RossiPrestwich2026}{ablation of literate-style comments
+\textelp{} did not produce differences in accuracy with respect to the
+baseline}.
+The only journal article in the set asks whether a model is \enquote{literate},
+in the sense that it recognizes both the language and the task of a program, a
+question that is not about writing literate programs at
 all\autocite{SunStaron2026}.
 
 \begin{frame}
   \begin{remark}[Two things nobody has done yet]
+    Two gaps stand out:
     \begin{itemize}
-      \item Where an evaluated system has prose, a model writes it, mostly
-        from the code.
+      \item Where an evaluated system has prose, a model writes it, mostly from
+        the code.
         That is the reverse of Knuth's order.
       \item We found no controlled test of literate programming as Knuth meant
-        it, with the explanation written first, together with a language
-        model.
+        it, with the explanation written first, together with a language model.
     \end{itemize}
   \end{remark}
 \end{frame}
 
-The answer to \cref{ex:ai-research-amount} is the third option: mostly
-proposals
-and tools, with little evaluation.
-That does not mean literate programming doesn't help with agents.
-It means we found no measurement of it yet, which is a different thing.
+So the research since 2023 is mostly proposals and prototypes, with little
+evaluation.
+That is not nothing, but we found no controlled study of literate programming
+itself.
+This does not mean that literate programming fails to help with agents, only
+that we found no measurement of whether it does.
 
 \subsection{Prose for the agent}\label{sec:ai-agent-reader}
 
@@ -363,8 +371,8 @@ It means we found no measurement of it yet, which is a different thing.
   better.
   The prompt names neither.
 }%
-Go back to the three readers.
-The agent reads the prose too, so does it help the agent?
+Start with the reader that is new, the agent.
+Does the prose it reads help it write better code?
 
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-comments-agent}
@@ -384,18 +392,22 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
-Here the benchmarks are fairly clear, and point to the second option.
-\Textcite{pan2026talking} controlled what the comments said.
+Here the benchmarks are fairly clear: a comment helps a model when it tells the
+model something correct that it couldn't otherwise know.
+More explanation is not better in itself, and the model does not ignore the
+comments either: wrong ones can make things worse.
+\Textcite{pan2026talking} controlled what the comments said, and measured
+pass@1: the share of problems for which the model's first program passes the
+tests.
 \textcquote[abstract]{pan2026talking}{Comments from source solutions that pass
 the tests raise recipient pass@1 by 17.2\,\% on average.
 In contrast, comments describing failed solutions provide no reliable gain,
 while comments written for a different problem reduce pass@1 by 20.8\,\%.}
-Asking the model to write its own comments recovered at most about a quarter of
-that gain.
+Nor does it help much to have the model write the comments itself: asking it to
+comment its own code recovered at most about a quarter of that gain.
 Prose about something else is worse than none.
-Giving models the docstring of another function,
-\textcite{macke2024documentation}
-found that
+\Textcite{macke2024documentation} gave models the docstring of another
+function, and found that
 \textcquote[abstract]{macke2024documentation}{providing an LLM with
 \enquote{incorrect} documentation can greatly hinder code understanding, while
 incomplete or missing documentation does not seem to significantly affect an
@@ -403,14 +415,13 @@ LLM's ability to understand code}.
 
 \begin{frame}
   \begin{block}{What prose does for the agent}
+    It depends on what the prose says:
     \begin{description}
       \item[Correct and new] Helps: comments from passing solutions raised
-      small
-        models' pass rate by about 17 percentage
-        points\autocite{pan2026talking}, and comments gave up to three times as
-        many exact bug
-        fixes, from about 3 to 10\,\%, in fine-tuned models and with comments
-        that partly describe the fix\autocite{vitale2026comments}.
+      small models' pass rate by about 17 percentage
+      points\autocite{pan2026talking}, and comments gave up to three times as
+      many exact bug fixes, from about 3 to 10\,\%, in fine-tuned models and
+      with comments that partly describe the fix\autocite{vitale2026comments}.
       \item[Off-topic] Hurts, more than no prose at
         all\autocite{pan2026talking,macke2024documentation}; a wrong solution
         described in comments gave no gain\autocite{pan2026talking}.
@@ -435,22 +446,22 @@ literate program in Knuth's sense.
   treatment.
   We show the positive study first, and then the one that varied the quality of
   the explanation, since the contrast between them is about what was varied,
-  not
-  about who is right.
+  not about who is right.
 }%
-The third reader decides whether what the agent wrote is right.
+The checker has to decide whether what the agent wrote is right.
 Does an explanation help a person do that?
 Here there are studies with people, and they point in different directions.
 
 \begin{frame}
   \begin{block}{What prose does for the checker}
+    The studies with people found different things:
     \begin{description}
       \item[Correct explanations, next to the code] Participants answered 90
         instead of 65\,\% of questions right, compared with using a
         chatbot\autocite{yan2024ivie}.
       \item[Comments of varying quality] No better judgement, even with exact
-        comments; with under-specified ones, people judged less accurately
-        than with exact ones, yet more confidently than with no comment at
+        comments; with under-specified ones, people judged less accurately than
+        with exact ones, yet more confidently than with no comment at
         all\autocite{kaufman2026assertions}.
       \item[Comments and adoption] People adopt AI-written code more often when
         it has comments\autocite{li2026comments}.
@@ -461,54 +472,48 @@ Here there are studies with people, and they point in different directions.
 The positive result compared explanations with a chatbot, and did not vary
 whether they were correct.
 \Textcite{kaufman2026assertions} instead varied how good the AI-written
-comments
-were, in a pre-registered experiment with 86 developers.
+comments were, in a pre-registered experiment with 86 developers.
 \textcquote[sec.~RQ2]{kaufman2026assertions}{Contrary to our pre-registered
 hypothesis \textelp{}, the presence of a comment (even if that comment was of
 high-quality) did not significantly improve participant accuracy compared to
 providing no comment at all}.
 With under-specified comments, people judged the AI's output less accurately
 than with exact ones, and yet more confidently than with no comment at all.
-That is a preprint, and a single study, but it is the one that tested the
+The study is a preprint, and only one study, but it is the one that tested the
 situation that matters most: an explanation that might be wrong.
 
 \begin{frame}
   \begin{remark}
-    An explanation can make you more confident without making you more
-    correct.
-    We will see an example of how this could happen in our own demonstration.
+    An explanation can make you more confident without making you more correct.
+    Our own demonstration gives an example of how this could happen.
   \end{remark}
 \end{frame}
 
 There is a further reason for care.
-In a randomized study by Anthropic researchers, people learning a new library
-\textcquote[sec.~1.1]{shen2026skill}{using AI assistance to complete tasks that
-involve this new library resulted in a reduction in the evaluation score by
-17\,\% or two grade points}, measured on a test of understanding.
+In a randomized study by Anthropic researchers of people learning a new
+library, \textcquote[sec.~1.1]{shen2026skill}{using AI assistance to complete
+tasks that involve this new library resulted in a reduction in the evaluation
+score by 17\,\% or two grade points}, measured on a test of understanding.
 Reading prose about the code is not the same as understanding the code, and we
 found no test of whether writing literate programs with an agent changes that.
-
 
 \subsection{Prose that instructs the agent}\label{sec:ai-instructions}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOReader,AiLOEvidence}.
 
-  The instruction files are the kind of prose I rely on most, so we test them
-  on
-  ourselves.
+  The instruction files are the kind of prose I rely on most, so the evidence
+  on them bears directly on my own practice.
   \Cref{ex:ai-stale} has a plausible distractor in each direction: that
-  noticing
-  the conflict makes the agent follow the code, and that it compromises.
-  The fourth option was impossible in the experiment, which ran without a user
-  to
-  ask, so we say so when revealing the answer.
+  noticing the conflict makes the agent follow the code, and that it
+  compromises.
+  Asking the user was impossible in the experiment, which ran without a user,
+  so we say so when revealing the answer.
 }%
-So far the prose was about the code.
-An instruction file, such as an [[AGENTS.md]] or a [[CLAUDE.md]], tells the
-agent what to do
-instead.
-What happens when it is out of date?
+So far the prose has been about the code.
+An instruction file, such as [[AGENTS.md]] or [[CLAUDE.md]], is prose of
+another kind: it tells the agent what to do.
+What happens when such a file is out of date?
 
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-stale}
@@ -530,31 +535,33 @@ ai_poll(
   \end{exercise}
 \end{frame}
 
-The answer is the third.
-In a controlled experiment, \textcquote[abstract]{xu2026stale}{Without the
-sentence, 90.1\,\% of the agents' choices followed the stale file.
+The agents mostly followed the file, even when they had noticed the conflict.
+In a controlled experiment, \textcite{xu2026stale} ran agents with and without
+one added sentence, an instruction to prefer the code where the two disagree:
+\textcquote[abstract]{xu2026stale}{Without the sentence, 90.1\,\% of the
+agents' choices followed the stale file.
 Claude Code pointed out the conflict in 79 of 80 runs and still followed the
 file.}
-For Claude Code alone, the share in the option: it
+With the sentence, the agents followed the code instead.
+For Claude Code alone, they report that it
 \textcquote[sec.~5.2]{xu2026stale}{named the conflict in its final reply in 79
-of 80
-runs, and in those runs 86.2\,\% of its choices still matched the file}.
-The sentence mentioned there was a single instruction to prefer the code when
-the two disagree, which turned the result around.
-Asking was not possible, since the runs had no user.
+of 80 runs, and in those runs 86.2\,\% of its choices still matched the file}.
+So noticing the conflict made the agent neither follow the code nor split the
+difference, and stopping to ask was not possible, since the runs had no user.
 Another study found the same:
-\textcquote[abstract]{mohammadi2026workingset}{where
-standard and code disagree, agents follow the standard even when it prescribes
-the worse code, so a stale convention file costs more than no file}.
+\textcquote[abstract]{mohammadi2026workingset}{where standard and code
+disagree, agents follow the standard even when it prescribes the worse code, so
+a stale convention file costs more than no file}.
 
 \begin{frame}
   \begin{block}{What instruction files do}
+    The studies of such files report:
     \begin{description}
       \item[Context files] No significant change in whether four agents solved
         the task, at about 20\,\% higher cost\autocite{gloaguen2026agentsmd}.
       \item[Out of date] Followed over the code, even when the agent notices
         the conflict\autocite{xu2026stale,mohammadi2026workingset}.
-      \item[Skills] Skills written by people helped on specialised tasks, and
+      \item[Skills] Skills written by people helped on specialized tasks, and
         those the agent wrote itself made things
         worse\autocite{li2026skillsbench};
         on ordinary repositories, 92 of 98 public skills had no significant
@@ -564,37 +571,37 @@ the worse code, so a stale convention file costs more than no file}.
 \end{frame}
 
 \Textcite{gloaguen2026agentsmd} found that
-\textcquote[abstract]{gloaguen2026agentsmd}{providing
-context files does not generally improve task success rates, while increasing
-inference cost by over 20\,\% on average}.
-Be careful with that paper, though: its first version said that context files
+\textcquote[abstract]{gloaguen2026agentsmd}{providing context files does not
+generally improve task success rates, while increasing inference cost by over
+20\,\% on average}.
+Read that paper with care, though: its first version said that context files
 reduce success, and only the later version says that they don't improve it.
 Our demonstration shows a similar rise in cost, for a skill rather than a
 context file.
 
-One more result connects this directly to literate programming.
+One more paper connects instruction files directly to literate programming.
 Instruction files keep growing, and \textcite{chakrabarti2026growing} argue
-that
-it is because the reason for each rule is lost, so nobody dares remove one.
+that they grow because the reason for each rule is lost, so nobody dares remove
+one.
 They ask: \textcquote[abstract]{chakrabarti2026growing}{If English is the new
 code, why don't we have comments yet?}
 
 \begin{frame}
   \begin{remark}[A pattern across the studies]
-    Prose helps an agent when it carries information the agent can't get from
-    the code or already knows: a correct requirement, a procedure, a reason.
+    Prose helps an agent when it carries information that the agent neither
+    finds in the code nor already knows: a correct requirement, a procedure, a
+    reason.
     Prose that restates the code costs tokens and does little.
-    Instructions that are wrong are followed.
+    Wrong instructions are followed anyway.
   \end{remark}
 \end{frame}
 
-That pattern is our reading of the studies together, not something one of them
-tested.
-It is, though, close to what Knuth asked of the prose: explain what the code
+That pattern is our reading of the studies together, not something any one of
+them tested.
+It is close, though, to what Knuth asked of the prose: explain what the code
 can't.
 
-
-\section{How I make agents write literate programs}
+\section[My practice]{How I make agents write literate programs}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOInstruct}.
@@ -608,31 +615,31 @@ can't.
   the evidence can't.
 }%
 I have the agents I work with write literate programs, and have done so for
-about
-a year.
+about a year.
 \Cref{tab:ai-repositories} shows how far that goes in the repositories I
 maintain.
 
 \begin{frame}
   \begin{table}
     \begin{sidecaption}{%
-      Repositories where agents write literate programs, on 5 November 2026.
-      Commits are non-merge commits on the default branch; the agent commits
-      are those with a \texttt{Co-Authored-By: Claude} line.
-      This counts activity, not quality, and it misses other agents.
-    }[tab:ai-repositories]
-      \footnotesize
+      Repositories where agents write literate programs, on 6 November 2026.
+      Commits are non-merge commits on the default branch.
+      An agent commit has a co-author line naming an agent (Claude, OpenCode,
+      Mistral Vibe) or was made by GitHub's Copilot agent.
+      Commits an agent helped with but that carry neither are not counted.
+      This counts activity, not quality.
+    }[tab:ai-repositories] \footnotesize
       \begin{tabular}{lrrrr}
         \toprule
         Repository & \texttt{.nw} files & Lines & Commits & Agent commits \\
         \midrule
-        \texttt{nytid} & 28 & 95\,277 & 1\,554 & 666 \\
-        \texttt{canvaslms} & 40 & 61\,968 & 1\,273 & 559 \\
-        \texttt{learnlog} & 18 & 48\,348 & 294 & 187 \\
-        \texttt{mentipy} & 15 & 48\,184 & 256 & 165 \\
-        \texttt{ladok3} & 11 & 17\,302 & 640 & 79 \\
-        \texttt{kthutils} & 7 & 12\,521 & 251 & 40 \\
-        \texttt{weblogin} & 5 & 4\,656 & 149 & 31 \\
+        \texttt{nytid} & 28 & 95\,277 & 1\,554 & 766 \\
+        \texttt{canvaslms} & 40 & 61\,968 & 1\,273 & 656 \\
+        \texttt{learnlog} & 18 & 48\,348 & 294 & 192 \\
+        \texttt{mentipy} & 15 & 48\,184 & 256 & 184 \\
+        \texttt{ladok3} & 11 & 17\,302 & 640 & 101 \\
+        \texttt{kthutils} & 7 & 12\,521 & 251 & 52 \\
+        \texttt{weblogin} & 5 & 4\,656 & 149 & 33 \\
         \bottomrule
       \end{tabular}
     \end{sidecaption}
@@ -640,12 +647,13 @@ maintain.
 \end{frame}
 
 These numbers say that it is possible to work this way at some scale, and
-nothing
-about whether it is better.
-There is no version of these projects written without it to compare with.
+nothing about whether it is better.
+There is no version of these projects written without literate programming to
+compare with.
 What I can show is how it is done.
 
-The polling tool you are using, Mentipy, is one of them.
+Mentipy, the polling system behind the questions in this lecture, is one of
+these projects.
 This is how one of its modules opens: what the module is for, in the order that
 makes it understandable, before any code.
 
@@ -659,13 +667,12 @@ makes it understandable, before any code.
 \ltnote{%
   We show the rule only after the students have seen what it produces.
   The rule itself is a contrast, a bad and a good version on one task, and it
-  is
-  a useful thing to show because it is how the agent is taught too: the same
+  is a useful thing to show because it is how the agent is taught too: the same
   pattern works on both readers.
 }%
 Getting there takes more than asking.
-Every project has a file of instructions for agents, stating the first rule:
-the literate source is what you edit.
+Each of these projects has an instruction file for agents, and it states the
+first rule: the literate source is what you edit.
 
 \begin{frame}[fragile]
   \begin{example}[From \texttt{AGENTS.md} in Mentipy]
@@ -676,9 +683,9 @@ the literate source is what you edit.
 
 The rest lives in a \emph{skill}: a text file of instructions, which the agent
 loads when it is about to work on a [[.nw]] file.
-Mine contains rules like the one below.
-In the file, each is followed by a bad and a good version of the same
+In my skill, each rule is followed by a bad and a good version of the same
 paragraph.
+One of the rules is to explain \emph{why}.
 
 \begin{frame}[fragile]
   \begin{example}[From my \texttt{literate-programming} skill]
@@ -701,6 +708,7 @@ themselves.
 
 \begin{frame}
   \begin{block}{A year of rules}
+    Some of the rules, by the month they were added:
     \begin{description}
       \item[2025-12] Introduce structure gradually, don't dump it.
       \item[2026-02] Explain why, not what, with bad and good examples.
@@ -714,8 +722,7 @@ themselves.
 
 \ltnote{%
   Drafted by Claude: these are plausible reasons, but only Daniel can say
-  whether
-  they are his.
+  whether they are his.
   Replace them with the real ones before this goes on a slide.
   They are stated as reasoning, so that they don't compete with the evidence in
   the review.
@@ -725,6 +732,7 @@ Here is my reasoning, which is not evidence.
 
 \begin{frame}
   \begin{block}{Why I do it}
+    My reasons are these:
     \begin{itemize}
       \item The explanation and the code change in the same diff, so I review
         the agent's reasons along with its code.
@@ -739,7 +747,7 @@ Here is my reasoning, which is not evidence.
   \end{remark}
 \end{frame}
 
-\section{The same task, three instructions}
+\section[Demonstration]{The same task, three instructions}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOInstruct,AiLOReader}.
@@ -747,17 +755,14 @@ Here is my reasoning, which is not evidence.
   \textbf{Variation pattern}: contrast.
   \textbf{What varies}: the instruction, in three values.
   \textbf{What stays invariant}: the task, the model, the tools and the
-  isolation
-  from any other instructions.
+  isolation from any other instructions.
   The critical aspect is that what we tell the agent shapes the explanation and
   the design, while behaviour may stay the same.
   Three repetitions each keep one lucky run from carrying the conclusion, but
-  this
-  is an illustration, not a study: three runs of one task with one model.
+  this is an illustration, not a study: three runs of one task with one model.
 }%
-Here is a task that is small enough to run in front of you, and has a few
-traps:
-bookings can overlap, touch and come in any order.
+Our task is small enough to run live, and it has a few traps: bookings can
+overlap, touch and come in any order.
 
 \begin{frame}[fragile]
   \begin{example}[The task]\label{ex:ai-task}
@@ -772,13 +777,14 @@ test_freeslots.py and run them with pytest.
   \end{example}
 \end{frame}
 
-We vary only what we add to it.
-The second instruction asks for a literate program.
-The third asks for the same, but also gives the agent my skill.
+We vary only what we add to the task, in three instructions.
+The first, [[plain]], is the task alone.
+The second, [[noweb]], also asks for a literate program.
+The third, [[skill]], asks for the same and also gives the agent my skill.
 
 \begin{frame}[fragile]
   \begin{example}[What varies]\label{ex:ai-instruction}
-    The second and third runs also get this text:
+    The second and third instructions add this text:
 <<the instruction to write literately>>=
  Write it as a literate program in noweb, in the file freeslots.nw. Tangle
 it to get freeslots.py and test_freeslots.py.
@@ -788,10 +794,9 @@ it to get freeslots.py and test_freeslots.py.
 
 We have to keep everything else out of the comparison.
 A coding agent normally reads your settings, your instruction files and the
-name
-of the directory it is in, and any of them could tell it about literate
+name of the directory it is in, and any of them could tell it about literate
 programming.
-So the script below turns off everything it can.
+So the script in \cref{ex:ai-run-demo} turns off everything it can.
 
 \begin{frame}[fragile]
   \begin{example}[Running one of the three]\label{ex:ai-run-demo}
@@ -817,20 +822,16 @@ esac
   \end{example}
 \end{frame}
 
-The flags ignore user settings, which drops the user's own plugins and hooks,
-and turn off skills and external tool servers.
-The model is fixed, since a different one would be a second thing varying.
-For the third run, we hand it the skill file directly.
-The plain runs ran in a directory whose name says nothing about literate
-programming.
-The agent works without asking, and reports what it did, its cost and its time
-as JSON at the end.
-The recorded skill runs got the skill as committed on 28 October 2026; a live
-run gets whatever the file says on the day.
+The flags in [[<<the flags that isolate the agent>>]] keep everything else out.
+They ignore user settings, which drops the user's own plugins and hooks, and
+they turn off skills and external tool servers.
+They fix the model, since a different one would be a second thing varying.
+They let the agent work without asking, and have it report what it did, its
+cost and its time as JSON at the end.
+For the third instruction, a further flag hands the agent the skill file
+directly.
 The [[--]] before the prompt matters: [[--allowedTools]] takes every argument
 after it, and would otherwise take the prompt for a tool name.
-The recorded runs were made with these flags, each in its own empty directory
-and with a time limit, three of each instruction at once.
 
 \begin{frame}[fragile]
   \begin{example}[The isolation]
@@ -848,16 +849,22 @@ skill=(--append-system-prompt-file
   \end{example}
 \end{frame}
 
+The recorded runs were made with these flags, three of each instruction at
+once, each in its own empty directory and with a time limit.
+The plain runs ran in a directory whose name says nothing about literate
+programming.
+The recorded skill runs got the skill as committed on 28 October 2026; a live
+run gets whatever the file says on the day.
+
 \ltnote{%
   Each option is a real outcome or a plausible misconception, and several can
-  be
-  right, so that ticking them separates behaviour, prose and design without our
-  naming those as the aspects to look at.
+  be right, so that ticking them separates behaviour, prose and design without
+  our naming those as the aspects to look at.
   Most students will probably expect the amount of prose to grow.
   Few are likely to expect the design to change, which is the point of
   \cref{ex:ai-design}.
 }%
-Before we run it, what do you expect?
+Before we run the agent, what do you expect to differ?
 
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-predict-demo}
@@ -895,16 +902,15 @@ ai_poll(
 \end{frame}
 }
 
-In the session we run the third instruction live, in an empty directory, with
+The third instruction is quick enough to run live, in an empty directory, with
 [[run_demo.sh skill > run.json]].
-It takes about a minute, and then we read the [[.nw]] file it wrote.
-Yours will not come out exactly like the recorded run below, since the model
+It takes about a minute, and then we read the [[.nw]] file the agent wrote.
+A live run will not come out exactly like the recorded ones, since the model
 doesn't give the same answer twice.
-So I ran each instruction three times beforehand, and this program compares all
-nine runs.
+So I ran each instruction three times beforehand, and the program
+[[compare_runs.py]] compares all nine runs (\cref{ex:ai-results}).
 It feeds every program one input that none of the agents saw, checks the
-result,
-and reports what each one cost.
+result, and reports what each run cost.
 
 \begin{frame}[fragile]
   \begin{example}[All nine runs]\label{ex:ai-results}
@@ -916,34 +922,33 @@ and reports what each one cost.
 \end{frame}
 
 So behaviour didn't differ on this input: all nine were correct, and every
-agent's
-own tests pass too.
-The amount of prose did differ, and so did the cost: about five times that of
-the plain instruction, and almost three times that of the noweb instruction
-without the skill.
+agent's own tests pass too.
+The amount of prose did differ, and so did the cost: the runs with the skill
+cost about five times as much as the plain runs, and almost three times as much
+as the noweb runs.
 That is a rise like the one for instruction files in
-\cref{sec:ai-instructions},
-though far larger, and our nine runs can't tell how much of it comes from
-reading the skill and how much from the extra work it asks for.
+\cref{sec:ai-instructions}, though far larger, and our nine runs can't tell how
+much of it comes from reading the skill and how much from the extra work it
+asks for.
 The reported cost is Claude Code's estimate at API prices, and small in
-absolute
-terms, but the ratio is what you would notice on a larger project.
+absolute terms, but the ratio is what you would notice on a larger project.
 \mode<article>{\subsection{How the runs are compared}}
 
 \ltnote{%
   This subsection exists only in the notes.
   It is too long for a slide, and in the session the output is what matters,
-  but
-  a deck about literate programming shouldn't rest on a program it doesn't
+  but a deck about literate programming shouldn't rest on a program it doesn't
   explain.
   We present the main program first and its helpers after, which is not the
-  order
-  Python needs.
+  order Python needs.
 }%
 The comparison asks two things of each run: does the program work, and what did
 the agent write?
 The main program reports them per instruction, as means, since the point is to
 compare instructions and not to rank single runs.
+With [[--merge]] it reports instead how many runs of each instruction have a
+merging step; we use that only after \cref{ex:ai-design} has asked about the
+design.
 
 <<[[compare_runs.py]]>>=
 """Compare what each instruction gave, over all its recorded runs."""
@@ -960,10 +965,21 @@ import sys
 <<functions>>
 
 
-def main():
-    print("           correct  prose  code  merge  cost($)  seconds")
+def main(argv):
+    if "--merge" in argv:
+        print_merge_steps()
+    else:
+        print_comparison()
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
+<<functions>>=
+def print_comparison():
+    """Print, per instruction, correctness, prose, code, cost and time."""
+    print("           correct  prose  code  cost($)  seconds")
     for name in INSTRUCTIONS:
-        runs = sorted((DEMO / name).iterdir())
+        runs = runs_of(name)
         meta = [json.loads((run / "meta.json").read_text()) for run in runs]
         lines = [count_lines(run) for run in runs]
         print(
@@ -971,17 +987,29 @@ def main():
             f"{sum(map(is_correct, runs))}/{len(runs)}      "
             f"{statistics.mean(prose for prose, _ in lines):5.0f}  "
             f"{statistics.mean(code for _, code in lines):4.0f}  "
-            f"{sum(map(has_merge_step, runs))}/{len(runs)}    "
             f"{statistics.mean(m['cost_usd'] for m in meta):7.2f}  "
             f"{statistics.mean(m['seconds'] for m in meta):7.0f}"
         )
 
 
-if __name__ == "__main__":
-    main()
+def print_merge_steps():
+    """Print, per instruction, how many runs have a merging step."""
+    for name in INSTRUCTIONS:
+        runs = runs_of(name)
+        print(f"{name:>9}  {sum(map(has_merge_step, runs))} of {len(runs)}")
 <<constants>>=
 DEMO = pathlib.Path(__file__).resolve().parent.parent / "demo"
 INSTRUCTIONS = ["plain", "noweb", "skill"]
+@
+
+Each instruction has a directory of runs, one directory per run.
+Anything else kept beside them, such as a note on what the runs were given, is
+not a run, so we take only the directories.
+
+<<functions>>=
+def runs_of(name):
+    """Return the run directories of the instruction `name`, in order."""
+    return sorted(path for path in (DEMO / name).iterdir() if path.is_dir())
 @
 
 An agent's own tests can't tell us whether its program works, since the same
@@ -991,13 +1019,12 @@ It holds each trap the task names: bookings out of order, an overlap, two that
 touch.
 It also has one booking inside another, which is what a program that merely
 tracks the end of the last booking gets wrong.
-It also has what the task doesn't name, namely bookings reaching outside the
+And it has something the task doesn't name, bookings that reach outside the
 working day at both ends, so that an agent that only did what it was told would
 get caught.
 We worked out the expected result by hand.
 One input can show a program wrong but can't show it right, so a pass here
-means
-only that none of them failed this particular test.
+means only that the program did not fail this particular test.
 
 <<constants>>=
 BOOKINGS = (
@@ -1022,9 +1049,8 @@ Counting lines is a crude measure, and we use it only for the amount of prose.
 It can't tell a reason from a restatement of the code, which is why we read the
 programs as well.
 A documentation chunk starts with an [[@]] followed by a space or the end of
-the
-line, which is how noweb tells it from code such as a decorator, which also
-starts with [[@]].
+the line; that is how noweb tells it from code that also starts with [[@]],
+such as a Python decorator.
 For the plain runs there is no [[.nw]] file, so all their lines count as code,
 with the tests included as in the literate files.
 
@@ -1049,7 +1075,7 @@ def count_lines(run):
     return prose, code
 @
 
-Finally, we look for the merging step by name.
+Finally, for [[--merge]], we look for the merging step by name.
 That would miss the same logic under another name, so the counts were also
 checked by reading the programs.
 
@@ -1059,39 +1085,37 @@ def has_merge_step(run):
     return "def merge" in (run / "freeslots.py").read_text()
 @
 
-What the prose says is the more interesting difference.
+The counts show how much prose there is, but what the prose says is the more
+interesting difference.
 
 \ltnote{%
   \textbf{Variation pattern}: contrast, on the same point in the same program:
   how malformed input is handled.
-  We put them on one slide so that they can be compared directly, without
-  saying
-  in advance what to look for.
+  We put the two excerpts on one slide so that they can be compared directly,
+  without saying in advance what to look for.
 }%
-Here both programs reject malformed input.
-Compare how they tell the reader so.
+\Cref{ex:ai-why} takes one point in two programs: both reject malformed input.
+Compare how each of them tells the reader about it.
 
 \begin{frame}[fragile]
   \begin{exercise}[Same point, two programs]\label{ex:ai-why}
     With the noweb instruction:
     \inputminted[fontsize=\scriptsize,firstline=36,lastline=37]%
-      {latex}{demo/noweb/1/freeslots.nw}
-    With the skill as well:
+      {latex}{demo/noweb/1/freeslots.nw} With the skill as well:
     \inputminted[fontsize=\scriptsize,firstline=68,lastline=71]%
-      {latex}{demo/skill/1/freeslots.nw}
-    What does the second tell you that the first doesn't?
+      {latex}{demo/skill/1/freeslots.nw} What does the second tell you that the
+      first doesn't?
   \end{exercise}
 \end{frame}
 
-The first sentence restates the code: you could get it by reading the
+The first sentence restates the code: you could learn as much by reading the
 [[raise]].
 That is the kind of prose that, in \cref{sec:ai-agent-reader}, gave a model
 nothing it didn't already have.
 The second gives a reason you couldn't get from the code, namely what would go
-wrong for the person using the tool.
+wrong for the person using the program.
 That is the difference the skill asks for, and it held in the other runs as
-well,
-though not always as clearly.
+well, though not always as clearly.
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOReader}.
@@ -1104,52 +1128,63 @@ though not always as clearly.
   We ask before telling, without using the word \enquote{unnecessary}.
 }%
 The third instruction changed something else, too.
-Compare how the two programs find the free slots.
+Compare how a plain program and a skill program find the free slots.
 
 \begin{frame}[fragile,shrink=10]
   \begin{exercise}[Two designs]\label{ex:ai-design}
     With the plain instruction, the bookings are sorted directly:
     \inputminted[fontsize=\scriptsize,firstline=26,lastline=40]%
-      {python}{demo/plain/1/freeslots.py}
-    With the skill, the same function starts by calling this one instead:
+      {python}{demo/plain/1/freeslots.py} With the skill, the same function
+      starts by calling this one instead:
     \inputminted[fontsize=\scriptsize,firstline=116,lastline=127]%
-      {python}{demo/skill/1/freeslots.nw}
-    Does the program need [[merge_slots]]?
+      {python}{demo/skill/1/freeslots.nw} Does the program need
+      [[merge_slots]]?
   \end{exercise}
 \end{frame}
 
 It doesn't.
 Sorting and keeping the furthest end seen so far already handle overlaps, as
-the
-plain version shows, and all nine programs give the same output.
-All three skill runs added this step, and none of the others did.
+the plain version shows, and all nine programs give the same output.
+All three skill runs added this step, and none of the others did, as the
+comparison program shows when asked for merging steps (\cref{ex:ai-merge}).
 My guess is that a pipeline of named stages makes a better story, and the skill
 asks for a story.
 The prose explains the step carefully, even noting that one of its choices is
 \enquote{harmless for free-slot output}, but never asks whether the step itself
 is needed.
-A good explanation can make unnecessary code look justified, which is the risk
-that \cref{sec:ai-checker} found, shown in small.
+A good explanation can make unnecessary code look justified: a small instance
+of the risk found in \cref{sec:ai-checker}.
+
+\begin{frame}[fragile]
+  \begin{example}[Which runs merge]\label{ex:ai-merge}
+    Counting the runs whose program has a merging function:
+    \runpython[showcommand,chdir,args=--merge,fontsize=\scriptsize]%
+      {examples/compare_runs.py}
+  \end{example}
+\end{frame}
 
 \begin{frame}
   \begin{remark}[What the demonstration shows]
     With one task and one model, the instruction changed what the prose
-    explains
-    and how the program is designed, but not what it does on our input.
+    explains and how the program is designed, but not what it does on our
+    input.
     Prose that explains well is not evidence that the code should exist.
     You still have to read it.
   \end{remark}
 \end{frame}
 
 \ltnote{%
-  We reuse the scale from the related-approaches part of the first lecture.
+  We reuse the scale from the related approaches in the lecture \emph{What is
+  literate programming?}.
   \textbf{Variation pattern}: generalization.
   \textbf{What stays invariant}: the goals and the scale.
   \textbf{What varies}: the thing being rated, here a program an agent wrote,
-  and
-  below other approaches.
+  and then other approaches made for agents.
 }%
-Now rate the result as you rated notebooks and docstrings.
+In the lecture \emph{What is literate programming?} you rated notebooks and
+docstrings against the goals of literate programming.
+Now rate the program the agent wrote with the skill in the same way.
+\Cref{app:ai-skill-program} prints the whole of it.
 
 \begin{frame}[fragile]
   \only<presentation>{\LPgoals}
@@ -1164,13 +1199,13 @@ ai_goals_poll(
   \end{exercise}
 \end{frame}
 
-\section{Related approaches}
+\section[Related approaches]{Related approaches}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOCompare}.
 
   \textbf{Variation pattern}: generalization, continued from the related
-  approaches in the first lecture.
+  approaches in the lecture \emph{What is literate programming?}.
   \textbf{What stays invariant}: the two goals and the scale.
   \textbf{What varies}: the approach, now ones made for agents.
   Showboat is rated because it adds something none of the earlier approaches
@@ -1178,8 +1213,8 @@ ai_goals_poll(
   Its limit is the one \cref{ex:ai-design} showed: there every output was
   correct, and the problem was in the design, which no output check catches.
 }%
-In the first lecture we rated notebooks, docstrings and pseudocode against the
-goals of literate programming.
+In the lecture \emph{What is literate programming?} we rated notebooks,
+docstrings and pseudocode against the goals of literate programming.
 Agents have brought new approaches, and we rate two of them the same way.
 
 The first is Showboat, by Simon Willison, a tool for an agent to show what it
@@ -1187,18 +1222,21 @@ has done.
 In his words: \textcquote{willison2026showboat}{I need tools that allow agents
 to clearly demonstrate their work to me, while minimizing the opportunities for
 them to cheat about what they've done.}
-An agent builds a Markdown document with commands: a note in prose, then a
-command, which Showboat runs and records together with its output.
+An agent builds a Markdown document through Showboat's commands: it adds a note
+in prose, then a command, which Showboat runs and records together with its
+output.
+The documentation sums up the idea:
 \textcquote{willison2026showboatreadme}{These documents serve as both readable
 documentation and reproducible proof of work.
 A verifier can re-execute all code blocks and confirm the outputs still match.}
 
 \begin{frame}
   \begin{block}{Showboat}
+    The agent works through commands such as these:
     \begin{description}
       \item[\texttt{note}] The agent adds prose.
-      \item[\texttt{exec}] Showboat runs a command and records it with its
-        real output.
+      \item[\texttt{exec}] Showboat runs a command and records it with its real
+        output.
       \item[\texttt{verify}] Showboat runs every block again and reports any
         output that has changed.
     \end{description}
@@ -1227,50 +1265,48 @@ ai_goals_poll(
   \end{exercise}
 \end{frame}
 
-It does explain to people: the prose is written for a reader, and the outputs
-are real.
+A Showboat document does explain to people: the prose is written for a reader,
+and the outputs are real.
 But the order is the order in which the agent did things, not necessarily the
 order best for understanding, which puts it closer to a notebook than to a
 literate program.
 What it adds is something literate programming lacks: the outputs are checked.
-It doesn't check the prose, though, and Willison himself notes a way around it:
+Showboat doesn't check the prose, though, and Willison himself notes a way
+around the check:
 \textcquote{willison2026showboat}{Since the demo file is Markdown the agent
-will
-sometimes edit that file directly rather than using Showboat, which could
-result in command outputs that don't reflect what actually
-happened.}
-We found no scientific evaluation of documents like these; the closest, a small
-pilot with models as reviewers, found that requiring a delegation contract made
-the work rate as more
-reviewable to model reviewers, while every run was correct either
-way\autocite{schmalbach2026contracts}.
+will sometimes edit that file directly rather than using Showboat, which could
+result in command outputs that don't reflect what actually happened.}
+We found no scientific evaluation of documents like these.
+The closest is a small pilot with models as reviewers: requiring a delegation
+contract made the model reviewers rate the work as more reviewable, while every
+run was correct either way\autocite{schmalbach2026contracts}.
 
 \begin{frame}
   \begin{block}{Showboat}
+    Against the two goals:
     \begin{itemize}
       \item[\(+\)] {\color{green!75!black}\LPexplain}
       \item[\(\approx\)] {\color{orange}\LPorder}
     \end{itemize}
   \end{block}
   \begin{remark}
-    In the order the agent worked.
-    Outputs are checked, the prose is not.
+    It follows the order the agent worked in.
+    Its outputs are checked, its prose is not.
   \end{remark}
 \end{frame}
 
 The second is the instruction file itself, together with skills and
 specifications written before the code.
-Specification-driven development, in tools such as GitHub's Spec Kit or
-Amazon's
-Kiro, writes the explanation first, as Knuth wanted, but in a separate file.
+Specification-driven development, with GitHub's Spec Kit or in Amazon's Kiro,
+writes the explanation first, as Knuth wanted, but in a separate file.
 \Textcite{agarwal2026sdd}, who studied how it is practised, sum up its
 evidence:
-\textcquote[sec.~1]{agarwal2026sdd}{Tool
-documentation, gray literature, and early research prescribe workflows and
-promise better quality, less agent drift, and higher productivity.
-However, their evaluations rarely extend beyond the authors' own projects},
-and the practitioners they studied report that the specifications decay as the
-code moves on.
+\textcquote[sec.~1]{agarwal2026sdd}{Tool documentation, gray literature, and
+early research prescribe workflows and promise better quality, less agent
+drift, and higher productivity.
+However, their evaluations rarely extend beyond the authors' own projects}, and
+the practitioners they studied report that the specifications decay as the code
+moves on.
 
 \begin{frame}[fragile]
   \only<presentation>{\LPgoals}
@@ -1290,42 +1326,44 @@ ai_goals_poll(
   \end{exercise}
 \end{frame}
 
-They explain, but mostly to the agent, and in a file of their own.
+Instruction files and specifications explain, but mostly to the agent, and in
+a file of their own.
 They are not in an order for understanding the program, since they aren't about
 the program's parts at all, and they decay because nothing ties them to the
 code.
 A literate program keeps the explanation next to the code it explains, so the
 two can change in the same edit; whether agents actually keep them in step is
-one
-of
-the things nobody has measured.
+one of the things nobody has measured.
 
 \begin{frame}
   \begin{block}{Instruction files and specifications}
+    Against the two goals:
     \begin{itemize}
       \item[\(\approx\)] {\color{orange}\LPexplain}
       \item[\(-\)] {\color{red}\LPorder}
     \end{itemize}
   \end{block}
   \begin{remark}
-    Written for the agent, separate from the code, and they go out of date.
+    They are written for the agent, kept apart from the code, and go out of
+    date.
   \end{remark}
 \end{frame}
 
-
-\section{What is left for us?}
+\section[What is left]{What is left for us?}
 
 \ltnote{%
   Relevant learning objectives: \cref{AiLOReader,AiLOEvidence,AiLOInstruct}.
 
-  This closes with the question from the start of the session, so students can
-  compare what they answer now with what they answered then.
+  \Cref{ex:ai-closing} returns to the question of \cref{ex:ai-matter}, turned
+  to the student's own next program, so students can compare what they answer
+  now with what they answered then.
   We keep this an open answer and read a few aloud rather than giving a
   conclusion, as the literature doesn't settle it.
 }%
 We opened by asking whether explaining programs to people matters more or less
 when agents write them.
 You now have some evidence, one demonstration, and a way to rate approaches.
+The last question is about your own next program.
 
 \begin{frame}[fragile]
   \begin{exercise}\label{ex:ai-closing}
