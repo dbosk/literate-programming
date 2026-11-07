@@ -696,9 +696,9 @@ One of the rules is to explain \emph{why}.
 \end{frame}
 
 \ltnote{%
-  Drafted by Claude from the skill's version history: the dates and the commit
-  count are facts from the repository, but the reading of them as a record of
-  failures is for Daniel to confirm.
+  Drafted by Claude from the skill's version history and confirmed by Daniel:
+  the dates and the commit count are facts from the repository, and reading
+  them as a record of failures is his.
 }%
 The skill wasn't written in one go.
 Its directory has had 72 commits since November 2025, many of them adding a
@@ -721,9 +721,8 @@ themselves.
 \end{frame}
 
 \ltnote{%
-  Drafted by Claude: these are plausible reasons, but only Daniel can say
-  whether they are his.
-  Replace them with the real ones before this goes on a slide.
+  The first reason is Daniel's own words; Claude drafted the other three and
+  Daniel confirmed them.
   They are stated as reasoning, so that they don't compete with the evidence in
   the review.
 }%
@@ -734,6 +733,8 @@ Here is my reasoning, which is not evidence.
   \begin{block}{Why I do it}
     My reasons are these:
     \begin{itemize}
+      \item The literate source is more pleasant to read, and I can read it
+        without distractions on my reMarkable.
       \item The explanation and the code change in the same diff, so I review
         the agent's reasons along with its code.
       \item The next agent reads the same explanation as the next person, so
