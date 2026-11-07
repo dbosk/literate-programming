@@ -1127,16 +1127,34 @@ well, though not always as clearly.
   In all three skill runs the agent added a merging step that neither the plain
   nor the noweb runs had, and that the program doesn't need.
   We ask before telling, without using the word \enquote{unnecessary}.
+
+  \textbf{Variation pattern}: contrast.
+  The two [[free_slots]] are shown whole, one after the other, so that the
+  loop stays nearly invariant and what varies is mainly what it loops over:
+  the sorted bookings or the merged ones.
+  The plain program also skips empty bookings there, which the skill program
+  rejects when it reads them.
 }%
 The third instruction changed something else, too.
 Compare how a plain program and a skill program find the free slots.
 
 \begin{frame}[fragile,shrink=10]
-  \begin{exercise}[Two designs]\label{ex:ai-design}
-    With the plain instruction, the bookings are sorted directly:
+  \begin{example}[Same function, two runs]\label{ex:ai-free-slots}
+    With the plain instruction:
     \inputminted[fontsize=\scriptsize,firstline=26,lastline=40]%
-      {python}{demo/plain/1/freeslots.py} With the skill, the same function
-      starts by calling this one instead:
+      {python}{demo/plain/1/freeslots.py} With the skill as well:
+    \inputminted[fontsize=\scriptsize,firstline=157,lastline=169]%
+      {python}{demo/skill/1/freeslots.nw}
+  \end{example}
+\end{frame}
+
+The plain program loops over the sorted bookings, the skill program over what
+[[merge_slots]] returns.
+\Cref{ex:ai-design} shows that function.
+
+\begin{frame}[fragile]
+  \begin{exercise}[Two designs]\label{ex:ai-design}
+    The skill program's [[free_slots]] calls this function first:
     \inputminted[fontsize=\scriptsize,firstline=116,lastline=127]%
       {python}{demo/skill/1/freeslots.nw} Does the program need
       [[merge_slots]]?
