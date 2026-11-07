@@ -26,6 +26,10 @@ make -C src lpbook.pdf
 make -C src lpbook-teachers.pdf
 make -C src slides.pdf
 
+# The standalone deck on AI and literate programming (slides.pdf, notes.pdf)
+make -C ai slides.pdf LATEXFLAGS="-shell-escape -interaction=nonstopmode"
+make -C ai notes.pdf LATEXFLAGS="-shell-escape -interaction=nonstopmode"
+
 # Create a release and publish to GitHub.
 # NOTE: this also runs `git push --all -u` and creates a `gh release`.
 make publish
@@ -71,6 +75,28 @@ programming:
 A second self-contained example lives in `tutorial-java/Fraction.nw` (with
 JUnit) and is built independently from its own Makefile.
 
+`ai/` is a standalone didactic deck on AI and literate programming: one
+`contents.nw` gives `slides.pdf` and `notes.pdf`. It is the pilot for moving
+chapters out of `src/` (issue #54), and not yet bound into `lpbook`.
+- **Weave:** it uses `noweb.mk`'s standard weave (`tominted`, `-autolang`), with
+  roots named `<<[[file]]>>`, unlike `src/`.
+- **Polls:** it has its own venv on Mentipy 1.0 (`ai/.venv`) and its own
+  tracked store (`ai/mentipy.json`).
+  - **Answers:** 1.0 writes them to a separate log, `ai/mentipy-answers.jsonl`.
+    Track it too (`git add` it; `.gitattributes` merges it by union), and skim
+    the free-text answers before committing, as for `src/`.
+  - **Lecture:** run `mentipy present` from `ai/` first, then
+    `make slides.pdf`. 1.0 builds take the served address from
+    `mentipy-obj/.served-base-url`.
+  - **Version split:** `src/` is still on 0.17, which reads the old
+    `mentipy.base_url` key and sees no answers in a 1.0 log. The upgrade order
+    is in the `mentipy` skill, under "Upgrading to 1.0".
+- **Sources:** `ltnotes.bib` carries a provenance block on every entry, and
+  `sokprotokoll.tex` holds the method appendices.
+- **Demo:** `demo/` holds the recorded agent runs it compares, as tracked
+  exhibits: never regenerate them by hand. `examples/run_demo.sh` (tangled)
+  reruns one of them.
+
 ### .tex Files
 LaTeX document sources. Key files:
 - `src/lpbook.tex`: Main book manuscript
@@ -89,6 +115,7 @@ LaTeX document sources. Key files:
 │   ├── *.tex              # LaTeX document sources
 │   ├── figs/              # Figure assets
 │   └── Makefile           # Build configuration for documents
+├── ai/                    # Standalone deck: AI and literate programming
 ├── tutorial-java/         # Self-contained Java/JUnit Noweb example (Fraction.nw)
 ├── makefiles/             # Git submodule with custom build system makefiles
 ├── didactic/              # Git submodule: LaTeX package for typesetting educational material
@@ -232,9 +259,10 @@ plain prompts in the books.
   keeps it.
 - Editing a prompt, its options or its context gives a new question with a new
   QR code. Answers stay under the old one.
-- Every poll must be built by all three jobs (`slides-intro`, `lpbook`,
-  `lpbook-teachers`). They share the store, so rebuilding must leave
-  `mentipy.json` byte-identical.
+- Every poll in `src/mentipy.json` must be built by all three jobs
+  (`slides-intro`, `lpbook`, `lpbook-teachers`). They share the store, so
+  rebuilding must leave `mentipy.json` byte-identical. `ai/mentipy.json` is
+  built by `ai/`'s two jobs.
 
 Running a lecture, from `src/`, with `mentipy.base_url` on `auto`. Start the
 server first, then recompile in another terminal:
@@ -253,6 +281,12 @@ whenever it runs, which is on a job's first build and when its code changes
 `mentipy present`, then `make slides-intro.pdf` again.
 
 ## Project-specific gotchas
+
+- **`didactic` is pinned to `37d6be0`** (its `master`, v2.6.1 or later) for
+  `\runpython`'s `showcommand`/`chdir`/`transcript` and `\runbasedir`. Upstream
+  has no tag after v2.2, so the pin is by commit. Since the bump,
+  `lpbook-teachers.pdf` can need more latexmk passes than latexmk's default
+  maximum.
 
 - **`makefiles` is pinned to `1571556`** (PR dbosk/makefiles#74) for its
   PythonTeX fix, which isn't on `master`. `src/Makefile` overrides the rest of

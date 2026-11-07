@@ -1,6 +1,7 @@
 SUBDIR_GOALS=all clean distclean
 
 SUBDIR+=	src/
+SUBDIR+=	ai/
 
 date=$(shell date +%Y%m%d-%H%M)
 release_files=src/lpbook.pdf src/lpbook-teachers.pdf src/slides.pdf

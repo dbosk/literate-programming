@@ -1,0 +1,231 @@
+\documentclass{article}
+\usepackage{noweb}
+\noweboptions{smallcode}
+\begin{document}
+\title{Free time slots}
+\maketitle
+\tableofcontents
+
+\section{Overview}
+
+Given the bookings of one day, we want to know when we are free during
+the working day 08:00--17:00.  The program has three parts, which we
+present in the order the data flows through them:
+\begin{description}
+\item[Parsing] turns lines such as [[09:00-10:30]] into pairs of minutes
+  since midnight.
+\item[Merging] sorts the bookings and fuses those that overlap or touch.
+\item[Gap finding] walks the merged bookings and reports what is left of
+  the working day, formatted as text again.
+\end{description}
+The module [[freeslots.py]] ties them together and the file
+[[test_freeslots.py]] checks each part.
+
+<<[[freeslots.py]]>>=
+"""Print the free slots of the working day, given the booked ones."""
+<<imports>>
+<<constants>>
+<<functions>>
+if __name__ == "__main__":
+    main()
+@
+
+<<[[test_freeslots.py]]>>=
+from freeslots import *
+<<test functions>>
+@
+
+\section{Representing time}
+
+We work with integer minutes since midnight internally.  Integers make
+ordering, overlap and adjacency tests plain comparisons, whereas
+comparing [[HH:MM]] strings would only work by accident of zero padding.
+The working day is a pair of constants so that no magic numbers appear
+in the algorithm.
+
+<<constants>>=
+DAY_START = 8 * 60
+DAY_END = 17 * 60
+@
+
+\section{Parsing and formatting}
+
+A booking line must have the exact shape [[HH:MM-HH:MM]].  We validate
+with a regular expression rather than splitting on characters, so that
+malformed input is rejected with a clear message instead of failing
+later with an obscure [[IndexError]].  We also reject bookings whose end
+is not after their start, since they cannot denote a time span.
+
+<<imports>>=
+import re
+import sys
+<<constants>>=
+SLOT_RE = re.compile(r"^(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})$")
+<<functions>>=
+def parse_slot(line):
+    """Parse `HH:MM-HH:MM` into a (start, end) pair of minutes.
+
+    Raise `ValueError` if the text is malformed or the end is not
+    after the start.
+    """
+    match = SLOT_RE.match(line.strip())
+    if match is None:
+        raise ValueError(f"bad time slot: {line.strip()!r}")
+    h1, m1, h2, m2 = (int(g) for g in match.groups())
+    if m1 > 59 or m2 > 59 or h1 > 23 or h2 > 24:
+        raise ValueError(f"time out of range: {line.strip()!r}")
+    start, end = h1 * 60 + m1, h2 * 60 + m2
+    if end <= start:
+        raise ValueError(f"slot must end after it starts: {line.strip()!r}")
+    return start, end
+@
+
+Formatting is the inverse, always zero padded so the output has the same
+shape as the input.
+
+<<functions>>=
+def format_slot(start, end):
+    """Format a (start, end) pair of minutes as `HH:MM-HH:MM`."""
+    s_h, s_m = divmod(start, 60)
+    e_h, e_m = divmod(end, 60)
+    return f"{s_h:02d}:{s_m:02d}-{e_h:02d}:{e_m:02d}"
+@
+
+Let's verify that parsing and formatting are inverse, and that bad input
+is rejected:
+
+<<test functions>>=
+import pytest
+
+
+def test_parse_and_format_roundtrip():
+  assert parse_slot("09:00-10:30") == (540, 630)
+  assert format_slot(540, 630) == "09:00-10:30"
+
+
+@pytest.mark.parametrize(
+  "bad",
+  ["", "9-10", "10:00-09:00", "10:00-10:00", "25:00-26:00", "09:60-10:00"],
+)
+def test_parse_rejects_bad_input(bad):
+  with pytest.raises(ValueError):
+    parse_slot(bad)
+@
+
+\section{Merging bookings}
+
+Bookings arrive in any order and may overlap or touch.  If we sort them
+by start time, then any booking that begins no later than the end of
+the current merged block belongs to that block: everything earlier has
+already been absorbed, so a later start can only be inside or just after
+the block.  Using [[<=]] rather than [[<]] fuses touching bookings,
+which is harmless since a zero-length gap is not a free slot anyway, and
+it keeps the merged list strictly separated.
+
+<<functions>>=
+def merge(slots):
+    """Return the sorted, disjoint union of (start, end) pairs."""
+    merged = []
+    for start, end in sorted(slots):
+        if merged and start <= merged[-1][1]:
+            merged[-1] = (merged[-1][0], max(merged[-1][1], end))
+        else:
+            merged.append((start, end))
+    return merged
+@
+
+We check unordered, overlapping, touching and nested bookings:
+
+<<test functions>>=
+def test_merge_overlap_touch_nested_and_unordered():
+  slots = [(600, 660), (540, 600), (630, 700), (650, 660), (800, 810)]
+  assert merge(slots) == [(540, 700), (800, 810)]
+
+
+def test_merge_empty():
+  assert merge([]) == []
+@
+
+\section{Finding the free slots}
+
+The free time is the complement of the merged bookings within the
+working day.  We keep a cursor that starts at the beginning of the day.
+Because the merged bookings are sorted and disjoint, the space between
+the cursor and the next booking is free, and afterwards the cursor
+jumps to that booking's end.  Bookings reaching outside the working day
+are clipped by [[max]] and [[min]] so that they never produce slots
+outside 08:00--17:00; a booking wholly outside leaves the cursor
+untouched.
+
+<<functions>>=
+def free_slots(bookings, day_start=DAY_START, day_end=DAY_END):
+    """Return the free (start, end) pairs between `day_start` and `day_end`."""
+    free = []
+    cursor = day_start
+    for start, end in merge(bookings):
+        if start > cursor:
+            free.append((cursor, min(start, day_end)))
+        cursor = max(cursor, end)
+        if cursor >= day_end:
+            break
+    if cursor < day_end:
+        free.append((cursor, day_end))
+    return free
+@
+
+<<test functions>>=
+def test_no_bookings_whole_day_free():
+  assert free_slots([]) == [(DAY_START, DAY_END)]
+
+
+def test_gaps_between_and_around_bookings():
+  booked = [(540, 630), (630, 720), (660, 690)]
+  assert free_slots(booked) == [(480, 540), (720, 1020)]
+
+
+def test_bookings_outside_day_are_clipped():
+  assert free_slots([(0, 9 * 60), (16 * 60, 20 * 60)]) == [(540, 960)]
+  assert free_slots([(0, 7 * 60)]) == [(DAY_START, DAY_END)]
+  assert free_slots([(18 * 60, 19 * 60)]) == [(DAY_START, DAY_END)]
+
+
+def test_fully_booked_day():
+  assert free_slots([(480, 700), (700, 1020)]) == []
+@
+
+\section{The command line}
+
+The program reads standard input, ignoring blank lines so that a
+trailing newline or separating blank is not an error.  The core is a
+function from lines to lines, which keeps the I/O shell trivial and the
+logic testable without touching [[sys.stdin]].
+
+<<functions>>=
+def free_slot_lines(lines):
+    """Map booking lines to the formatted free-slot lines."""
+    bookings = [parse_slot(line) for line in lines if line.strip()]
+    return [format_slot(s, e) for s, e in free_slots(bookings)]
+
+
+def main():
+    """Read bookings from standard input and print the free slots."""
+    try:
+        for line in free_slot_lines(sys.stdin):
+            print(line)
+    except ValueError as err:
+        sys.exit(f"freeslots: {err}")
+@
+
+Finally an end-to-end check of the text interface:
+
+<<test functions>>=
+def test_free_slot_lines_end_to_end():
+  lines = ["13:00-14:00\n", "\n", "09:00-10:30\n", "10:00-11:00\n"]
+  assert free_slot_lines(lines) == [
+    "08:00-09:00",
+    "11:00-13:00",
+    "14:00-17:00",
+  ]
+@
+
+\end{document}

@@ -1,0 +1,8 @@
+The skill runs (skill/1-3, recorded 2026-11-05 about 19:40) were given
+~/.claude/skills/literate-programming/SKILL.md as committed in the skills
+repository at 3ad09af (2026-10-28, "Add mentipy skill: authoring, build and
+running live polls"). The file was unchanged from that commit at the time of
+the runs:
+  git blob  e2164cc4ecc0525678bc7dd27a885e955fe0415d
+  sha256    44e07a4358ce126a9e3c0a231fd590ca245262800875a4ada5f5bcaed6e28be6
+A live run gets whatever version the file has then.
