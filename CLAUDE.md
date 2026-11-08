@@ -282,11 +282,15 @@ whenever it runs, which is on a job's first build and when its code changes
 
 ## Project-specific gotchas
 
-- **`didactic` is pinned to `37d6be0`** (its `master`, v2.6.1 or later) for
-  `\runpython`'s `showcommand`/`chdir`/`transcript` and `\runbasedir`. Upstream
-  has no tag after v2.2, so the pin is by commit. Since the bump,
-  `lpbook-teachers.pdf` can need more latexmk passes than latexmk's default
-  maximum.
+- **`didactic` is pinned to `535b687`** (its `master`, v2.15) for
+  `\runpython`'s `showcommand`/`chdir`/`transcript` and `\runbasedir`, and for
+  block and frame titles as run-in headings in the notes. Upstream has no tag
+  after v2.2, so the pin is by commit. v2.15 keeps listings, lead-ins and
+  headings with what follows, and warns in the log where it can't; moving the
+  pin moves page breaks, so check the PDFs after a bump. After checking out a
+  new pin, run `make -C didactic didactic.sty`: it is generated, and the decks
+  link to it. Since the bump to v2.6, `lpbook-teachers.pdf` can need more
+  latexmk passes than latexmk's default maximum.
 
 - **`makefiles` is pinned to `1571556`** (PR dbosk/makefiles#74) for its
   PythonTeX fix, which isn't on `master`. `src/Makefile` overrides the rest of
