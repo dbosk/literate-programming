@@ -26,6 +26,10 @@ make -C src lpbook.pdf
 make -C src lpbook-teachers.pdf
 make -C src slides.pdf
 
+# The standalone deck on AI and literate programming (slides.pdf, notes.pdf)
+make -C ai slides.pdf LATEXFLAGS="-shell-escape -interaction=nonstopmode"
+make -C ai notes.pdf LATEXFLAGS="-shell-escape -interaction=nonstopmode"
+
 # Create a release and publish to GitHub.
 # NOTE: this also runs `git push --all -u` and creates a `gh release`.
 make publish
@@ -71,6 +75,28 @@ programming:
 A second self-contained example lives in `tutorial-java/Fraction.nw` (with
 JUnit) and is built independently from its own Makefile.
 
+`ai/` is a standalone didactic deck on AI and literate programming: one
+`contents.nw` gives `slides.pdf` and `notes.pdf`. It is the pilot for moving
+chapters out of `src/` (issue #54), and not yet bound into `lpbook`.
+- **Weave:** it uses `noweb.mk`'s standard weave (`tominted`, `-autolang`), with
+  roots named `<<[[file]]>>`, unlike `src/`.
+- **Polls:** it has its own venv on Mentipy 1.0 (`ai/.venv`) and its own
+  tracked store (`ai/mentipy.json`).
+  - **Answers:** 1.0 writes them to a separate log, `ai/mentipy-answers.jsonl`.
+    Track it too (`git add` it; `.gitattributes` merges it by union), and skim
+    the free-text answers before committing, as for `src/`.
+  - **Lecture:** run `mentipy present` from `ai/` first, then
+    `make slides.pdf`. 1.0 builds take the served address from
+    `mentipy-obj/.served-base-url`.
+  - **Version split:** `src/` is still on 0.17, which reads the old
+    `mentipy.base_url` key and sees no answers in a 1.0 log. The upgrade order
+    is in the `mentipy` skill, under "Upgrading to 1.0".
+- **Sources:** `ltnotes.bib` carries a provenance block on every entry, and
+  `sokprotokoll.tex` holds the method appendices.
+- **Demo:** `demo/` holds the recorded agent runs it compares, as tracked
+  exhibits: never regenerate them by hand. `examples/run_demo.sh` (tangled)
+  reruns one of them.
+
 ### .tex Files
 LaTeX document sources. Key files:
 - `src/lpbook.tex`: Main book manuscript
@@ -89,6 +115,7 @@ LaTeX document sources. Key files:
 │   ├── *.tex              # LaTeX document sources
 │   ├── figs/              # Figure assets
 │   └── Makefile           # Build configuration for documents
+├── ai/                    # Standalone deck: AI and literate programming
 ├── tutorial-java/         # Self-contained Java/JUnit Noweb example (Fraction.nw)
 ├── makefiles/             # Git submodule with custom build system makefiles
 ├── didactic/              # Git submodule: LaTeX package for typesetting educational material
@@ -232,9 +259,10 @@ plain prompts in the books.
   keeps it.
 - Editing a prompt, its options or its context gives a new question with a new
   QR code. Answers stay under the old one.
-- Every poll must be built by all three jobs (`slides-intro`, `lpbook`,
-  `lpbook-teachers`). They share the store, so rebuilding must leave
-  `mentipy.json` byte-identical.
+- Every poll in `src/mentipy.json` must be built by all three jobs
+  (`slides-intro`, `lpbook`, `lpbook-teachers`). They share the store, so
+  rebuilding must leave `mentipy.json` byte-identical. `ai/mentipy.json` is
+  built by `ai/`'s two jobs.
 
 Running a lecture, from `src/`, with `mentipy.base_url` on `auto`. Start the
 server first, then recompile in another terminal:
@@ -254,12 +282,30 @@ whenever it runs, which is on a job's first build and when its code changes
 
 ## Project-specific gotchas
 
-- **`makefiles` is pinned to `1571556`** (PR dbosk/makefiles#74) for its
-  PythonTeX fix, which isn't on `master`. `src/Makefile` overrides the rest of
-  that branch: the classic weave flags, because `tominted` and `-autolang` are
-  not in upstream noweb, and plain `-R<file>` tangling, because our roots are
-  `<<fib.py>>`, not `<<[[fib.py]]>>`. Move the pin to `master` when the fix
-  lands there.
+- **`didactic` is pinned to `818334b`** (its `master`, v2.16.1) for
+  `\runpython`'s `showcommand`/`chdir`/`transcript` and `\runbasedir`, and for
+  block and frame titles as run-in headings in the notes. Upstream has no tag
+  after v2.2, so the pin is by commit. didactic keeps listings, lead-ins and
+  headings with what follows, and warns in the log where it can't; moving the
+  pin moves page breaks, so check the PDFs after a bump. After checking out a
+  new pin, run `make -C didactic didactic.sty`: it is generated, and the decks
+  link to it.
+- **`marginfix` is not pinned:** the builds load it from `~/texmf`
+  (`kpsewhich marginfix.sty`), where the didactic work installs its own
+  branch. An update there moves page breaks in the notes without any change
+  in this repository, so rebuild and check the PDFs after one. A build from
+  an old `.aux` can keep a stale margin layout (a didactic warning about a
+  footnote that "repeats one on the same page"); rebuild that job from clean.
+
+- **`makefiles` is pinned to `fe00f3b`** (PR dbosk/makefiles#74's line) for
+  its PythonTeX fix, which isn't on `master`, and for `$max_repeat = 10` in
+  `latexmkrc`: the notes and books can need more passes than latexmk's
+  default of five. `ai/` uses that branch's `tominted` weave as it is.
+  `src/Makefile` overrides the rest of the branch: the classic weave flags,
+  because `tominted` and `-autolang` are not in upstream noweb, and plain
+  `-R<file>` tangling, because our roots are `<<fib.py>>`, not
+  `<<[[fib.py]]>>`. Move the pin to `master` only once #74 is merged there;
+  `master` lacks the `tominted` weave until then.
 - **Jobs share PythonTeX's output in `src/ltxobj/`.** `src/Makefile` keeps a
   copy per job in `ltxobj/pythontex-<job>/` and restores it before each build;
   without that, a rebuild typesets the output of whichever job ran last. Don't

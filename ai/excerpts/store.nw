@@ -1,0 +1,16 @@
+\chapter{Store}
+
+The store is where the design stops being a pure document generator and becomes
+a persistent polling system.  It has four jobs:
+\begin{description}
+\item[Configuration] locate the shared configuration file in a way that works
+  both from the CLI and from PythonTeX,
+\item[Placement] resolve the files a slide deck names relative to the
+  deck's own directory, even when the deck is bound into a larger document,
+\item[Registration] assign stable URL prefixes to questions and mark which
+  of them the deck held in its last build, and
+\item[Persistence] keep the questions in a file that is only ever replaced whole,
+  so a half-written file never replaces a valid one, and the answers in a log
+  beside it that is only ever appended to, so no write can undo another.
+\end{description}
+

@@ -1,0 +1,201 @@
+\documentclass{article}
+\usepackage{noweb}
+\noweboptions{smallcode}
+\title{Free Time Slots}
+\begin{document}
+\maketitle
+
+\section{Problem}
+
+Given booked time slots like [[09:00-10:30]], one per line on standard
+input, we print the free slots within the working day 08:00--17:00 in the
+same format. Bookings may overlap, touch, and come in any order.
+
+\section{Approach}
+
+We work in minutes since midnight. The algorithm is:
+\begin{enumerate}
+\item parse each booking into a pair [[(start, end)]],
+\item sort by start,
+\item sweep through, keeping a cursor [[pos]] of the end of everything
+      seen so far (initially the start of the day); whenever a booking
+      starts after the cursor, the gap is a free slot,
+\item finally, if the cursor is before the end of the day, the remainder
+      is free.
+\end{enumerate}
+Bookings are clipped implicitly: the cursor never moves before the day
+start, and gaps are limited to the day end. Empty gaps (touching
+bookings) are never emitted.
+
+<<freeslots.py>>=
+#!/usr/bin/env python3
+"""Print the free slots of the working day given booked slots on stdin."""
+import sys
+
+<<constants>>
+<<parsing and formatting>>
+<<computing free slots>>
+<<main>>
+@
+
+<<constants>>=
+DAY_START = 8 * 60
+DAY_END = 17 * 60
+@
+
+\section{Parsing and formatting}
+
+Blank lines are ignored. Malformed lines raise [[ValueError]].
+A booking must have a start before its end.
+
+<<parsing and formatting>>=
+def parse_time(text):
+    """Convert 'HH:MM' to minutes since midnight."""
+    hours, minutes = text.strip().split(":")
+    h, m = int(hours), int(minutes)
+    if not (0 <= h <= 24 and 0 <= m < 60) or (h == 24 and m != 0):
+        raise ValueError(f"invalid time: {text!r}")
+    return h * 60 + m
+
+
+def format_time(minutes):
+    """Convert minutes since midnight to 'HH:MM'."""
+    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def parse_slot(line):
+    """Convert 'HH:MM-HH:MM' to a (start, end) pair of minutes."""
+    try:
+        start_text, end_text = line.strip().split("-")
+        start, end = parse_time(start_text), parse_time(end_text)
+    except ValueError:
+        raise ValueError(f"invalid slot: {line.strip()!r}") from None
+    if start >= end:
+        raise ValueError(f"slot must start before it ends: {line.strip()!r}")
+    return start, end
+
+
+def format_slot(slot):
+    return f"{format_time(slot[0])}-{format_time(slot[1])}"
+@
+
+\section{Computing the free slots}
+
+<<computing free slots>>=
+def free_slots(bookings, day_start=DAY_START, day_end=DAY_END):
+    """Return the free (start, end) pairs within the day, in order."""
+    free = []
+    pos = day_start
+    for start, end in sorted(bookings):
+        if start > pos:
+            free.append((pos, min(start, day_end)))
+        pos = max(pos, end)
+        if pos >= day_end:
+            break
+    if pos < day_end:
+        free.append((pos, day_end))
+    return free
+@
+
+The [[min]] ensures a booking starting after closing time does not
+produce a gap extending past the day; such a gap would start at [[pos]]
+and be cut to [[day_end]]. If [[pos]] is already at or past [[day_end]] we
+stop. Since [[pos < day_end]] holds inside the loop, the gap is never
+inverted.
+
+\section{Main program}
+
+<<main>>=
+def main(stdin=None, stdout=None):
+    stdin = stdin or sys.stdin
+    stdout = stdout or sys.stdout
+    bookings = [parse_slot(line) for line in stdin if line.strip()]
+    for slot in free_slots(bookings):
+        print(format_slot(slot), file=stdout)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except ValueError as error:
+        sys.exit(f"error: {error}")
+@
+
+\section{Tests}
+
+<<test_freeslots.py>>=
+import io
+import pytest
+from freeslots import free_slots, parse_slot, format_slot, main
+
+
+def run(*lines):
+    out = io.StringIO()
+    main(io.StringIO("\n".join(lines) + "\n"), out)
+    return out.getvalue().splitlines()
+
+
+<<tests>>
+@
+
+<<tests>>=
+def test_no_bookings():
+    assert run() == ["08:00-17:00"]
+
+def test_single_booking_middle():
+    assert run("09:00-10:30") == ["08:00-09:00", "10:30-17:00"]
+
+def test_unordered():
+    assert run("13:00-14:00", "09:00-10:00") == [
+        "08:00-09:00", "10:00-13:00", "14:00-17:00"]
+
+def test_overlapping():
+    assert run("09:00-11:00", "10:00-12:00") == ["08:00-09:00", "12:00-17:00"]
+
+def test_contained():
+    assert run("09:00-12:00", "10:00-11:00") == ["08:00-09:00", "12:00-17:00"]
+
+def test_touching():
+    assert run("09:00-10:00", "10:00-11:00") == ["08:00-09:00", "11:00-17:00"]
+
+def test_full_day():
+    assert run("08:00-17:00") == []
+
+def test_covered_by_several():
+    assert run("08:00-12:00", "12:00-17:00") == []
+
+def test_outside_working_hours():
+    assert run("06:00-09:00", "16:00-20:00") == ["09:00-16:00"]
+
+def test_entirely_outside():
+    assert run("05:00-07:00", "18:00-19:00") == ["08:00-17:00"]
+
+def test_starts_after_day_end():
+    assert run("09:00-10:00", "17:30-18:00") == ["08:00-09:00", "10:00-17:00"]
+
+def test_blank_lines_ignored():
+    assert run("", "09:00-10:00", "") == ["08:00-09:00", "10:00-17:00"]
+
+def test_duplicates():
+    assert run("09:00-10:00", "09:00-10:00") == ["08:00-09:00", "10:00-17:00"]
+
+def test_free_slots_function():
+    assert free_slots([(540, 600)]) == [(480, 540), (600, 1020)]
+
+def test_roundtrip():
+    assert format_slot(parse_slot("09:05-10:30")) == "09:05-10:30"
+
+@
+
+Malformed input must be rejected.
+
+<<tests>>=
+import pytest
+
+@pytest.mark.parametrize("bad", ["garbage", "10:00-09:00", "09:00-09:00",
+                                 "25:00-26:00", "09:60-10:00", "9-10"])
+def test_invalid(bad):
+    with pytest.raises(ValueError):
+        parse_slot(bad)
+@
+\end{document}

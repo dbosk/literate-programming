@@ -1,0 +1,1733 @@
+% The appendices of the notes.  Chapter A is the method, written for the
+% students; then one chapter per research question (B: RQ1, C: RQ2 and
+% RQ3, D: RQ4).  Each research chapter ends with its author's block and
+% the hit-list table.
+%
+% Author's note: drafted 2026-11-05 from three review reports by the
+% agents lit-rq1, lit-rq23 and lit-rq4 (scholar sessions lp-llm-direct,
+% lp-prose-effects, lp-agent-context).  Every key cited here is in
+% ltnotes.bib with a provenance block; every \textcquote is copied from a
+% QUOTE line of that block.
+
+\chapter{Checking a claim}
+\label{app:ai-method}
+
+Several things this lecture says are claims about what research has found, and
+you can't check them at the keyboard the way you can check what a program
+prints.
+This chapter says how we checked them, so that you can judge how far to trust
+them and redo the checks yourself.
+The chapters after it take the claims one research question at a time.
+
+The lecture rests on the literature at these points:
+\begin{description}
+  \item[What has been tested] Since 2023, literate programming has been
+    connected with language models mostly in proposals and prototypes, only
+    four works measure anything, and none tests literate programming as Knuth
+    meant it.
+    This is the answer to \cref{ex:ai-research-amount}, with the works sorted
+    by \cref{def:ai-evidence}.
+    \Cref{app:ai-rq1} asks how the two have been connected since 2023, and
+    finds that the claim holds, in a literature that is small and consists
+    mostly of preprints.
+  \item[Prose for the agent] In \cref{sec:ai-agent-reader}: prose helps a
+    language model when it tells the model something correct that it couldn't
+    otherwise know, wrong prose hurts, and prose that restates the code does
+    little.
+    \Cref{app:ai-rq23} finds this supported by benchmarks, with moderate
+    confidence, though none of them uses a literate program.
+  \item[Prose for the checker] In \cref{sec:ai-checker}: explanations next to
+    the code helped people in some studies, but not in the one experiment that
+    varied how good the explanations were; comments make people adopt
+    AI-written code more often; and AI assistance can lower understanding.
+    \Cref{app:ai-rq23} finds the evidence mixed, and weaker than for the model.
+  \item[Prose that instructs the agent] In \cref{sec:ai-instructions} and with
+    \cref{ex:ai-rate-instructions}: context files did not significantly change
+    whether agents solved their tasks, at a higher cost; out-of-date files are
+    followed over the code; skills written by people helped on specialized
+    tasks but mostly not on ordinary repositories; and spec-driven development
+    has hardly been evaluated beyond its authors' own projects.
+    \Cref{app:ai-rq4} supports each of these, with the reservation that nearly
+    all of the evidence is preprints from 2026.
+  \item[Proof of agent work] With \cref{ex:ai-rate-showboat}: we found no
+    scientific evaluation of documents like Showboat's.
+    \Cref{app:ai-rq4} reports the closest studies.
+\end{description}
+The pattern the lecture draws across these studies, that prose helps an agent
+when it carries information the agent can't get from the code or doesn't
+already know, is our synthesis of \cref{app:ai-rq23,app:ai-rq4}.
+No study tested it, and the lecture says so.
+
+\section{What kind of review this is}
+
+The searches follow the method of a systematic review: written research
+questions, the same queries in every database, searches both for and against
+each claim, and a record of every step.
+They are not a full systematic review, though, and you should read them as
+systematic in style only:
+\begin{itemize}
+  \item The screening was done in a single pass, by AI agents under the
+    teacher's supervision, with a language model classifying the records.
+  \item No second, independent reviewer checked the screening or the
+    classification.
+  \item All of it was done in one evening, on 5 November 2026.
+  \item Most of the relevant work is from 2026, much of it preprints that have
+    not been peer-reviewed, and it measures model versions that will soon be
+    replaced.
+\end{itemize}
+
+\section{Turn the claim into a question}
+
+A claim can be checked only once it's clear what would show it wrong.
+\enquote{Documentation helps with agents} can't be shown wrong, because it
+doesn't say whom it helps, to do what.
+That is why the lecture separates the readers: the agent that works from the
+prose, and the person who checks what the agent wrote.
+Each becomes its own question, and each question says what counts as help:
+whether the model solves the task, what it costs, or whether the person judges
+the code correctly.
+
+The question also fixes how strong the claim is.
+\enquote{Can help} needs one good study; \enquote{helps} needs several that
+agree, and no good study against it.
+A claim that something has \emph{not} been done, such as \enquote{nobody has
+tested this}, can be supported by a search but never proved by one, so the
+chapters say \enquote{we found no} rather than \enquote{there is no}.
+
+\section{Choose the right kind of source}
+
+Which source can answer a question depends on the question.
+For what literate programming is, we go to the primary source, Knuth's
+article\autocite{Knuth1984}, not to someone's summary of it.
+Whether something works is a different kind of question: a single study answers
+it for its own setting, and a review of many studies answers whether the result
+is established.
+For the questions of this lecture there are hardly any reviews yet, so the
+chapters weigh single studies against each other.
+
+Two more things decide how much weight a source gets.
+The first is the kind of evidence, sorted as in \cref{def:ai-evidence}: a
+proposal shows that something can be built, a benchmark shows what a model
+does, and only a study with people shows what people do.
+The second is the source's status: whether it has been peer-reviewed or is a
+preprint that its authors have posted themselves, and whether the authors sell
+the product they evaluate.
+The chapters give both for every source they lean on.
+
+\section{Search so that you can be wrong}
+
+A search that looks only for support finds it.
+Each search therefore has two kinds of query.
+Support queries look for work on the claim.
+Counter-queries use the same terms together with words such as
+\enquote{limitations}, \enquote{does not improve} or \enquote{misleading}, to
+find work that contradicts or narrows the claim.
+The queries name concepts, not authors, since a search for the people you
+expect finds the work you already believed in.
+
+Every query was sent to the same databases: OpenAlex, Web of Science, IEEE
+Xplore, arXiv and HAL, through the command-line search tool \texttt{scholar},
+which records each query and its hits.
+Two further databases, Semantic Scholar and DBLP, failed on the day, so the
+chapters mark them as not searched, never as having no hits.
+Databases don't find everything, so we also followed citations, both to the
+papers that cite Knuth's article and from the reference lists of the central
+papers.
+Searches outside the databases, in the paper search service alphaXiv and on the
+web, are given in each chapter with their exact wording.
+
+Before searching, we set aside a few papers known to be relevant, to test the
+queries.
+Where the queries missed one, we improved them with the terms the field uses,
+rather than adding the missing paper by name, which would have hidden how much
+else the queries were missing.
+
+\section{Read the full text, and write down how}
+
+A hit is not evidence.
+A title can promise more than the paper shows, and an abstract can report the
+best number without the caveat.
+Each cited source was opened, and the statement it backs was matched against a
+verbatim passage, which the chapters quote with its location.
+Where only the abstract could be read, the chapter says so.
+
+For each source, the source file of the bibliography records these fields:
+\begin{description}
+  \item[Claim] The statement the source is cited for.
+  \item[Found via] The exact query, database or citation trail that found it.
+  \item[Picked] Why this source rather than another.
+  \item[Quote] The passage that supports the claim, verbatim, with its
+    location.
+  \item[Verified] What was read, full text or abstract only, and anything that
+    limits how the source applies.
+  \item[Counter] The counter-search and what it found.
+  \item[Date] When the source was checked.
+\end{description}
+
+Every record that the database searches returned was then classified as
+supporting the claim, qualifying or contradicting it, adjacent (the same field,
+another question) or a false hit.
+A language model classified the records first, and the reviewing agent
+classified again every record that bears on the question.
+The table at the end of each chapter lists the records that bear on the
+question, so that you can see what was left out as well as what was cited.
+For \cref{app:ai-rq23} the classification was not finished in time, so its
+table is still to come.
+
+\section{Draw the conclusion, with reservations}
+
+The conclusion of each chapter starts by answering its question, at the
+strength the evidence supports, and then says what limits the answer:
+databases that failed, papers read only in abstract, results that rest on a
+single study.
+The lecture states each claim no more strongly than its chapter concludes.
+Each chapter ends with further work: what its search left undone, and what the
+field would have to study for a surer answer.
+
+\section{A note on language models}
+
+The searches, the screening, the classification and the first drafts of these
+appendices were done by AI agents (Claude, working in Claude Code) under the
+teacher's supervision, and the language model \texttt{gpt-5.6-sol} classified
+the records.
+That is itself an instance of what the lecture is about: prose about the
+research, written by an agent, which a person has to check.
+An agent can misread a paper or quote from the wrong version of it, so the
+chapters give the passages verbatim and say where they are, which lets you
+check them.
+The agents were told to cite only what they had opened and to record what they
+could not read.
+As the note at the start of each chapter says, the teacher has not yet reviewed
+the results in full.
+
+
+% ================================================================ RQ1
+\chapter{How has literate programming been connected with language models
+  since 2023?}
+\label{app:ai-rq1}
+\chapterprecis{The author has not yet reviewed the results in this
+  appendix in full.}
+
+The lecture claims that since 2023 literate programming has been connected with
+language models mostly in proposals and prototypes, that only four works
+measure anything, and that nobody has tested literate programming as Knuth
+meant it together with a language model (\cref{ex:ai-research-amount}, with the
+evidence sorted by \cref{def:ai-evidence}).
+By literate programming we mean what \textcite{Knuth1984} proposed:
+\textcquote[p.~97]{Knuth1984}{explaining to human beings what we want a
+computer to do}, in a program whose concepts are introduced
+\textcquote[p.~97]{Knuth1984}{in an order that is best for human
+understanding}.
+
+The research question is: how has literate programming been connected with
+large language models, generative AI or coding agents since 2023, and how much
+of that work has been evaluated?
+A work is in scope if it explicitly connects the two.
+The claim has two parts of different strength.
+That the work is mostly proposals is a statement about proportions, which the
+search can test.
+That no controlled test exists is a statement about absence, which the search
+can support but not prove.
+
+\section{Method}
+\label{sec:ai-rq1-method}
+
+% Author's note (verification and reproduction): see the block above the
+% hit-list \input at the end of the chapter.
+
+The search was made on 5 November 2026 with \texttt{scholar}.
+Its check of the databases that evening found OpenAlex, Web of Science, IEEE
+Xplore, arXiv and HAL working.
+Semantic Scholar rejected the access key (HTTP 403), and DBLP answered with a
+page that stops automated clients instead of with data (HTTP 202), so neither
+could be searched.
+Scopus answered, but was not part of the search plan and was not used.
+Every query was sent to each working database separately, limited to works from
+2023 onwards and to 100 hits per database.
+Web of Science received the same keywords as a topic search, TS=(\dots).
+
+The queries combine four groups of terms:
+\begin{description}
+  \item[LLM] LLM OR LLMs OR \enquote{large language model} OR \enquote{large
+    language models} OR \enquote{generative AI} OR GenAI OR ChatGPT OR Copilot
+    OR \enquote{code generation} OR \enquote{coding agent} OR \enquote{coding
+    agents} OR \enquote{AI-assisted programming} OR \enquote{vibe coding}
+  \item[LP2] \enquote{literate program} OR \enquote{literate programs} OR noweb
+    OR CWEB OR \enquote{org-babel} OR \enquote{org-mode} OR (Knuth AND
+    literate)
+  \item[NB] \enquote{computational notebook} OR \enquote{computational
+    notebooks} OR Jupyter
+  \item[CTR] limitation OR limitations OR criticism OR critique OR failure OR
+    \enquote{negative result} OR \enquote{negative results} OR \enquote{does
+    not} OR overhead OR cost
+\end{description}
+The queries themselves are:
+\begin{description}
+  \item[S1] \enquote{literate programming} AND (LLM)
+  \item[S2] (LP2) AND (LLM)
+  \item[S3] (NB) AND literate AND (LLM)
+  \item[S4] literate AND (LLM)
+  \item[C1] \enquote{literate programming} AND (LLM) AND (CTR)
+  \item[C2] (LP2) AND (LLM) AND (CTR)
+  \item[C3] (NB) AND literate AND (LLM) AND (CTR)
+  \item[C4] \enquote{literate programming} AND (adoption OR \enquote{lack of
+    adoption} OR barrier OR barriers OR criticism OR critique OR limitations OR
+    overhead OR cost)
+  \item[U1] \enquote{literate programming}
+\end{description}
+The support queries S1--S4 look for the connection, from the exact phrase (S1)
+to any use of \enquote{literate} (S4), which is broad on purpose and catches
+the other meanings of the word.
+The counter-queries C1--C3 add the CTR terms to S1--S3, to find limitations and
+negative results, and C4 asks about the adoption problems of literate
+programming itself.
+U1 takes everything on literate programming since 2023.
+\Cref{tab:ai-rq1-queries} gives the hits.
+
+\begin{table}[htbp]
+  \begin{sidecaption}{Queries and number of hits per database, 5 November
+    2026, with the tool \texttt{scholar}; the queries are given in
+    \cref{sec:ai-rq1-method}.
+    S = support query, C = counter-query, U = catch-all query.
+    Databases: OpenAlex (OA; not open access), Web of Science (WoS), IEEE
+    Xplore (IEEE), arXiv, HAL (Hyper Articles en Ligne), Semantic Scholar (S2),
+    DBLP.
+    At most 100 hits were fetched per database and query, so 100 means
+    \enquote{at least 100}.
+    \enquote{--} means that the search failed: Semantic Scholar rejected the
+    access key and DBLP answered every query with a page that stops automated
+    clients, so neither database was searched.
+    Web of Science got the keywords as \texttt{TS=(\dots)}, the others as
+    boolean free text.}[tab:ai-rq1-queries] \centering\footnotesize
+    \begin{tabular}{@{}lrrrrrrr@{}}
+      \toprule
+         & OA  & WoS & IEEE & arXiv & HAL & S2 & DBLP \\
+      \midrule
+      S1 & 100 & 3   & 2    & 4     & 0   & -- & --   \\
+      S2 & 100 & 1   & 1    & 4     & 1   & -- & --   \\
+      S3 & 100 & 0   & 0    & 0     & 0   & -- & --   \\
+      S4 & 100 & 60  & 19   & 100   & 4   & -- & --   \\
+      \midrule
+      C1 & 100 & 0   & 0    & 1     & 0   & -- & --   \\
+      C2 & 100 & 0   & 0    & 1     & 0   & -- & --   \\
+      C3 & 100 & 0   & 0    & 0     & 0   & -- & --   \\
+      C4 & 100 & 5   & 2    & 7     & 1   & -- & --   \\
+      \midrule
+      U1 & 99  & 31  & 7    & 13    & 12  & -- & --   \\
+      \bottomrule
+    \end{tabular}
+  \end{sidecaption}
+\end{table}
+
+OpenAlex matches the full text, so most of its hits mention a term only in
+passing, and every OpenAlex cell but one reached the limit of 100.
+Its full totals for the same queries, before the limit, were 291 (S1), 371
+(S2), 235 (S3), 11,505 (S4), 278 (C1), 358 (C2), 228 (C3), 567 (C4) and 759
+(U1).
+Because of that limit, the database searches were complemented the same day:
+by three searches that do not depend on relevance ranking (the forward and
+backward citations, and the title and abstract search), and by two ranked
+searches outside the databases (alphaXiv and the web).
+\begin{description}
+  \item[Forward citations] All 180 works from 2023 onwards that cite Knuth's
+    article, according to OpenAlex, were screened by title and abstract for
+    terms about AI.
+  \item[Title and abstract] An OpenAlex search for \enquote{literate
+    programming} in the title or abstract, from 2023 onwards and without a
+    limit, gave 92 works.
+  \item[Backward citations] The reference lists of eight of the central papers
+    were screened for literate programming work from 2023 onwards.
+    They returned only works already found.
+  \item[alphaXiv] Two searches, both for papers from 2023 onwards: one with the
+    keywords \enquote{literate programming} and \enquote{LLM} and the question
+    \enquote{literate programming with LLMs, generative AI or coding agents},
+    and one with the keywords \enquote{literate programming},
+    \enquote{computational notebook} and \enquote{limitations} and the question
+    \enquote{limitations, criticism or negative results of literate programming
+    or literate notebooks with LLM coding assistants}.
+  \item[The web] Two searches: \enquote{literate programming coding agents LLM
+    evaluation empirical study noweb org-mode 2025 2026}, and \enquote{literate
+    programming AI agents criticism does not work overhead why literate
+    programming failed adoption LLM}.
+\end{description}
+The alphaXiv and web searches added one source each, both cited in
+\cref{sec:ai-rq1-results}.
+Knuth's article was retrieved as a known document and read in the published
+version, from the teacher's own copy, since the publisher refused the download.
+
+Before the search, eight papers known to be relevant were set aside to test the
+queries.
+The queries found seven of them.
+The eighth, on \enquote{literate tracing}\autocite{Sotoudeh2025}, was found
+only through alphaXiv; it never mentions language models, so it is outside the
+question, and the queries were right to miss it.
+
+The 1,178 database hits came to 580 records, 567 works once preprints and their
+published versions are merged, and with the forward citations and the
+title-and-abstract search, 729 unique works were screened.
+A language model classified the 580 records of the database searches as
+connecting literate programming with language models explicitly, qualifying
+that connection, adjacent, or false hits.
+Every record it put in the first two groups, and every record it was unsure of
+(a confidence under 0.7), was read again, and four of its decisions were
+changed.
+The other 149 works were screened by searching their titles and abstracts for
+terms on both topics and reading the abstracts that matched.
+In addition, 39 arXiv full texts among the hits of S1 and S2 were searched for
+\enquote{literate programming} and Knuth: four use literate programming
+centrally, and 22 mention it only in passing.
+Eleven works are in scope: three peer-reviewed papers, one paper in conference
+proceedings, six preprints and one blog post.
+
+\section{Results}
+\label{sec:ai-rq1-results}
+
+\subsection{What has been proposed}
+
+Most of the work proposes a way to use literate programming with language
+models, without measuring whether it works.
+At Google, \textcite{Shi2025NLO} let a model write \enquote{natural-language
+outlines}, prose that \textcquote[abstract]{Shi2025NLO}{partition the code and
+summarize its main ideas in the style of literate programming}.
+\Textcite{Zhang2024ILP} use \enquote{interoperable literate programming}
+documents as the prompt for a model working on a large project; their evidence
+is a demonstration in which GPT-4o wrote correct code for all of twelve small
+Scheme functions, and the authors develop the tools the paper promotes.
+\Textcite{Yuan2026VLP} propose \enquote{verifiable literate programming},
+documentation derived from the code that a person checks instead of the code
+itself.
+\Textcite{Burke2026notlob} build a literate programming environment for humans
+and agents, and state that \textcquote[sec.~1]{Burke2026notlob}{%
+experimental evaluation is left to future work}.
+\Textcite{VanClief2026ICM} describe a way of organizing an agent's context in
+folders of Markdown files and note that \textcquote[sec.~3]{%
+VanClief2026ICM}{There is also something of Knuth's literate programming in
+this design}; their support is informal reports from the method's own
+community.
+
+\subsection{What has been measured}
+
+Four works measure something, each in its own way.
+The only journal article, by \textcite{SunStaron2026}, asks whether the
+internal representations of 19 models recognize both the programming language
+and the task of a program, and concludes that
+\textcquote[sec.~VIII]{SunStaron2026}{trillion-scale models are the only ones
+that come close to literate programming by consistently recognizing both the
+programming language and the programs' corresponding tasks with an accuracy of
+over 70\,\% on both datasets}.
+The sizes of those models are the authors' estimates, and the authors
+themselves note that the study \textcquote[sec.~VII]{SunStaron2026}{%
+evaluates \enquote{literacy} indirectly through classification accuracy rather
+than through end-to-end code generation or explanation}.
+No literate program is written or read in it.
+
+In the outline study, six developers rated the outlines of 30 functions they
+had chosen from their own projects; five of the six raters are the paper's
+authors, and \textcquote[sec.~5]{Shi2025NLO}{60\,\% of outlines were rated as
+having excellent overall quality (90\,\% were acceptable or better)}; in a case
+study, 30 Android reverse engineers rated 83.8\,\% of the outlines completely
+correct.
+The authors note the small samples themselves, and the study rates the prose,
+not whether it helps anyone.
+
+The verifiable literate programming preprint reports that it
+\textcquote[abstract]{Yuan2026VLP}{improves code pass@1 from 28.7\,\%-73.2\,\%
+to 65.4\,\%-93.5\,\%}, where pass@1 is the share of tasks solved at the first
+attempt.
+Those numbers come from a language model playing the user, and
+\textcquote[sec.~V-A]{Yuan2026VLP}{The oracle context includes the benchmark
+prompt and golden reference implementation}, so the simulated user knows the
+answer.
+The study with people had eight participants.
+
+The one study that isolates literate comments is a benchmark of mathematical
+modelling by \textcite{RossiPrestwich2026}, in which the
+\textcquote[sec.~5]{RossiPrestwich2026}{ablation of literate-style comments
+\textelp{} did not produce differences in accuracy with respect to the
+baseline}.
+The authors' further claim, that the comments make the models more readable,
+rests on their own inspection, not on a measurement.
+
+\subsection{Positions and practice}
+
+Two education papers take positions, read only in abstract since the full texts
+could not be obtained.
+\Textcite{Birkenkrahe2024} posits that AI coding assistants and literate
+programming are complementary, a \textcquote[abstract]{Birkenkrahe2024}{%
+symbiotic relationship}.
+\Textcite{Rosiene2024} argue the opposite for teaching: \textcquote[%
+abstract]{Rosiene2024}{In contrast to the practice of Literate Programming},
+students should learn to read LLM-generated code in a way that
+\textcquote[abstract]{Rosiene2024}{requires little or no commentary}.
+A practitioner's essay, found by the web search, argues that
+\textcquote{Whitlock2026}{The fundamental extra labor of literate programming,
+which I believe is why it is not widely practiced, is eliminated by the agent},
+and adds \textcquote{Whitlock2026}{I don't have data to support this}.
+None of these has data, so their disagreement is one of positions, not of
+findings.
+
+\subsection{Neighbouring work}
+
+Two works continue the literate programming tradition without language models.
+\Textcite{Bond2026LitExec} design a \enquote{literate execution} language and
+leave model-written documentation aside, since in their system
+\textcquote[sec.~7]{Bond2026LitExec}{@doc annotations are written by hand}.
+\Textcite{Sotoudeh2025}, found through alphaXiv, propose literate tracing and
+point out a limit of literate programming:
+\textcquote[sec.~6.1]{Sotoudeh2025}{it cannot help make existing monolithic
+codebases (GCC, Linux, etc.) more understandable}.
+
+Four further records that the language model counted as connecting literate
+programming with language models are not cited.
+They are self-archived reports in the Zenodo repository: three were read in
+abstract and contain no evaluation, and the fourth has no abstract and could
+not be read.
+They are listed in \cref{tab:lp-llm-direct}.
+
+\section{Discussion and limitations}
+\label{sec:ai-rq1-discussion}
+
+The works that report gains do not settle whether literate prose helps.
+The gains of verifiable literate programming come from a checking loop with a
+simulated user who sees the answer, not from the prose alone, and those of
+interoperable literate programming come from a small demonstration by the
+tool's own developers.
+The one ablation of literate comments found no difference in accuracy.
+None of them measures what literate programming is for: whether people
+understand the program.
+
+Two things make \enquote{literate programming} mean something else in this
+literature than it did for Knuth.
+Where an evaluated system writes prose, a model generates it, mostly from the
+code, after the fact, whereas Knuth's programmer writes the explanation and
+orders the program for it.
+And \textcite{SunStaron2026} use \enquote{literate} for a property of the
+model, which is partly a collision of terms.
+
+The search has these limitations.
+Semantic Scholar and DBLP could not be searched, and Scopus was not used.
+The OpenAlex cells reached the limit of 100, and the coverage beyond it rests
+on the uncapped title-and-abstract search, the citation chaining and alphaXiv,
+which added grey literature but no peer-reviewed work in scope that the queries
+had missed.
+Knuth's own system, WEB, cannot be searched for as a keyword.
+Two of the eleven works in scope were read only in abstract.
+The language model's label for a supporting record means \enquote{connects
+literate programming with language models explicitly}, not \enquote{shows a
+benefit}, so the hit list's supporting rows are not evidence of benefit.
+Six of the eleven works are preprints, and all but three are from 2025 or 2026,
+so the picture can change quickly.
+
+\section{Conclusion}
+\label{sec:ai-rq1-conclusion}
+
+Since 2023, literate programming has been connected with language models mainly
+through proposals and prototypes; only four works measure anything, and we
+found none that tests literate programming in Knuth's sense, with human-written
+prose and the program in expository order, against a non-literate control.
+The four measurements are narrow: a rating of model-written outlines by six
+developers, gains in a simulation where the user knows the answer, a null
+result for literate comments, and a study of model representations that uses
+the word in another sense.
+The lecture's answer to \cref{ex:ai-research-amount}, \enquote{mostly proposals
+and prototypes, with little evaluation}, is the one this search supports, and
+its statement that nobody has tested literate programming as Knuth meant it
+holds for the databases and the citation trails searched here.
+
+\section{Further work}
+\label{sec:ai-rq1-further}
+
+This search left the following undone.
+Semantic Scholar and DBLP should be searched when they answer, and Scopus
+added.
+The full texts of the two education papers\autocite{Birkenkrahe2024,
+Rosiene2024} should be read before either is quoted beyond its abstract, since
+one of them is the only counter-position in scope.
+
+The field lacks, first, a controlled comparison of literate programs in Knuth's
+sense with ordinary programs, when a model or an agent writes, repairs or
+maintains the code.
+It also lacks measurements of whether agents keep prose and code in step over
+time, which the essay asserts\autocite{Whitlock2026} and the environment paper
+doubts, having seen agents neglect such artefacts\autocite{Burke2026notlob}.
+Nor are there measurements of what literate programs cost an agent in tokens
+and time, of whether people understand literate model-written programs better
+than ordinary ones, or of students using literate programming with an AI
+assistant.
+Every result so far comes from a single group, without replication.
+If a controlled study found that literate programs help agents or their
+readers, the lecture could state the benefit instead of the absence of
+evidence; if it found no effect, the lecture's case for literate programming
+would rest on the human reader alone.
+
+\section{Hits bearing on the claim}
+\label{sec:ai-rq1-hits}
+
+\Cref{tab:lp-llm-direct} lists the records of the database searches that bear
+on the question.
+Knuth's article, the essay and the work on literate tracing came from the
+known-document retrieval and the complementary searches and are not in it, and
+the literate execution paper is classified as adjacent.
+
+% Author's note (verification and reproduction):
+%   scholar session : lp-llm-direct
+%   report          : scratchpad lp-llm-direct-report.md (agent lit-rq1)
+%   exports         : scratchpad lp-llm-direct.csv, lp-llm-direct.bib,
+%                     lp-llm-direct-table.tex (copied here as
+%                     litteratursokning/rq1-full.tex)
+%   scratchpad      : /tmp/claude-1000/-home-dbosk-devel-edu-literate-
+%                     programming/05aac7d0-554d-4ce5-a79b-906fad3fe64f/
+%                     scratchpad/ (temporary: copy the exports into
+%                     litteratursokning/ before it is cleaned)
+%   searched        : 2026-11-05, 19:39-20:05 CET; providers openalex wos
+%                     ieee arxiv hal, each separately, -y 2023- -l 100
+%                     -f bibtex+prov, WoS as "TS=(<Q>)"
+%                     (s2: key rejected, HTTP 403 -- failed every query;
+%                     dblp: anti-bot page, HTTP 202 -- failed every
+%                     query; scopus ok but not in the plan, not used)
+%   superseded      : a first combined multi-provider run of S1 (one
+%                     merged record, shared cap); session file moved to
+%                     lp-llm-direct-work/superseded-session-combined.json;
+%                     the redo recovered all its relevant results
+%   complements     : OpenAlex works?filter=cites:W2342082360,
+%                     from_publication_date:2023-01-01 (180 works);
+%                     filter=title_and_abstract.search:"literate
+%                     programming",from_publication_date:2023-01-01 (92);
+%                     backward chaining of 8 papers; alphaXiv
+%                     discover_papers x2; WebSearch x2; Knuth1984 read on
+%                     the user's reMarkable (/Literate programming/Literate
+%                     Programming, journal pp. 97 and 107)
+%   classification  : scholar llm context (RQ1, four audit tags) + llm
+%                     classify --no-examples --no-enrich, model
+%                     openai-codex/gpt-5.6-sol, nothing pending; overrides
+%                     via sessions decide: RossiPrestwich2026 and
+%                     Rosiene2024 supports->qualifies, Yuan2026VLP
+%                     qualifies->supports, Sun's 2026 thesis
+%                     off-topic->adjacent; 11 rows < 0.7 read, kept
+%                     adjacent
+%   hit-list table  : scholar sessions export lp-llm-direct -f table
+%                     --bearing-only --lang en (label tab:lp-llm-direct)
+%   provenance      : ltnotes.bib, keys Knuth1984 SunStaron2026 Shi2025NLO
+%                     Zhang2024ILP Yuan2026VLP RossiPrestwich2026
+%                     Burke2026notlob VanClief2026ICM Birkenkrahe2024
+%                     Rosiene2024 Whitlock2026 Bond2026LitExec Sotoudeh2025
+%   dropped         : Starling & Dubinetska x2, LEAP, NALM (Zenodo grey);
+%                     Sun 2026 thesis (not independent); Ustynov 2026 and
+%                     Eghbali et al. 2026 (no LP link; used in RQ2)
+\input{litteratursokning/rq1-full}
+
+
+% ============================================================= RQ2 + RQ3
+\chapter{Does literate prose help language models, and does it help
+  people check AI-written code?}
+\label{app:ai-rq23}
+\chapterprecis{The author has not yet reviewed the results in this
+  appendix in full.}
+
+The lecture makes two claims about prose next to code.
+For the agent (\cref{sec:ai-agent-reader}), it claims that prose helps a
+language model when it tells the model something correct that it couldn't
+otherwise know, that wrong prose hurts more than none, and that prose restating
+the code does little.
+For the person who checks what an agent wrote (\cref{sec:ai-checker}), it
+claims that explanations next to the code helped in some studies but not in the
+one that varied how good they were, that comments make people adopt AI-written
+code more often, and that AI assistance can lower understanding.
+
+Literate prose here means any natural-language explanation kept with the code:
+comments, docstrings, documentation, outlines and explanations.
+Literate programs in Knuth's sense are a special case, and \cref{app:ai-rq1}
+found no test of them with language models, so this chapter asks about the
+wider category.
+The two research questions are:
+\begin{description}
+  \item[RQ2] Does prose of this kind help a language model or coding agent to
+    write, repair or understand code, and when does it hurt?
+  \item[RQ3] Does it help people to understand and validate code that an AI has
+    written?
+\end{description}
+For RQ2, the claim is about conditions (when prose helps), so the search must
+find both gains and losses.
+For RQ3, the claim is that the evidence is mixed, which needs studies on both
+sides.
+
+\section{Method}
+\label{sec:ai-rq23-method}
+
+% Author's note (verification and reproduction): see the block above the
+% hit-list placeholder at the end of the chapter.
+
+The search was made on 5 November 2026 with \texttt{scholar}, in the same
+databases as \cref{app:ai-rq1}: OpenAlex, Web of Science, IEEE Xplore, arXiv
+and HAL worked; Semantic Scholar (access key rejected, HTTP 403) and DBLP (a
+page that stops automated clients, HTTP 202) failed and were not searched;
+Scopus was not part of the plan.
+Each query was sent to each working database separately, with at most 50 hits
+per database, and to Web of Science as a topic search, TS=(\dots), with the
+same keywords.
+
+The support queries for RQ2 (S) and RQ3 (H) are:
+\begin{description}
+  \item[S1] (\enquote{code comments} OR docstrings OR documentation) AND
+    (\enquote{large language model} OR \enquote{large language models} OR LLM)
+    AND \enquote{code generation}
+  \item[S2] \enquote{natural language outlines} AND (code OR LLM OR
+    \enquote{large language model})
+  \item[S3] (\enquote{code comments} OR docstrings OR documentation) AND (LLM
+    OR \enquote{large language model} OR \enquote{large language models}) AND
+    (\enquote{program repair} OR \enquote{code comprehension} OR
+    \enquote{program comprehension} OR \enquote{code understanding})
+  \item[S4] (documentation OR \enquote{code comments} OR docstrings OR
+    \enquote{explanations of intent}) AND (\enquote{coding agent} OR
+    \enquote{coding agents} OR \enquote{agentic coding} OR \enquote{software
+    engineering agent})
+  \item[S5] (\enquote{code readability} OR \enquote{readability} OR
+    \enquote{self-documenting}) AND (LLM OR \enquote{large language model} OR
+    \enquote{large language models}) AND (\enquote{code generation} OR
+    \enquote{AI-generated code} OR \enquote{generated code})
+  \item[S6] \enquote{comments} AND \enquote{code generation} AND
+    (\enquote{large language model} OR LLM) AND (improve OR effect OR impact)
+  \item[S7] (intent OR explanation OR \enquote{reasoning comments}) AND
+    \enquote{code comments} AND (LLM OR \enquote{large language model})
+  \item[H1] (\enquote{AI-generated code} OR \enquote{LLM-generated code} OR
+    \enquote{AI-assisted programming}) AND (\enquote{program comprehension} OR
+    \enquote{code comprehension} OR \enquote{code understanding}) AND
+    (\enquote{controlled experiment} OR \enquote{human study} OR \enquote{user
+    study})
+  \item[H2] (\enquote{AI-generated code} OR \enquote{LLM-generated code}) AND
+    \enquote{code review} AND (explanation OR documentation OR comments OR
+    \enquote{human study} OR \enquote{controlled experiment})
+  \item[H3] (explanation OR explanations OR documentation OR \enquote{natural
+    language}) AND (\enquote{AI-generated code} OR \enquote{LLM-generated code}
+    OR \enquote{AI code}) AND (developers OR programmers) AND (understand OR
+    comprehension OR validation OR verification)
+  \item[H4] (\enquote{literate programming}) AND (LLM OR \enquote{large
+    language model} OR \enquote{AI-generated} OR \enquote{LLM-generated}) AND
+    (validation OR understanding OR human)
+  \item[H5] \enquote{human validation} AND (\enquote{LLM-generated code} OR
+    \enquote{AI-generated code} OR \enquote{generated code})
+  \item[H6] (\enquote{code summaries} OR \enquote{code summarization} OR
+    \enquote{generated comments} OR \enquote{code explanations}) AND (LLM OR
+    \enquote{AI-generated} OR \enquote{large language model}) AND
+    (\enquote{controlled experiment} OR \enquote{user study} OR \enquote{human
+    study}) AND (comprehension OR understanding)
+\end{description}
+The counter-queries for RQ2 (C) and RQ3 (D) look for misleading, outdated or
+useless prose, its costs, and over-reliance on explanations:
+\begin{description}
+  \item[C1] (\enquote{misleading comments} OR \enquote{outdated comments} OR
+    \enquote{comment inconsistency} OR \enquote{code-comment inconsistency} OR
+    \enquote{incorrect comments}) AND (LLM OR \enquote{large language model} OR
+    \enquote{large language models} OR \enquote{code generation})
+  \item[C2] (\enquote{code comments} OR docstrings OR documentation) AND (LLM
+    OR \enquote{large language model} OR \enquote{large language models}) AND
+    (robustness OR perturbation OR adversarial OR misleading OR degrade OR
+    \enquote{does not improve})
+  \item[C3] (documentation OR \enquote{code comments} OR docstrings OR
+    \enquote{context files}) AND (\enquote{coding agent} OR \enquote{coding
+    agents} OR LLM) AND (\enquote{token cost} OR tokens OR overhead OR
+    \enquote{no improvement})
+  \item[C4] (\enquote{code readability} OR \enquote{self-documenting} OR
+    \enquote{comment quality}) AND (LLM OR \enquote{large language model}) AND
+    (harm OR \enquote{no effect} OR limitation OR misleading OR \enquote{does
+    not})
+  \item[C5] (\enquote{comment removal} OR \enquote{without comments} OR
+    \enquote{stripping comments} OR \enquote{removing comments} OR
+    \enquote{comment-free}) AND (LLM OR \enquote{large language model} OR
+    \enquote{large language models})
+  \item[D1] (\enquote{over-reliance} OR overreliance OR \enquote{cognitive
+    offloading} OR \enquote{comprehension debt} OR \enquote{cognitive debt})
+    AND (\enquote{AI-generated code} OR \enquote{AI coding} OR \enquote{AI
+    assistant} OR \enquote{code generation} OR LLM) AND (developers OR
+    programmers OR \enquote{software engineering})
+  \item[D2] (explanation OR explanations OR documentation) AND
+    (\enquote{AI-generated code} OR \enquote{LLM-generated code} OR \enquote{AI
+    code}) AND (overtrust OR \enquote{over-trust} OR \enquote{over-reliance} OR
+    overreliance OR misleading OR wrong OR \enquote{does not help} OR
+    incorrect)
+  \item[D3] (\enquote{AI-generated code} OR \enquote{LLM-generated code} OR
+    \enquote{AI-assisted}) AND (\enquote{code review} OR \enquote{reviewing})
+    AND (burden OR effort OR \enquote{review time} OR fatigue OR \enquote{lost
+    understanding} OR overreliance)
+  \item[D4] (\enquote{illusion of understanding} OR \enquote{illusion of
+    explanatory depth} OR \enquote{automation bias} OR \enquote{explanation})
+    AND (\enquote{code generation} OR \enquote{AI-generated code} OR
+    \enquote{programming assistant}) AND (\enquote{controlled experiment} OR
+    \enquote{randomized} OR \enquote{human study} OR \enquote{user study})
+  \item[D5] (\enquote{incorrect explanations} OR \enquote{wrong explanations}
+    OR \enquote{misleading explanations} OR \enquote{inaccurate explanations}
+    OR \enquote{inaccurate summaries} OR \enquote{misleading summaries}) AND
+    (code OR programming) AND (LLM OR AI OR \enquote{large language model})
+\end{description}
+\Cref{tab:ai-rq23-queries} gives the hits.
+
+\begin{table}[htbp]
+  \begin{sidecaption}{Queries and number of hits per database, 5 November
+    2026, with the tool \texttt{scholar}; the queries are given in
+    \cref{sec:ai-rq23-method}.
+    S = support query and C = counter-query on prose for language models (RQ2);
+    H = support query and D = counter-query on prose for people (RQ3).
+    Databases: OpenAlex (OA; not open access), Web of Science (WoS), IEEE
+    Xplore (IEEE), arXiv, HAL (Hyper Articles en Ligne), Semantic Scholar (S2),
+    DBLP.
+    At most 50 hits were fetched per database and query, so 50 means
+    \enquote{at least 50}.
+    \enquote{--} means that the search failed: Semantic Scholar rejected the
+    access key and DBLP answered every query with a page that stops automated
+    clients, so neither database was searched.
+    Web of Science got the keywords as \texttt{TS=(\dots)}, the others as
+    boolean free text.}[tab:ai-rq23-queries] \centering\footnotesize
+    \begin{tabular}{@{}lrrrrrrr@{}}
+      \toprule
+         & OA & WoS & IEEE & arXiv & HAL & S2 & DBLP \\
+      \midrule
+      S1 & 50 & 50  & 50   & 50    & 4   & -- & --   \\
+      S2 & 49 & 1   & 0    & 1     & 0   & -- & --   \\
+      S3 & 50 & 42  & 35   & 48    & 1   & -- & --   \\
+      S4 & 50 & 10  & 6    & 50    & 0   & -- & --   \\
+      S5 & 50 & 39  & 50   & 50    & 0   & -- & --   \\
+      S6 & 50 & 10  & 18   & 41    & 0   & -- & --   \\
+      S7 & 50 & 8   & 10   & 7     & 0   & -- & --   \\
+      \midrule
+      C1 & 49 & 8   & 7    & 9     & 0   & -- & --   \\
+      C2 & 50 & 50  & 50   & 50    & 0   & -- & --   \\
+      C3 & 50 & 44  & 47   & 50    & 0   & -- & --   \\
+      C4 & 50 & 5   & 2    & 26    & 0   & -- & --   \\
+      C5 & 50 & 4   & 2    & 8     & 1   & -- & --   \\
+      \midrule
+      H1 & 50 & 2   & 2    & 2     & 0   & -- & --   \\
+      H2 & 50 & 1   & 4    & 7     & 0   & -- & --   \\
+      H3 & 50 & 15  & 21   & 50    & 0   & -- & --   \\
+      H4 & 50 & 2   & 1    & 4     & 0   & -- & --   \\
+      H5 & 50 & 1   & 1    & 5     & 0   & -- & --   \\
+      H6 & 50 & 3   & 3    & 3     & 0   & -- & --   \\
+      \midrule
+      D1 & 50 & 32  & 14   & 50    & 2   & -- & --   \\
+      D2 & 50 & 2   & 1    & 9     & 0   & -- & --   \\
+      D3 & 50 & 17  & 15   & 50    & 0   & -- & --   \\
+      D4 & 50 & 1   & 2    & 4     & 0   & -- & --   \\
+      D5 & 50 & 2   & 5    & 10    & 1   & -- & --   \\
+      \bottomrule
+    \end{tabular}
+  \end{sidecaption}
+\end{table}
+
+HAL holds few records on this topic, so its zeros are answers, not failures.
+The database searches were complemented the same day by two searches in
+alphaXiv, for papers from 2023 onwards:
+\begin{description}
+  \item[Prose for the model] Keywords \enquote{code comments}, \enquote{LLM},
+    \enquote{code generation}, \enquote{misleading comments},
+    \enquote{documentation} and \enquote{coding agents}, and the question
+    \enquote{Do natural-language code comments or documentation improve or harm
+    LLM performance in code generation, repair, comprehension, or agentic
+    tasks?}
+  \item[Prose for people] Keywords \enquote{AI-generated code},
+    \enquote{program comprehension}, \enquote{code review},
+    \enquote{over-reliance}, \enquote{cognitive offloading},
+    \enquote{comprehension debt} and \enquote{explanation}, and the question
+    \enquote{Controlled experiments with human developers: do explanations,
+    comments or documentation help people understand, review or validate
+    AI-generated code, or do they increase over-reliance and lost
+    understanding?}
+\end{description}
+Two of the included papers were found only through alphaXiv, and three were
+found by both alphaXiv and the queries.
+Two papers were pointed out by the parallel search of \cref{app:ai-rq1}.
+One of them\autocite{eghbali2026equivalence} had already been returned by the
+queries S2, S3 and H4, and was read after the pointer.
+The other\autocite{ustynov2026beyond}, on the formats of log files for agents,
+was returned by no query and was retrieved by its arXiv identifier as a known
+document.
+Before the search, five papers known to be relevant were set aside to test the
+queries, and the queries found all five.
+
+The 2,436 hits came to 1,666 unique records.
+Their titles were filtered by keywords for each question, about 180 titles were
+read, about 60 papers were opened in full text or abstract, and 34 were
+included.
+With the two papers pointed out by the other search, 36 sources are cited, 19
+for RQ2 and 18 for RQ3, one of them for both.
+Several were read in the abstract and introduction only, and the chapter says
+so where it matters.
+A language model is classifying every record of the search in the same way as
+for the other chapters, but that classification was not finished when this
+chapter was written, so the screening reported here is the keyword screening
+alone.
+
+\section{Results}
+\label{sec:ai-rq23-results}
+
+\subsection{Prose for the language model}
+
+\paragraph{What the prose says matters, not that there is prose.}
+The cleanest causal study, a peer-reviewed one by \textcite{pan2026talking},
+controlled what comments said, and found that
+\textcquote[abstract]{pan2026talking}{Comments from source solutions that pass
+the tests raise recipient pass@1 by 17.2\,\% on average.
+In contrast, comments describing failed solutions provide no reliable gain,
+while comments written for a different problem reduce pass@1 by 20.8\,\%.}
+The 17.2 is in percentage points, the recipients were four small open models,
+and the comments came from a stronger model's passing solution, so they partly
+pass on the solution itself.
+Asking a model to comment its own code helped much less:
+\textcquote[sec.~1]{pan2026talking}{the best prompt recovers at most about
+24\,\% of the external-comment lift}.
+
+\paragraph{With the code present, more documentation did not help.}
+For an agent fixing issues, \textcquote[abstract]{arman2026compact}{When the
+source is present, neither static compact documentation nor retrieved context
+beats the issue alone}; the full-length description did worst, and only when
+the source was withheld did documentation raise the share of tests passed, from
+0.08 to 0.71.
+Repository context files for agents likewise gave no reliable gain, at more
+than 20\,\% higher cost\autocite{gloaguen2026agentsmd}; \cref{app:ai-rq4}
+treats them in detail.
+Documentation can also replace code the model does not see: docstrings that
+describe a function exactly let a model predict its output with
+\textcquote[abstract]{eghbali2026equivalence}{12.8-24.5\,\% higher accuracy,
+when compared to human-written documentation and documentation generated by a
+baseline approach}, in a setting where the model was shown the docstring and
+not the code.
+
+\paragraph{Comments help where they carry requirements.}
+In automated bug fixing, \textcquote[abstract]{vitale2026comments}{comments
+improve ABF accuracy by up to threefold when present in both phases}, though
+from low levels, for example from 2.78 to 9.80\,\% exact fixes.
+In translation between programming languages, model-written comments changed
+success by between $-90$ and $+435$\,\%\autocite{gupta2026translation}, a
+nearly balanced mix of gains and losses.
+On one legacy module, comments raised four models' quiz scores from 84 to
+90--96\,\%, and wholly wrong comments lowered them to
+61\,\%\autocite{sabetto2025legacy}; the models scored 75\,\% without the code
+at all, so the module may be in their training data.
+Comments that users could edit raised the share of solved tasks of a code model
+by 17.1\,\%, and users of the tool were 16.7\,\% faster, in a study with 12
+participants\autocite{di2025mutual}.
+Switching the concept of a comment on and off inside the model shifted
+performance between $-90$ and $+67$\,\%, depending on model and
+task\autocite{imani2026insideout}.
+
+\paragraph{Wrong prose hurts.}
+\Textcite{macke2024documentation} found that
+\textcquote[abstract]{macke2024documentation}{providing an LLM with
+\enquote{incorrect} documentation can greatly hinder code understanding, while
+incomplete or missing documentation does not seem to significantly affect an
+LLM's ability to understand code}.
+Misleading cues in natural language lowered 17 models' output prediction by
+23.2\,\% on average\autocite{lam2025codecrash}.
+Defective code left in comments made coding assistants write defective code in
+up to 58.17\,\% of cases\autocite{huang2026commenttraps}, and insecure
+instructions hidden in comments gave vulnerable completions in 77.4--92.3\,\%
+of cases, against 1.7--5.1\,\% without them\autocite{munir2026hidden}.
+One study points the other way, for detecting vulnerabilities rather than
+writing code: adversarial comments had no significant effect on eight models,
+and removing the comments hurt the weaker models\autocite{%
+thornton2026adversarial}.
+
+\paragraph{Prose costs tokens, and removing it is not free either.}
+Docstrings in prompts could be shortened by 25--40\,\% without lowering the
+quality of the generated code\autocite{yang2026lessismore}, whereas compressing
+the log files an agent reads lowered its input by 17\,\% but raised the cost of
+the session by 67\,\%, in one model and one session per
+format\autocite{ustynov2026beyond}.
+In real agent sessions, agent instruction files and working notes made up
+60.5\,\% of the agents' interactions with documentation, and consulting them
+was associated with less testing\autocite{gao2026agentfriendly}.
+
+\paragraph{Literate prose itself.}
+The only work in this search that uses literate programming by name is the
+outline study already discussed in \cref{app:ai-rq1}, which shows that a model
+can write such prose, not that it helps\autocite{Shi2025NLO}.
+A survey of practitioners by a tool vendor found that 81\,\% still consider
+readability important for AI-written code\autocite{%
+takerngsaksiri2025readability}, which is an opinion, not a test.
+
+\subsection{Prose for the person who checks}
+
+\paragraph{Tool studies with correct explanations are positive.}
+With explanations placed next to generated code, participants, mostly graduate
+students, \textcquote[sec.~5.4]{yan2024ivie}{answered an average of 90.2\,\% of
+questions correctly, in contrast to 65.0\,\% with the baseline}, and the
+baseline was a chatbot.
+Linked natural-language summaries raised task correctness from 81.7 to 95.0\,\%
+for 20 developers, though the authors warn that their results
+\textcquote[limitations]{tang2026naturaledit}{are also subject to automation
+bias: a readable NL diff may increase perceived control while still concealing
+semantic errors or inaccurate NL-code mappings}.
+Explanations from a language model helped 32 participants understand code more
+than web search did, for code written by people\autocite{nam2024gilt}.
+The study of editable comments\autocite{di2025mutual} and the verifiable
+literate programming study\autocite{Yuan2026VLP} point the same way, with 12
+and eight participants.
+None of these studies varied whether the explanation was correct.
+
+\paragraph{Varying the quality of the explanation removed the gain.}
+In a pre-registered experiment with 86 developers judging assertions about
+AI-generated functions, \textcite{kaufman2026assertions} found that
+\textcquote[sec.~RQ2]{kaufman2026assertions}{the presence of a comment (even if
+that comment was of high-quality) did not significantly improve participant
+accuracy compared to providing no comment at all (p > 0.1)}.
+Under-specified comments lowered accuracy compared with exact ones (odds ratio
+0.58) while raising confidence compared with no comment.
+The stimuli were assertions about small benchmark functions, not whole
+programs.
+
+\paragraph{Explanations raise adoption and trust, not necessarily
+correctness.}
+In an experiment with 173 programmers, \textcquote[abstract]{%
+li2026comments}{the presence of comments significantly influences programmers'
+adoption of AI-generated code regardless of the participants' development
+expertise}, which measures uptake, not whether the code was right.
+Full explanations of AI code-review recommendations gave the highest trust, but
+not the highest agreement, and the recommendations were always correct, since
+\textcquote[threats]{gao2026xai}{Evaluating whether explanations help
+developers detect incorrect recommendations would require a different design}.
+In a study of students working with an agent, comprehension fell sharply, and
+more comments in the code were associated with lower comprehension, a
+correlation rather than a manipulated effect\autocite{balepur2026impaired}.
+Outside programming, \textcquote[abstract]{kim2025reliance}{the presence of
+explanations increases reliance on both correct and incorrect responses}, which
+has not been tested for code.
+
+\paragraph{AI assistance can lower understanding.}
+In a randomized study by Anthropic researchers,
+\textcquote[sec.~1.1]{shen2026skill}{using AI assistance to complete tasks that
+involve this new library resulted in a reduction in the evaluation score by
+17\,\% or two grade points (Cohen's d = 0.738, p = 0.010)}.
+With an AI assistant, 15 participants performed better but
+\textcquote[abstract]{qiao2025faster}{showed no corresponding improvement in
+overall comprehension (p = 0.59)}.
+Beginners understanding code from a language model succeeded in 32.5\,\% of
+tasks\autocite{zi2025beginners}, and labelling code as written by a language
+model changed where reviewers looked, not how thoroughly they
+reviewed\autocite{khojah2026scrutiny}.
+
+\paragraph{Debt and reviews.}
+A review of practitioners' reports finds that
+\textcquote[results]{tavantzis2026cognitive}{a plausible AI-generated
+explanation does not necessarily produce durable human understanding}, and an
+essay names \enquote{intent debt}, a
+\textcquote[introduction]{storey2026debt}{lack of externalized goals,
+constraints, and rationale that both humans and AI systems need to work safely
+and efficiently with the codebase}.
+Students' diaries show AI code accepted as a black box and verification
+bypassed\autocite{ahmad2026comprehension}, and a systematic review of
+generative AI in programming education reports that its assistants
+\textcquote[abstract]{qiao2026slr}{often yield inaccurate or unclear
+explanations}.
+
+\section{Discussion and limitations}
+\label{sec:ai-rq23-discussion}
+
+For the model, the split between studies that find gains and studies that find
+none follows what the prose adds.
+Comments help when they carry requirements or intent the model cannot infer, as
+in bug fixing, translation and legacy code, and do nothing when they restate
+code already in context or a well-known benchmark function; the causal study
+shows this directly, since the content and not the commenting carried the
+effect\autocite{pan2026talking}.
+Documentation that replaces code the model cannot see helps a
+lot\autocite{eghbali2026equivalence,arman2026compact}, but literate prose is an
+addition to the code, not a replacement, so the regime with the code present is
+the one that applies to literate programming.
+Wrong prose is followed when a model writes code, while strong models that
+detect vulnerabilities seem more robust to it; that counter-example rests on a
+single preprint.
+
+For people, the positive studies compared explanations with a chatbot, web
+search or other tools, kept the explanations correct, and measured
+understanding by quizzes or self-reports right after the task.
+The null result varied the quality of the explanation and measured whether
+people judged correctly.
+These designs answer different questions, so the studies do not contradict each
+other; but only the second tests the situation a checker is in, where the
+explanation might be wrong.
+That comments increase adoption fits both readings: people use commented code
+more, not necessarily more correctly.
+Some authors have interests in the result: the outline study and one of the
+explanation studies have Google authors, the readability survey evaluates its
+authors' own tool, and the study of lost understanding is by Anthropic
+researchers, a result against the interest of their own AI company.
+
+The search has these limitations.
+Semantic Scholar and DBLP could not be searched, and Scopus was not used.
+Each cell was limited to 50 hits, which OpenAlex reached for all but two
+queries, so relevant older items may be buried by the relevance ranking.
+The screening of 1,666 titles was assisted by keywords rather than a full
+reading, and the language model's classification of the whole search was not
+finished, so the hit list is not yet included.
+Several cited papers were read in abstract and introduction only.
+Nearly all of the work is benchmarks on models from 2024--2026 and can date
+quickly, and none of it uses a literate program in Knuth's sense.
+
+\section{Conclusion}
+\label{sec:ai-rq23-conclusion}
+
+Prose helps a language model when it adds correct information the model doesn't
+otherwise have, hurts it when it is wrong, and does little but cost tokens when
+it restates code the model can see; for people checking AI-written code, the
+evidence is mixed, and the one experiment that varied the quality of the
+explanation found no gain and a cost in false confidence.
+Our confidence is moderate for the first answer, which several independent
+benchmarks support, and low to moderate for the second, which rests on few
+studies with people.
+Neither answer is about literate programming in Knuth's sense, for which we
+found no test with language models or with people checking AI-written code.
+The lecture's claims in \cref{sec:ai-agent-reader,sec:ai-checker} are stated at
+this strength, with the reservation that they are about prose with code in
+general.
+
+\section{Further work}
+\label{sec:ai-rq23-further}
+
+This search left the following undone.
+The language model's classification of the whole search must be finished and
+its hit list added to this chapter.
+Semantic Scholar and DBLP should be searched when they answer, and Scopus
+added.
+Several papers were found but could not be obtained in full text, the most
+important first: a study of outdated comments in LLM-based code completion
+(Xia, Huang, Chen and Zheng, ASE 2026), a neurophysiological study of code
+understanding in modern coding workflows (ISSRE 2025), an evaluation of the
+explanations language models give for the patches they write (Sobania and
+others, SSBSE 2023), a conceptual framework for comprehension gaps in
+AI-assisted development (IEEE Access 2026), and a study of how programmers' AI
+literacy affects their handling of bad code (BISE 2026).
+% DOIs of the papers to fetch: 10.1145/3832783.3834359 (When Comments
+% Mislead, ACM 403), 10.1109/ISSRE66568.2025.00058,
+% 10.1007/978-3-031-48796-5_12, 10.1109/ACCESS.2026.3689574,
+% 10.1007/s12599-026-01000-5; also 10.1145/3597503.3639176 (TODO comments
+% and Copilot, ICSE 2024; abstract read, not cited).
+
+The field lacks, first, a controlled study of literate programs, with the
+chunks in explanatory order, either with language models or with people who
+check AI-written code.
+It also lacks an experiment with people that crosses whether an explanation is
+present with whether it is correct, for whole AI-written programs; one study
+did so for assertions\autocite{kaufman2026assertions}, and another left that
+design to future work\autocite{gao2026xai}.
+Nobody has compared prose written by a person with prose written by a model,
+for the same code; the causal benchmark suggests that a model's own comments
+add little for the model\autocite{pan2026talking}, and nothing tests the same
+for people.
+Nor has anyone followed over time whether prose reduces the debt in
+understanding that practitioners report, or how stale prose affects agents.
+If such studies found that human-written literate prose helps checkers find
+errors, the lecture could recommend literate programs to anyone who checks an
+agent's work; if they found the same null result as for comments, the lecture's
+caution about explanations would extend to literate programs too.
+
+\section{Hits bearing on the claim}
+\label{sec:ai-rq23-hits}
+
+The classification of this search's records was still running when this
+appendix was written, so its hit list is not yet included.
+
+% Author's note (verification and reproduction):
+%   scholar session : lp-prose-effects
+%   report          : scratchpad lp-prose-effects-report.md (lit-rq23)
+%   exports         : scratchpad lp-prose-effects/lp-prose-effects.bib
+%                     (36 entries); per-query results in
+%                     lp-prose-effects/q/, matrix.log, merged.json
+%   searched        : 2026-11-05, ~19:40-20:10 CET; providers openalex
+%                     ieee arxiv hal (-l 50 -f csv) and wos as
+%                     TS=(<same keywords>), each separately, -n
+%                     lp-prose-effects (s2: key rejected, HTTP 403 --
+%                     failed every query; dblp: bot wall, HTTP 202 --
+%                     failed every query; scopus ok, not in the plan)
+%   superseded      : a first test query ("code comments" AND "large
+%                     language model" AND "code generation", five
+%                     providers in one call, no TS= for WoS, 57 hits),
+%                     replaced by S1; its records are among the session's
+%                     1,800 but not in the matrix
+%   complements     : alphaXiv discover_papers x2 (retained 2601.20245
+%                     shen2026skill and 2604.13277 ahmad2026comprehension
+%                     only there); alphaXiv answer_pdf_queries on "When
+%                     Comments Mislead" (not indexed); Crossref/OpenAlex
+%                     metadata; arXiv ti: queries for four closed papers
+%                     (no copies); hand-offs from team lead: Eghbali
+%                     (already in S2, S3, H4) and Ustynov 2604.07502
+%                     (known item by id)
+%   classification  : scholar llm context (RQ2/RQ3) + llm classify
+%                     lp-prose-effects --no-examples --no-enrich, model
+%                     openai-codex/gpt-5.6-sol, batches of 100; STILL
+%                     RUNNING at 20:12 (620 of 1,800 done, see
+%                     lp-prose-effects/classify.log); theme tags on the
+%                     cited papers not yet applied
+%   hit-list table  : TODO, when classification is done:
+%                     scholar sessions export lp-prose-effects -f table
+%                     --bearing-only --lang en --label tab:lp-prose-effects
+%                     --theme ... -o litteratursokning/rq23-full
+%                     then uncomment the \input below
+%   provenance      : ltnotes.bib, keys pan2026talking arman2026compact
+%                     vitale2026comments macke2024documentation
+%                     sabetto2025legacy gupta2026translation
+%                     imani2026insideout lam2025codecrash
+%                     huang2026commenttraps munir2026hidden
+%                     thornton2026adversarial yang2026lessismore
+%                     di2025mutual gao2026agentfriendly
+%                     takerngsaksiri2025readability kaufman2026assertions
+%                     balepur2026impaired shen2026skill gao2026xai
+%                     yan2024ivie nam2024gilt tang2026naturaledit
+%                     li2026comments qiao2025faster zi2025beginners
+%                     khojah2026scrutiny kim2025reliance
+%                     tavantzis2026cognitive storey2026debt
+%                     ahmad2026comprehension qiao2026slr
+%                     eghbali2026equivalence ustynov2026beyond
+%                     gloaguen2026agentsmd Shi2025NLO Yuan2026VLP
+% TODO: table pending classification
+% \input{litteratursokning/rq23-full}
+
+
+% ================================================================ RQ4
+\chapter{Do context files, skills and spec-driven development help coding
+  agents?}
+\label{app:ai-rq4}
+\chapterprecis{The author has not yet reviewed the results in this
+  appendix in full.}
+
+The lecture makes several claims about prose that instructs an agent rather
+than explains the code (\cref{sec:ai-instructions}).
+Context files, such as \texttt{AGENTS.md} or \texttt{CLAUDE.md}, did not
+significantly change whether agents solved their tasks, and made them more
+expensive.
+Out-of-date files are followed over the code, even when the agent notices the
+conflict.
+Skills written by people helped on specialized tasks and those the agent wrote
+itself made things worse, while on ordinary repositories most public skills had
+no effect.
+When rating these approaches (\cref{ex:ai-rate-instructions}), the lecture adds
+that spec-driven development, where a specification is written before the code,
+has hardly been evaluated beyond its authors' own projects, and when rating
+Showboat (\cref{ex:ai-rate-showboat}) that no scientific evaluation of such
+documents was found.
+
+The research question is: do context files, skills and spec-driven development
+help coding agents, and what do the studies measure as help?
+Help can mean that the agent solves more tasks, that it costs less, or that its
+work is easier for a person to check, and the chapter keeps these apart.
+The claims tested are mostly negative ones (no significant gain, no
+evaluation), which need studies that could have found a gain, and searches for
+evidence in both directions.
+
+\section{Method}
+\label{sec:ai-rq4-method}
+
+% Author's note (verification and reproduction): see the block above the
+% hit-list \input at the end of the chapter.
+
+The search was made on 5 November 2026 with \texttt{scholar}, in the same
+databases as \cref{app:ai-rq1,app:ai-rq23}: OpenAlex, Web of Science, IEEE
+Xplore, arXiv and HAL worked; Semantic Scholar (access key rejected, HTTP 403)
+and DBLP (a page that stops automated clients, HTTP 202) failed and were not
+searched; Scopus was not part of the plan.
+Each query was sent with at most 40 hits per database.
+Each item in the two lists gives the query as sent to OpenAlex, IEEE Xplore,
+arXiv and HAL, then the same keywords as sent to Web of Science.
+The support queries are:
+\begin{description}
+  \item[S1] \enquote{AGENTS.md} OR \enquote{CLAUDE.md} coding agent; WoS:
+    TS=((\enquote{AGENTS.md} OR \enquote{CLAUDE.md}) AND coding AND agent*)
+  \item[S2] \enquote{context file} OR \enquote{context files} coding agent
+    evaluation; WoS: TS=((\enquote{context file} OR \enquote{context files})
+    AND coding AND agent* AND evaluat*)
+  \item[S3] \enquote{agent instructions} OR \enquote{repository instructions}
+    OR \enquote{copilot instructions} OR \enquote{cursor rules} empirical; WoS:
+    TS=((\enquote{agent instructions} OR \enquote{repository instructions} OR
+    \enquote{copilot instructions} OR \enquote{cursor rules}) AND empirical)
+  \item[S4] \enquote{agentic coding} instructions effect efficiency impact;
+    WoS: TS=(\enquote{agentic coding} AND instruction* AND (effect* OR
+    efficien* OR impact*))
+  \item[S5] \enquote{agent skills} coding agent evaluation; WoS:
+    TS=(\enquote{agent skills} AND coding AND agent* AND evaluat*)
+  \item[S6] \enquote{spec-driven development} OR \enquote{specification-driven
+    development} agent; WoS:
+    TS=((\enquote{spec-driven development} OR \enquote{specification-driven
+    development}) AND agent*)
+  \item[S7] executable demonstration proof of agent work coding agent verify;
+    WoS: TS=((executable NEAR/3 (demonstration* OR documentation)) AND coding
+    AND agent*)
+  \item[S8] \enquote{instruction files} OR \enquote{agent manifests} OR
+    \enquote{agent configuration files} coding agent; WoS:
+    TS=((\enquote{instruction files} OR \enquote{agent manifests} OR
+    \enquote{agent configuration files}) AND coding AND agent*)
+  \item[S9] architecture documentation prompt context coding agent experiment
+    developers experience capability; WoS: TS=(architecture AND documentation
+    AND context AND \enquote{coding agent*} AND experiment*)
+  \item[S10] agent proof of work demo verify reproducible artifact coding agent
+    evidence of correctness supervisor; WoS: TS=((\enquote{proof of work} OR
+    \enquote{executable demo*} OR \enquote{reproducible evidence}) AND
+    \enquote{coding agent*})
+  \item[S11] \enquote{rule files} OR \enquote{persistent configuration} OR
+    \enquote{AI configuration} coding agents; WoS: TS=((\enquote{rule files} OR
+    \enquote{persistent configuration} OR \enquote{AI configuration}) AND
+    coding AND agent*)
+  \item[S12] \enquote{skill files} OR \enquote{agent skills} coding agent cost
+    success controlled; WoS: TS=((\enquote{skill files} OR \enquote{agent
+    skills}) AND agent* AND (cost OR success))
+  \item[S13] instruction following coding agents instruction surfaces rules
+    project files; WoS: TS=(\enquote{instruction following} AND \enquote{coding
+    agent*})
+  \item[S14] coding agent adoption code quality technical debt configuration
+    repositories; WoS: TS=(\enquote{coding agent*} AND adoption AND
+    (\enquote{code quality} OR \enquote{technical debt}))
+\end{description}
+The counter-queries reuse the concept terms with words for harm, cost,
+staleness, conflict and mistakes:
+\begin{description}
+  \item[C1] \enquote{AGENTS.md} OR \enquote{CLAUDE.md} OR \enquote{context
+    files} coding agent reduced success cost tokens harmful; WoS:
+    TS=((\enquote{AGENTS.md} OR \enquote{CLAUDE.md} OR \enquote{context files})
+    AND coding AND agent* AND (reduc* OR cost OR token* OR harm*))
+  \item[C2] \enquote{agent instructions} OR \enquote{repository instructions}
+    OR \enquote{cursor rules} stale outdated redundant; WoS:
+    TS=((\enquote{agent instructions} OR \enquote{repository instructions} OR
+    \enquote{cursor rules}) AND (stale OR outdated OR redundant))
+  \item[C3] \enquote{spec-driven development} OR \enquote{specification-driven
+    development} limitations does not help cost empirical; WoS:
+    TS=((\enquote{spec-driven development} OR \enquote{specification-driven
+    development}) AND (limitation* OR cost OR empirical))
+  \item[C4] \enquote{agent skills} coding agent no benefit worse security
+    limitations; WoS: TS=(\enquote{agent skills} AND coding AND agent* AND
+    (benefit* OR worse OR limitation* OR security))
+  \item[C5] \enquote{instruction files} OR \enquote{context files} stale
+    outdated agent worse performance not helpful; WoS:
+    TS=((\enquote{instruction files} OR \enquote{context files}) AND (stale OR
+    outdated OR worse) AND agent*)
+  \item[C6] coding agent documentation code disagree conflict instruction files
+    coherence; WoS: TS=(\enquote{coding agent*} AND (documentation OR
+    \enquote{instruction files}) AND (conflict* OR disagree* OR coheren*))
+  \item[C7] \enquote{AGENTS.md} OR \enquote{CLAUDE.md} smells mistakes problems
+    configuration; WoS: TS=((\enquote{AGENTS.md} OR \enquote{CLAUDE.md}) AND
+    (smell* OR mistake* OR problem*))
+\end{description}
+\Cref{tab:ai-rq4-queries} gives the hits.
+
+\begin{table}[htbp]
+  \begin{sidecaption}{Queries and number of hits per database, 5 November
+    2026, with the tool \texttt{scholar}; the queries are given in
+    \cref{sec:ai-rq4-method}.
+    S = support query, C = counter-query.
+    Databases: OpenAlex (OA; not open access), IEEE Xplore (IEEE), arXiv, HAL
+    (Hyper Articles en Ligne), Web of Science (WoS), Semantic Scholar (S2),
+    DBLP.
+    \enquote{Union} is the number of unique records from OpenAlex, IEEE Xplore,
+    arXiv and HAL together, as the search session stored them.
+    At most 40 hits were fetched per database and query, so 40 means
+    \enquote{at least 40}.
+    \enquote{--} means that the search failed: Semantic Scholar rejected the
+    access key and DBLP answered every query with a page that stops automated
+    clients, so neither database was searched.
+    Web of Science got the keywords as \texttt{TS=(\dots)}, the others as free
+    text.}[tab:ai-rq4-queries] \centering\footnotesize
+    \begin{tabular}{@{}lrrrrrrrr@{}}
+      \toprule
+          & OA & IEEE & arXiv & HAL & Union & WoS & S2 & DBLP \\
+      \midrule
+      S1  & 40 & 4    & 40    & 40  & 121   & 2   & -- & --   \\
+      S2  & 40 & 32   & 40    & 14  & 122   & 0   & -- & --   \\
+      S3  & 40 & 2    & 40    & 39  & 119   & 0   & -- & --   \\
+      S4  & 40 & 0    & 40    & 0   & 74    & 0   & -- & --   \\
+      S5  & 40 & 0    & 40    & 0   & 68    & 1   & -- & --   \\
+      S6  & 40 & 3    & 40    & 40  & 120   & 2   & -- & --   \\
+      S7  & 40 & 1    & 40    & 0   & 80    & 1   & -- & --   \\
+      S8  & 40 & 7    & 40    & 40  & 125   & 3   & -- & --   \\
+      S9  & 40 & 0    & 40    & 0   & 80    & 0   & -- & --   \\
+      S10 & 40 & 0    & 40    & 0   & 80    & 0   & -- & --   \\
+      S11 & 40 & 11   & 40    & 40  & 130   & 0   & -- & --   \\
+      S12 & 40 & 1    & 40    & 0   & 70    & 7   & -- & --   \\
+      S13 & 40 & 0    & 40    & 0   & 75    & 2   & -- & --   \\
+      S14 & 40 & 0    & 40    & 0   & 77    & 1   & -- & --   \\
+      \midrule
+      C1  & 40 & 4    & 40    & 0   & 83    & 1   & -- & --   \\
+      C2  & 40 & 1    & 40    & 0   & 80    & 0   & -- & --   \\
+      C3  & 40 & 2    & 40    & 4   & 85    & 2   & -- & --   \\
+      C4  & 40 & 0    & 40    & 0   & 80    & 0   & -- & --   \\
+      C5  & 39 & 6    & 40    & 0   & 85    & 0   & -- & --   \\
+      C6  & 40 & 0    & 40    & 0   & 79    & 0   & -- & --   \\
+      C7  & 40 & 4    & 40    & 0   & 82    & 0   & -- & --   \\
+      \bottomrule
+    \end{tabular}
+  \end{sidecaption}
+\end{table}
+
+The search session stored one merged record set per query, so the counts per
+database were taken by running the same queries again outside the session.
+Web of Science indexes almost none of this literature, which is mostly
+preprints from 2026, so its zeros carry little weight, and the HAL cells of 40
+are mostly false hits on single words of the query.
+
+Seven papers known to be relevant were set aside before the search, and the
+queries S1--S10 and C1--C5 found all seven.
+The reference list of one of the central studies\autocite{xu2026stale} showed
+six relevant papers that the queries had missed.
+The queries S11--S14, C6 and C7 add the terms the field uses for these things,
+\enquote{rule files}, \enquote{persistent configuration}, \enquote{AI
+configuration}, \enquote{instruction following}, \enquote{smells} and conflict
+or coherence, and with them all six were found.
+Three further papers, all descriptive, were still missed by every query; they
+are named in \cref{sec:ai-rq4-further}.
+
+Searches outside the databases, all on the same day, served mostly to read the
+sources and establish their status:
+\begin{description}
+  \item[alphaXiv] A search with the keywords \enquote{coding agents},
+    \enquote{proof of work}, \enquote{executable documentation} and
+    \enquote{verification evidence} and the question \enquote{Research on
+    coding agents producing executable demonstrations or verifiable evidence
+    (proof) of their work for a human supervisor, and whether agents misreport
+    or fabricate what they did} returned 13 papers, of which two were
+    kept\autocite{smyth2026overclaiming,xu2026ctxgap}.
+    The full texts of four papers were read through alphaXiv.
+  \item[Practitioner sources] Simon Willison's blog post on Showboat and
+    Rodney\autocite{willison2026showboat} and the Showboat
+    documentation\autocite{willison2026showboatreadme} were retrieved as known
+    documents and read in full, together with the open issue about agents that
+    edit the document directly.
+  \item[The web] One web search, \enquote{\enquote{Evaluating AGENTS.md}
+    Gloaguen ICLR 2026 workshop openreview}, led to the authors' page that
+    gives the venue of one paper\autocite{gloaguen2026agentsmd}.
+\end{description}
+
+The roughly 2,300 hits came to 1,377 unique records.
+A language model classified all of them, as supporting, qualifying or
+contradicting the claim, adjacent, or false hits.
+Every record it called supporting or qualifying, and the one record it was
+unsure of, was read again: 41 of its calls were changed to adjacent, mostly
+papers that propose a way to optimize skills rather than test whether skills
+help, and those changes rest on title and abstract.
+About 205 records were read in title or abstract and about 60 in abstract or
+more.
+Thirty-one sources are included: 21 read partly in full text (the abstract and
+the passages that bear on the question), eight read in abstract only, and two
+practitioner sources.
+
+\section{Results}
+\label{sec:ai-rq4-results}
+
+\subsection{Context files: controlled experiments}
+
+The most careful benchmark so far ran four agents on 438 tasks, one sample per
+task, and \textcite{gloaguen2026agentsmd} report that
+\textcquote[abstract]{gloaguen2026agentsmd}{providing context files does not
+generally improve task success rates, while increasing inference cost by over
+20\,\% on average}.
+Files written by the developers raised success by 2.4 percentage points, which
+is not significant, and files written by a model lowered it slightly.
+The overview of the repository, the part such files most often contain, did not
+help the agents find the relevant files:
+\textcquote[sec.~4.3]{gloaguen2026agentsmd}{We conclude that context files are
+not effective at providing a repository overview}.
+The paper is a workshop paper, and its first version said that context files
+tend to reduce success; the later version quoted here says they make no
+significant difference.
+
+Three smaller experiments agree.
+With two agents on 17 tasks, \textcquote[abstract]{khatri2026context}{%
+Context strategy does not measurably move correctness on either agent}, though
+the author notes that the study can detect only large effects.
+On 58 tasks chosen to be neither too easy nor too hard, rule files raised
+success by 7 to 14 percentage points, but \textcquote[results]{%
+zhang2026guardrails}{no condition is significantly different from any other},
+and \textcquote[sec.~1]{zhang2026guardrails}{Random rules improve a coding
+agent's task performance as much as expert-curated ones}.
+In 1,650 sessions, the size, position and structure of the file and
+contradictions in it had no detectable effect on whether the agent followed
+it\autocite{mcmillan2026adherence}; that study was read in abstract only.
+
+Two experiments vary what the file contains.
+Including every category of instruction \textcquote[abstract]{%
+polandra2026categories}{does not reliably reduce agent-file-generation cost or
+improve generated code quality}, in a task far from everyday work: having an
+agent regenerate a whole library.
+In a single-author preprint scored partly by a language model, the format of an
+architecture specification hardly mattered for the strongest models, but
+mattered more for weaker ones:
+\textcquote[abstract]{canedo2026architecture}{On weaker models, format produces
+spreads of 0.83--2.42 points}.
+
+One experiment finds lower cost:
+\textcquote[abstract]{lulla2026agentsmd}{the presence of AGENTS.md is
+associated with a lower median runtime (\(\Delta\)28.64\,\%) and reduced output
+token consumption (\(\Delta\)16.58\,\%)}, for one agent on small pull requests.
+Total tokens did not change significantly, and correctness was not measured,
+since \textcquote[sec.~3.1.8]{lulla2026agentsmd}{A comprehensive evaluation of
+the output quality \textelp{} is beyond the scope of this paper}.
+
+\subsection{Context files in real projects}
+
+Two observational studies of real repositories point in no clear direction.
+After instruction files were added to 148 projects,
+\textcquote[abstract]{arabat2026instructions}{27.7\,\% of the projects
+increased their merge rate by at least 20\,\%, while 26.35\,\% decreased it}.
+In 441 repositories, those that adopted agents without committed AI
+configuration saw complexity rise faster, and the authors \textcquote[%
+abstract]{denisovblanch2026markdown}{present these findings as
+hypothesis-generating}.
+Two descriptive studies find that the files \textcquote[abstract]{%
+chatlatanagulchai2026readmes}{evolve like configuration code through frequent,
+small additions}, and that problems such as rules better left to a linter and
+bloated context are common\autocite{dossantos2026smells}.
+
+\subsection{Out-of-date files and instruction following}
+
+The clearest result is a harmful one.
+In a controlled experiment with 40 projects, \textcquote[abstract]{%
+xu2026stale}{Without the sentence, 90.1\,\% of the agents' choices followed the
+stale file.
+Claude Code pointed out the conflict in 79 of 80 runs and still followed the
+file.
+Codex CLI rewrote the existing code to match the file in 20 of 80 runs, and the
+project's own tests then failed in 17 of them.}
+The sentence is one instruction to prefer the code when the two disagree.
+A second experiment found the same: \textcquote[abstract]{%
+mohammadi2026workingset}{where standard and code disagree, agents follow the
+standard even when it prescribes the worse code, so a stale convention file
+costs more than no file}.
+In a case study of one repository, stale documentation was the largest class of
+failures, 48 of 118\autocite{aliabadi2026lessons}, and an existing consistency
+checker found stale references to code in 23.0\,\% of 356
+repositories\autocite{treude2026contextrot}.
+
+\Textcite{chakrabarti2026growing} explain why the files keep growing:
+\textcquote[abstract]{chakrabarti2026growing}{once an instruction's rationale
+is gone, deleting it without risking a correctness regression costs
+\(O(2^{|D|})\) in a prompt of \(|D|\) instructions}.
+Keeping each instruction's rationale beside it, as a comment, made it possible
+to remove 99.3\,\% of the excess instructions, but that was tested on
+instruction-following tasks, not on coding agents.
+
+Two benchmarks qualify what following a rule means.
+\textcquote[abstract]{huang2026harnessif}{When a coding agent obeys a rule, it
+may simply have been going to do that anyway}; every model was worse at rules
+that go against its prior, by 3.6 to 7.4 points.
+And patches that pass the tests still \textcquote[abstract]{truong2026swecc}{%
+violate 43.1 percent of applicable project policies}; that study was read in
+abstract only.
+
+\subsection{Skills}
+
+The results on skills split by the kind of task.
+On specialized tasks built together with their skills,
+\textcquote[abstract]{li2026skillsbench}{Curated Skills raise the average pass
+rate from 33.9\,\% to 50.5\,\% (+16.6 percentage points; 25.5\,\%
+normalized gain)}, but \textcquote[results]{li2026skillsbench}{Self-generated
+Skills land below the no-Skills baseline on all three configurations}, by 8.1
+to 11.5 percentage points.
+On real software repositories, \textcquote[abstract]{han2026sweskills}{92 of 98
+skills have no statistically significant effect, and adding skills raises the
+average pass ratio only from 76.6\,\% to 76.9\,\%}, and harmful skills override
+the task's own instructions.
+
+Four further studies qualify the gains.
+Skills helped in all nine configurations of one benchmark, but
+\textcquote[sec.~1]{cheng2026utility}{The same Skills yield gains under some
+configurations and losses under others on 36.78\,\% of tasks}.
+A study of failures found that \textcquote[abstract]{dong2026harmful}{%
+seemingly relevant skills often make the agent incorrectly implement or omit
+task-required implementation elements}.
+Shortening skills by up to 54\,\% did not lower the cost, since the skill is a
+small and mostly cached part of what the agent reads\autocite{%
+xu2026shortening}.
+And skills go stale as software changes: \textcquote[abstract]{%
+duan2026repo2skill}{every evaluated transition invalidates part of the V1 skill
+set}; that study was read in abstract only.
+
+\subsection{Spec-driven development}
+
+The first systematic study of spec-driven development as practised combines
+interviews, online discussions and a corpus of specification files, and notes
+that \textcquote[sec.~1]{agarwal2026sdd}{Tool documentation, gray literature,
+and early research prescribe workflows and promise better quality, less agent
+drift, and higher productivity.
+However, their evaluations rarely extend beyond the authors' own projects}.
+The practitioners \textcquote[abstract]{agarwal2026sdd}{used SDD selectively
+and mainly for new features, and reported more reliable agent behavior
+alongside greater planning and review costs}, and they reported that the
+specifications decayed; the benefits are self-reported.
+The only measurement of outcomes is of tokens: cutting a full specification to
+a bare user story \textcquote[abstract]{smekal2026taskspec}{raises token spend
+by 29.7\,\%}, for one model and without measuring correctness; that study too
+was read in abstract only.
+
+\subsection{Proof of agent work}
+
+Showboat is described only in practitioner sources.
+Its author wants \textcquote{willison2026showboat}{tools that allow agents to
+clearly demonstrate their work to me, while minimizing the opportunities for
+them to cheat about what they've done}, and its documentation says that
+\textcquote{willison2026showboatreadme}{A verifier can re-execute all code
+blocks and confirm the outputs still match}.
+We found no scientific evaluation of documents like these.
+The closest is a pilot of 64 runs, in which models rather than people did the
+reviewing and \textcquote[abstract]{schmalbach2026contracts}{delegation
+contracts bought reviewability rather than correctness}.
+The problem such documents address has been measured, in abstracts only:
+\textcquote[abstract]{smyth2026overclaiming}{agents fail to read every file
+they were asked to review in 67.9\,\% of runs}, and readers of an agent's
+reports alone recover 52.0\,\% of the task state, against 92.7\,\% with the
+full context\autocite{xu2026ctxgap}.
+
+\section{Discussion and limitations}
+\label{sec:ai-rq4-discussion}
+
+Most of the apparent conflicts are different measurements.
+The study that found lower cost measured time and output tokens for one agent
+on small tasks, while the one that found higher cost measured money, which
+input and reasoning tokens dominate, for four agents.
+The two are not fully reconciled, since the second also found a higher cost for
+the agent the first one used.
+The two benchmarks of skills differ in their tasks: specialized procedures with
+a low baseline in one, ordinary repositories and a high baseline in the other.
+Both agree that skills help when they supply procedures the agent would
+otherwise leave out.
+That random rules did as well as curated ones points to priming rather than
+content.
+The observational studies are confounded by the discipline of the teams and by
+time, as their authors say.
+
+Taken together, the studies suggest that text helps an agent when it carries
+information the agent can't get from the code or its training: procedures in
+curated skills, facts that have been withheld, structured specifications for
+weak models.
+Overviews that restate the code did not help.
+That reading is ours, and no single study tests it.
+
+Some authors have interests in the result, though none of the studies evaluates
+its own company's product: authors at Amazon, at ByteDance and at a company
+that builds coding agents appear among the experiments, and one author of the
+spec-driven development study works at Google, which makes one of the tools in
+that study's corpus.
+
+The search has these limitations.
+Semantic Scholar and DBLP could not be searched, and Scopus was not used.
+The limit of 40 hits was reached by arXiv for every query and by OpenAlex for
+all but one.
+The counts per database were taken outside the session, and the session's
+records do not say which database returned them, so the provider column of the
+hit list names every database the query was sent to.
+Several full-text readings covered the abstract and the passages that bear on
+the question rather than the whole paper, eight sources were read in abstract
+only, and the language model's classification was changed on title and
+abstract.
+Nearly everything is a 2026 preprint or workshop paper, on single model
+versions and mostly on Python, and the experiments ran between 17 and 438 tasks
+each.
+
+\section{Conclusion}
+\label{sec:ai-rq4-conclusion}
+
+Measured by whether the agent solves its task, repository context files have
+not been shown to help, and out-of-date ones demonstrably harm, since agents
+follow them over the code.
+Skills written by people help on specialized tasks but mostly not on ordinary
+repositories, and skills that agents write for themselves hurt.
+Spec-driven development and executable demonstrations like Showboat's have not
+been evaluated by their outcomes.
+Our confidence is moderate that generic context files give no gain in success
+and that stale files harm, and low for their effect on cost, which depends on
+the setup.
+The lecture's claims in \cref{sec:ai-instructions} and its ratings in
+\cref{ex:ai-rate-instructions,ex:ai-rate-showboat} are stated at this strength.
+
+\section{Further work}
+\label{sec:ai-rq4-further}
+
+This search left the following undone.
+Semantic Scholar and DBLP should be searched when they answer, and Scopus
+added.
+Three descriptive papers were missed by every query and should be read: on the
+availability and granularity of skills (Xu and Wu, 2026), on context
+engineering for AI agents in open-source software (Mohsenimofidi and others,
+MSR 2026), and on the context developers provide (Jiang and Nam).
+The sources read only in abstract should be read in full before any of them
+carries a claim, the experiment on file structure\autocite{%
+mcmillan2026adherence} and the pilot on reviewability\autocite{%
+schmalbach2026contracts} first.
+% arXiv ids: 2605.31408 (Xu & Wu; downloaded, not read), 2512.18925 (Jiang
+% & Nam).  Also to read: han2026sweskills results by configuration,
+% gloaguen2026agentsmd appendix B, li2026skillsbench appendix D.6, the
+% xu2026stale data (github.com/WenJing95/stale-docs-data).
+
+The field lacks, first, a test of prose that explains \emph{why} and is
+interleaved with the code, as in literate programming, against a separate
+instruction file; the closest are comparisons of specification formats and of
+overviews, and rationale comments tested outside
+coding\autocite{canedo2026architecture,%
+gloaguen2026agentsmd,chakrabarti2026growing}.
+We found no study comparing spec-driven development with working without a
+specification on real tasks, for success, defects or cost, and no evaluation of
+executable demonstration documents or of whether re-running them stops
+fabricated output.
+We found no study of developers with and without context files, no study of
+whether keeping the files current pays off over time, and none of long work
+over many sessions, where persistent context should matter most; the
+experiments that exist are single tasks.
+If an experiment found that prose interleaved with the code goes stale less and
+helps agents more than a separate file, the lecture could recommend literate
+programs as the place for an agent's instructions; if not, the rating of
+instruction files in \cref{ex:ai-rate-instructions} would stand as it is.
+
+\section{Hits bearing on the claim}
+\label{sec:ai-rq4-hits}
+
+\Cref{tab:lp-agent-context} lists the records that bear on the question.
+The practitioner sources on Showboat and the two papers found through alphaXiv
+are not in it.
+
+% Author's note (verification and reproduction):
+%   scholar session : lp-agent-context (42 search records, 1,377 unique)
+%   report          : scratchpad lp-agent-context-report.md (lit-rq4)
+%   exports         : scratchpad lp-agent-context.csv, lp-agent-context.bib
+%                     (31 entries), lp-agent-context-table.tex (copied
+%                     here as litteratursokning/rq4-full.tex); per-provider
+%                     split lp-agent-context-work/matrix2.tsv
+%   searched        : 2026-11-05, 19:40-19:54 CET; S1-S10 and C1-C5 at
+%                     19:40-19:44, S11-S14, C6, C7 at 19:53-19:54;
+%                     providers openalex ieee arxiv hal --limit 40, wos as
+%                     TS=(...) (s2: key rejected, HTTP 403 -- failed every
+%                     query; dblp: bot wall, HTTP 202 -- failed every
+%                     query; scopus ok, not in the plan)
+%   provider column : the hit list's provider column shows the union of
+%                     the providers queried, since the session stores one
+%                     merged record set per query; the split per provider
+%                     was recomputed outside the session
+%   recall          : 7 brief items found by S1-S10/C1-C5; 6 gaps found by
+%                     chaining xu2026stale (zhang2026guardrails,
+%                     denisovblanch2026markdown, mohammadi2026workingset,
+%                     dossantos2026smells, huang2026harnessif,
+%                     xu2026shortening) closed by concept queries S11-S14,
+%                     C6, C7; still missed: 2605.31408, Mohsenimofidi et al.
+%                     MSR'26, 2512.18925
+%   complements     : alphaXiv get_paper_content (2602.11988, 2601.20404,
+%                     2607.27250, 2610.30571); alphaXiv discover_papers
+%                     (retained 2609.20812, 2610.20003); WebFetch/curl of
+%                     simonwillison.net/2026/Feb/10/showboat-and-rodney/,
+%                     github.com/simonw/showboat, issue #12; WebSearch
+%                     for the Gloaguen venue; Crossref and arXiv API
+%   classification  : scholar llm classify --no-examples, model
+%                     openai-codex/gpt-5.6-sol, 1,377 records, none
+%                     pending; all supports/qualifies rows read, plus the
+%                     one row < 0.7 (discarded); 41 overrides to
+%                     adjacent-subtopic; theme tags ctx-effect ctx-stale
+%                     ctx-following ctx-descriptive skills sdd
+%                     proof-of-work on the cited sources
+%   hit-list table  : scholar sessions export lp-agent-context -f table
+%                     --bearing-only --lang en (label tab:lp-agent-context)
+%   provenance      : ltnotes.bib, keys gloaguen2026agentsmd
+%                     lulla2026agentsmd khatri2026context
+%                     zhang2026guardrails mcmillan2026adherence
+%                     polandra2026categories canedo2026architecture
+%                     xu2026stale mohammadi2026workingset
+%                     aliabadi2026lessons treude2026contextrot
+%                     chakrabarti2026growing huang2026harnessif
+%                     truong2026swecc arabat2026instructions
+%                     denisovblanch2026markdown chatlatanagulchai2026readmes
+%                     dossantos2026smells li2026skillsbench han2026sweskills
+%                     cheng2026utility dong2026harmful xu2026shortening
+%                     duan2026repo2skill agarwal2026sdd smekal2026taskspec
+%                     schmalbach2026contracts smyth2026overclaiming
+%                     xu2026ctxgap willison2026showboat
+%                     willison2026showboatreadme
+\input{litteratursokning/rq4-full}

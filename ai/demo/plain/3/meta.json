@@ -1,0 +1,7 @@
+{
+ "model": "claude-sonnet-5-5",
+ "version": "2.1.318 (Claude Code)",
+ "cost_usd": 0.0477,
+ "seconds": 15,
+ "turns": 5
+}
