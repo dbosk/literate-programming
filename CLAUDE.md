@@ -282,22 +282,30 @@ whenever it runs, which is on a job's first build and when its code changes
 
 ## Project-specific gotchas
 
-- **`didactic` is pinned to `535b687`** (its `master`, v2.15) for
+- **`didactic` is pinned to `818334b`** (its `master`, v2.16.1) for
   `\runpython`'s `showcommand`/`chdir`/`transcript` and `\runbasedir`, and for
   block and frame titles as run-in headings in the notes. Upstream has no tag
-  after v2.2, so the pin is by commit. v2.15 keeps listings, lead-ins and
+  after v2.2, so the pin is by commit. didactic keeps listings, lead-ins and
   headings with what follows, and warns in the log where it can't; moving the
   pin moves page breaks, so check the PDFs after a bump. After checking out a
   new pin, run `make -C didactic didactic.sty`: it is generated, and the decks
-  link to it. Since the bump to v2.6, `lpbook-teachers.pdf` can need more
-  latexmk passes than latexmk's default maximum.
+  link to it.
+- **`marginfix` is not pinned:** the builds load it from `~/texmf`
+  (`kpsewhich marginfix.sty`), where the didactic work installs its own
+  branch. An update there moves page breaks in the notes without any change
+  in this repository, so rebuild and check the PDFs after one. A build from
+  an old `.aux` can keep a stale margin layout (a didactic warning about a
+  footnote that "repeats one on the same page"); rebuild that job from clean.
 
-- **`makefiles` is pinned to `1571556`** (PR dbosk/makefiles#74) for its
-  PythonTeX fix, which isn't on `master`. `src/Makefile` overrides the rest of
-  that branch: the classic weave flags, because `tominted` and `-autolang` are
-  not in upstream noweb, and plain `-R<file>` tangling, because our roots are
-  `<<fib.py>>`, not `<<[[fib.py]]>>`. Move the pin to `master` when the fix
-  lands there.
+- **`makefiles` is pinned to `fe00f3b`** (PR dbosk/makefiles#74's line) for
+  its PythonTeX fix, which isn't on `master`, and for `$max_repeat = 10` in
+  `latexmkrc`: the notes and books can need more passes than latexmk's
+  default of five. `ai/` uses that branch's `tominted` weave as it is.
+  `src/Makefile` overrides the rest of the branch: the classic weave flags,
+  because `tominted` and `-autolang` are not in upstream noweb, and plain
+  `-R<file>` tangling, because our roots are `<<fib.py>>`, not
+  `<<[[fib.py]]>>`. Move the pin to `master` only once #74 is merged there;
+  `master` lacks the `tominted` weave until then.
 - **Jobs share PythonTeX's output in `src/ltxobj/`.** `src/Makefile` keeps a
   copy per job in `ltxobj/pythontex-<job>/` and restores it before each build;
   without that, a rebuild typesets the output of whichever job ran last. Don't
